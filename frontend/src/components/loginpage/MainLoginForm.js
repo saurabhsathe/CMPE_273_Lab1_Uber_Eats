@@ -11,15 +11,17 @@ const MainLoginForm = () => {
 <link href="/css/login_page.css" rel="stylesheet" id="bootstrap-css-custom"></link>
 <div className="sidenav">
          <div className="login-main-text">
-            
-            <p>Login or register from here to access.</p>
+         <Image src="/ubereats.png" thumbnail />
+            <p><h1>Login or register from here to access.</h1></p>
+
          </div>
       </div>
       <div className="main">
+        
          <div className="col-md-6 col-sm-12">
-         <Image src="/uber_eats.png/3600*1800" thumbnail />
+         
             <div className="login-form">
-            
+            <h2><b>Login or Signup</b></h2>
                <form>
                   <div className="form-group">
                      <label>User Name</label>
@@ -29,7 +31,7 @@ const MainLoginForm = () => {
                      <label>Password</label>
                      <input type="password" className="form-control" placeholder="Password" />
                   </div>
-                  <button type="submit" className="btn btn-black">Login</button>
+                  <button type="submit" className="btn btn-black">Login</button>&nbsp;     
                   <button type="submit" className="btn btn-secondary">Register</button>
                </form>
             </div>
