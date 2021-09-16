@@ -1,8 +1,8 @@
-import MainLoginForm from './components/loginpage/MainLoginForm'
+import MainLoginForm from './components/login_and_signup/MainLoginForm'
 function App() {
   return (
-    <div className="App">
-      < MainLoginForm />
+    <div className="App" id="maindiv">
+        <MainLoginForm />
     </div>
   );
 }
