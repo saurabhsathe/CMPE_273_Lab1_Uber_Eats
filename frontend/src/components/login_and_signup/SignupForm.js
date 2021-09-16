@@ -9,13 +9,13 @@ const SignupForm = () => {
     const [uemail,setemail] = useState();
     const [ucpass,setcpass] = useState();
 
-    function register_user(){
+    function register_user(e){
         alert("user registered")
     }
 
     return (
         
-         <div className="col-md-6 col-sm-12">
+         
          
             <div className="login-form">
             <h2><b>Login or Signup</b></h2>
@@ -56,10 +56,10 @@ const SignupForm = () => {
                   </div>
 
 
-                  <button type="submit" className="btn btn-secondary" onClick={register_user()}>Register</button>
+                  <button type="submit" className="btn btn-secondary" onClick={register_user}>Register</button>
                </form>
             </div>
-         </div>
+         
     )
 }
 
