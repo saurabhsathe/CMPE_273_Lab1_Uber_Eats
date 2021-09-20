@@ -1,21 +1,31 @@
 import React,{useState} from 'react'
-
+import {useDispatch} from 'react-redux'
+import {login} from '../../features/user_slice'
 const LoginForm = () => {
 
     const [uname,setusername]=useState()
     const [upwd,setpassword]=useState()
+    const [errors,seterrors]=useState()
+    const dispatch = useDispatch()
 
-
-    function handleclick(e){
+    function handleLogin(e){
         e.preventDefault()
-        alert("in the form")
-
+        
+        dispatch(login({
+            username:uname,
+            password:upwd
+        }))
+      
+    }
+    function handleRegister(e){
+        
     }
     
     return (
         <div className="login-form">
             <h2><b>Login</b></h2>
-               <form>
+               <p>{errors}</p>
+               <form onSubmit={handleLogin}>
                   <div className="form-group">
                      <label>User Name</label>
                      <input id="uname" value={uname} type="text" className="form-control" placeholder="User Name" onChange={e => setusername(e.target.value)} />
@@ -31,8 +41,8 @@ const LoginForm = () => {
                     <label><input type="radio" name="usertype" /> Restaurant</label>
                   </div>
 
-                  <button type="submit" className="btn btn-black" onClick={handleclick}>Login</button>&nbsp;     
-                  <button type="submit" className="btn btn-blue" onClick={handleclick}>Register</button>&nbsp;
+                  <button type="submit" className="btn btn-black" >Login</button>&nbsp;     
+                  <button type="submit" className="btn btn-blue" onClick={handleRegister}>Register</button>&nbsp;
                </form>
             </div>
     )
