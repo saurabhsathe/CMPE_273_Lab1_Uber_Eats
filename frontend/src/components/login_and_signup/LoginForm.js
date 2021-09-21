@@ -1,20 +1,56 @@
 import React,{useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {login} from '../../features/user_slice'
+import axios from 'axios';
+import cookie from 'react-cookies';
+//import {Redirect} from 'react-router';
 const LoginForm = () => {
 
     const [uname,setusername]=useState()
     const [upwd,setpassword]=useState()
-    const [errors,seterrors]=useState()
+    const [usertype,setusertype]=useState()
+    let [errors,seterrors]=useState()
     const dispatch = useDispatch()
 
     function handleLogin(e){
-        e.preventDefault()
+        var headers = new Headers();
+        //prevent page from refresh
+        alert(usertype)
+        e.preventDefault();
+        const data = {
+            username : uname,
+            password : upwd,
+            usertype:usertype
+        }
+        //set the with credentials to true
+        axios.defaults.withCredentials = true;
+        //make a post request with the user data
+        axios.post('http://localhost:3001/login',data)
+            .then(response => {
+                
+                if(response.status === 200){
+                    dispatch(login({
+                        username:uname,
+                        
+                    }))
+
+                    }else{
+                    
+                    seterrors("User does not exists or Invalid credentials")
+
+
+                    
+                }
+            });
+            if(!cookie.load('cookie')){
+               seterrors("not set cookies ")
+            }
+
+
+
+
+
         
-        dispatch(login({
-            username:uname,
-            password:upwd
-        }))
       
     }
     function handleRegister(e){
@@ -37,8 +73,8 @@ const LoginForm = () => {
 
                   
                   <div className="form-group">
-                    <label><input type="radio" name="usertype" defaultChecked/>User</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label><input type="radio" name="usertype" /> Restaurant</label>
+                    <label><input type="radio" name="usertype" onClick={() => setusertype("user")} defaultChecked/>User</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label><input type="radio" name="usertype" onClick={() => setusertype("restaurant")} /> Restaurant</label>
                   </div>
 
                   <button type="submit" className="btn btn-black" >Login</button>&nbsp;     
