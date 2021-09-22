@@ -1,0 +1,16 @@
+<div id="radio_vegnonve">
+            <div className="btn-group btn-group-toggle" data-toggle="buttons">
+            
+            <input className="radio_button_vegnonveg" type="radio" value="veg" name="vegnonveg" id="veg" />
+            <label for="veg" className="radio_class_vegnonveg">Veg</label>
+
+            <input className="radio_button_vegnonveg" type="radio" value="nonveg" name="vegnonveg" id="nonveg" />
+            <label for="nonveg" className="radio_class_vegnonveg">NonVeg</label>
+
+            <input className="radio_button_vegnonveg" type="radio" value="all" name="vegnonveg" id="all" checked />
+            <label for="all" className="radio_class_vegnonveg">All</label>
+
+            </div>
+
+    
+        </div>
