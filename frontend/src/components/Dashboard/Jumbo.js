@@ -6,8 +6,8 @@ function handleSearch(e){
 }
 
     return (
-        <div>
-            <header className="jumbotron jumbotron-fluid" style={{background:"transparent"}}>
+        <div style={{paddingBottom:"0px"}}>
+            <header className="jumbotron jumbotron-fluid  landing" >
                 <div className="container-fluid text-left"> 
                 <h1 className="display-3" style={{color:"white"}}>Want food? Get food.</h1>
                 <form onSubmit={handleSearch}>

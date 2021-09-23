@@ -9,12 +9,13 @@ const MainLoginForm = () => {
     function getregister(e){
         document.getElementById("login_div").style.display="None"
         document.getElementById("signup_div").style.display="block"
-        alert("in the register form")
+        
        }
     function getloginform(e){
-        document.getElementById("login_div").style.display="block"
         document.getElementById("signup_div").style.display="None"
-        alert("in the register form")
+        document.getElementById("login_div").style.display="block"
+        
+        
     }
 
     return (
@@ -28,7 +29,7 @@ const MainLoginForm = () => {
                 <LoginForm />        
                 Dont have an account yet? <button type="submit" className="btn btn-blue" onClick={getregister}>Register</button>&nbsp;   
          </div>
-         <div className="col-md-6 col-sm-12" style={{display:"None"}} id="signup_div">
+         <div className="col-md-6 col-sm-12" style={{display:"None"}} id="signup_div" style={{}}>
                 
                 <SignupForm />
                 Already have an account?<button type="submit" className="btn btn-black" onClick={getloginform}>Login</button>&nbsp;            

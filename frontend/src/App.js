@@ -1,14 +1,20 @@
+import './App.css';
+import Dashboard from './components/dashboard/Dashboard'
+import Userdash from './components/userdashboard/Userdash'
+import BootCdn from './components/userdashboard/BootCdn'
+import Main from './components/Main'
+import {BrowserRouter} from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Jumbo from './components/dashboard/Jumbo'
+import SideBar from './components/userdashboard/SideBar'
 import MainLoginForm from './components/login_and_signup/MainLoginForm'
-import {selectuser} from './features/user_slice'
-import {useSelector} from 'react-redux'
-import Success from './components/login_and_signup/Success'
 function App() {
-  const user = useSelector(selectuser)
   return (
-
-    <div className="App" id="maindiv">
-        { user? <Success userdetails={user.username} />  : <MainLoginForm /> }
-    </div>
+    <BrowserRouter>
+    <SideBar />
+    <Navbar />
+    
+    </BrowserRouter>
   );
 }
 

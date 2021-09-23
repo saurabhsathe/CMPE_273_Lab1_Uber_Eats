@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Dashboard = () => {
+const Userinfo = () => {
     return (
         <div>
-            
+            Userinfo display
         </div>
     )
 }
 
-export default Dashboard
+export default Userinfo

@@ -51,6 +51,54 @@ const Resteraunts = () => {
 
 
     </div>
+    <div className="row text-center">
+      <div className="col-md-4 mb-4">
+         <div className="card h-100">
+            <img className="card-img-top" src="design.jpg" alt="Design" />
+            <div className="card-body">
+               <h4 className="card-title">Design</h4>
+               <p className="card-text">Deliver the best user experience 
+               with our carefully designed responsive websites and applications!</p>
+            </div>
+            <div className="card-footer py-4">
+               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
+            </div>
+         </div>
+      </div>
+        
+      <div className="col-md-4 mb-4">
+         <div className="card h-100">
+            <img className="card-img-top" src="design.jpg" alt="Design" />
+            <div className="card-body">
+               <h4 className="card-title">Design</h4>
+               <p className="card-text">Deliver the best user experience 
+               with our carefully designed responsive websites and applications!</p>
+            </div>
+            <div className="card-footer py-4">
+               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
+            </div>
+         </div>
+      </div>
+      <div className="col-md-4 mb-4">
+         <div className="card h-100">
+            <img className="card-img-top" src="design.jpg" alt="Design" />
+            <div className="card-body">
+               <h4 className="card-title">Design</h4>
+               <p className="card-text">Deliver the best user experience 
+               with our carefully designed responsive websites and applications!</p>
+            </div>
+            <div className="card-footer py-4">
+               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
+            </div>
+         </div>
+      </div>
+
+
+
+
+    </div>
+
+
 </div>
     )
 }

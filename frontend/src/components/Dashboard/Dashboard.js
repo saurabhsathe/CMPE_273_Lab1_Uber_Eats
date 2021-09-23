@@ -1,6 +1,7 @@
 import React from 'react'
 import Jumbo from './Jumbo'
-import Navbar from './Navbar'
+import DashNavbar from './DashNavbar'
+import Resteraunts from './Resteraunts'
 const Dashboard = () => {
     return (
         
@@ -21,9 +22,13 @@ const Dashboard = () => {
       <div id="root">
        
         <div className="landing">
-            <Navbar />
+            <DashNavbar />
             <Jumbo />
+            
+
+
         </div>
+        <Resteraunts />
       </div>
       </body>
 

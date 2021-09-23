@@ -72,10 +72,14 @@ const LoginForm = () => {
                   </div>
 
                   
-                  <div className="form-group">
-                    <label><input type="radio" name="usertype" onClick={() => setusertype("user")} defaultChecked/>User</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label><input type="radio" name="usertype" onClick={() => setusertype("restaurant")} /> Restaurant</label>
+                  <div className="mainradio" style={{marginBottom:"10px"}}>
+                    <input className="radio_button" id="user" type="radio" name="usertype" onClick={() => setusertype("user")} defaultChecked/>
+                    <label for="user" className="radio_label"> User</label>
+                    <input className="radio_button" id="resto" type="radio" name="usertype" onClick={() => setusertype("resto")} defaultChecked/>
+                    <label for="resto" className="radio_label"> Restraunt</label>
+                    
                   </div>
+                  <br/>
 
                   <button type="submit" className="btn btn-black" >Login</button>&nbsp;     
                   <button type="submit" className="btn btn-blue" onClick={handleRegister}>Register</button>&nbsp;
