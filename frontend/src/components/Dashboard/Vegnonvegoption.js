@@ -1,5 +1,5 @@
 import React from 'react'
-
+import './vegnonveg.css'
 const Vegnonvegoption = () => {
     return (
         <div>

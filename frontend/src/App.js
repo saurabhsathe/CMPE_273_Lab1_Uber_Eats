@@ -1,4 +1,5 @@
 import './App.css';
+import './login_page.css'
 import Dashboard from './components/dashboard/Dashboard'
 import Userdash from './components/userdashboard/Userdash'
 import BootCdn from './components/userdashboard/BootCdn'
@@ -11,7 +12,7 @@ import MainLoginForm from './components/login_and_signup/MainLoginForm'
 function App() {
   return (
     <BrowserRouter>
-    <SideBar />
+    <Main />
     <Navbar />
     
     </BrowserRouter>

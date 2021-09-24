@@ -3,7 +3,8 @@ import Sidepanel from './SidePanel'
 import BootCdn from './BootCdn'
 import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
-
+import {Link} from 'react-router-dom';
+import './css/login_page.css'
 const MainLoginForm = () => {
     
     function getregister(e){
@@ -24,16 +25,9 @@ const MainLoginForm = () => {
       <div className="main">
         <BootCdn />
         <Sidepanel />
-         <div className="col-md-6 col-sm-12" style={{display:"block"}} id="login_div">
-                
-                <LoginForm />        
-                Dont have an account yet? <button type="submit" className="btn btn-blue" onClick={getregister}>Register</button>&nbsp;   
-         </div>
-         <div className="col-md-6 col-sm-12" style={{display:"None"}} id="signup_div" style={{}}>
-                
-                <SignupForm />
-                Already have an account?<button type="submit" className="btn btn-black" onClick={getloginform}>Login</button>&nbsp;            
-         </div>
+        <LoginForm />        
+        Dont have an account yet? <Link to="/signup">Register</Link>&nbsp;   
+         
          
       </div>
 

@@ -17,7 +17,7 @@ const SignupForm = () => {
         
          
          
-            <div className="login-form">
+            <div className="register-form">
             <h2><b>Login or Signup</b></h2>
                <form onSubmit={handleRegister}>
                   <div className="form-group">

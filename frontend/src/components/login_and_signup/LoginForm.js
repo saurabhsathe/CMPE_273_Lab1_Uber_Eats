@@ -58,7 +58,7 @@ const LoginForm = () => {
     }
     
     return (
-        <div className="login-form">
+        <div className="login-form" >
             <h2><b>Login</b></h2>
                <p>{errors}</p>
                <form onSubmit={handleLogin}>
