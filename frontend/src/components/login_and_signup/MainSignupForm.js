@@ -11,7 +11,7 @@ const MainSignupForm = () => {
         <BootCdn />
         <Sidepanel />
         <SignupForm />        
-        Already have an account? <Link to="/Login">Login</Link>&nbsp;   
+           
          
          
       </div>

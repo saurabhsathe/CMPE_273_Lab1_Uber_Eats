@@ -4,19 +4,19 @@ import DashNavbar from '../dashboard/DashNavbar'
 import {Link} from 'react-router-dom';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
-
+import "./side.css"
+import "./user.css"
 
 const SideBar = () => {
 
     let contentbar = null
     function setcontentbar(val){
-     contentbar= <Link to={val}></Link>  
     }
     
     return (
        
             <div>
-            <nav id="sidebar" >
+            <nav id="usersidebar" >
 
                 <div class="sidebar-header sidepanel">
             <h3 >Bootstrap Sidebar</h3>
@@ -45,9 +45,7 @@ const SideBar = () => {
         </ul>
         
             </nav>
-            <div>
-                {contentbar}
-            </div>
+            
             
             </div>
             

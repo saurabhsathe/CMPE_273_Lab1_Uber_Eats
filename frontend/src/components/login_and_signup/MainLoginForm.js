@@ -1,7 +1,6 @@
 import React,{useState} from 'react'
 import Sidepanel from './SidePanel'
 import BootCdn from './BootCdn'
-import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
 import {Link} from 'react-router-dom';
 import './css/login_page.css'
@@ -26,7 +25,7 @@ const MainLoginForm = () => {
         <BootCdn />
         <Sidepanel />
         <LoginForm />        
-        Dont have an account yet? <Link to="/signup">Register</Link>&nbsp;   
+           
          
          
       </div>

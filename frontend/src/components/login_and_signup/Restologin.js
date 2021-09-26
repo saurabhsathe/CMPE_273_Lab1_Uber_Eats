@@ -4,14 +4,16 @@ import {login} from '../../features/user_slice'
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom'
-//import {Redirect} from 'react-router';
-const LoginForm = () => {
 
+const Restologin = () => {
+    
     const [uname,setusername]=useState()
     const [upwd,setpassword]=useState()
     const [usertype,setusertype]=useState()
     let [errors,seterrors]=useState()
     const dispatch = useDispatch()
+
+
 
     function handleLogin(e){
         var headers = new Headers();
@@ -54,13 +56,11 @@ const LoginForm = () => {
         
       
     }
-    function handleRegister(e){
-        
-    }
+
     
     return (
-        <div className="login-form" >
-            <h2><b>Customer Login</b></h2>
+        <div className="login-form">
+            <h2><b> Resteraunt Owner Login</b></h2>
                <p>{errors}</p>
                <form onSubmit={handleLogin}>
                   <div className="form-group">
@@ -77,11 +77,12 @@ const LoginForm = () => {
                   <br/>
 
                   <button type="submit" className="btn btn-black" >Login</button>&nbsp; 
-                  Dont have an account yet? <Link to="/usersignup">    
+                  Dont have an account yet? <Link to="/restosignup">    
                   <button className="btn btn-dark" >Register</button>&nbsp;</Link>&nbsp;
                </form>
-            </div>
+            
+        </div>
     )
 }
 
-export default LoginForm
+export default Restologin

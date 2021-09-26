@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import BootCdn from './components/dashboard/BootCdn'
 import {Provider} from "react-redux"
 import store from './app/store'
+import './components/userdashboard/user.css'
+import './components/userdashboard/side.css'
+
 
 ReactDOM.render(
     <Provider store={store}>

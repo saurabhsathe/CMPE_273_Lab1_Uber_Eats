@@ -80,6 +80,21 @@ app.post('/login',function(req,res){
 
 
 //Route to handle Post Request Call
+app.post('/createUser',function(req,res){
+    
+        
+        console.log("already present")
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("Book already exists");
+    
+    
+    
+
+    
+});
+
 app.post('/create',function(req,res){
     
     
@@ -111,6 +126,8 @@ app.post('/create',function(req,res){
 
     
 });
+
+
 
 app.post('/delete',function(req,res){
     

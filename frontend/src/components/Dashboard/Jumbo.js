@@ -1,8 +1,11 @@
 import React from 'react'
-
+import {Link , Redirect,useHistory} from 'react-router-dom';
 const Jumbo = () => {
-function handleSearch(e){
-    alert(e.target.value)
+    const history = useHistory();
+    
+
+    function handleLogin(){
+        history.push('/login');
 }
 
     return (
@@ -10,9 +13,9 @@ function handleSearch(e){
             <header className="jumbotron jumbotron-fluid  landing" >
                 <div className="container-fluid text-left"> 
                 <h1 className="display-3" style={{color:"white"}}>Want food? Get food.</h1>
-                <form onSubmit={handleSearch}>
+                <form onSubmit={{handleLogin}}>
                     <p className="display-4" >Food Anytime Anywhere and for Anyone</p>
-                    <p><button type = "submmit" className="btn btn-dark btn-lg" >Login/Register</button></p>
+                    <p><Link to="/userlogin"><button type = "submmit" className="btn btn-dark btn-lg" >Login/Register</button></Link></p>
                 </form>
                 </div>
                 

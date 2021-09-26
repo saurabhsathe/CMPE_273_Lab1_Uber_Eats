@@ -4,9 +4,11 @@ import Userdash from './userdashboard/Userdash'
 import Resteraunts from './userdashboard/Resteraunts'
 import Userinfo from './userdashboard/Userinfo'
 import MainLoginForm from './login_and_signup/MainLoginForm'
-import LoginForm from './login_and_signup/LoginForm'
 import MainSignupForm from './login_and_signup/MainSignupForm'
-import Navbar from './Navbar'
+import Dashboard from './dashboard/Dashboard'
+import RestoMainLogin from './login_and_signup/RestoMainLogin'
+import RestoMainSignup from './login_and_signup/RestoMainSignup'
+
 //Create a Main Component
 import MainLayout from './MainLayout'
 import {BrowserRouter as Router,Switch} from "react-router-dom";
@@ -14,10 +16,12 @@ class Main extends Component {
     render(){
         return(
             <div>
-                <Route path="/" component={Navbar} />
-                <Route path="/login" component={MainLoginForm} />
-                <Route path="/signup" component={MainSignupForm} />
-                
+                <Route exact path="/" component={Dashboard} />
+                <Route path="/userlogin" component={MainLoginForm} />
+                <Route path="/usersignup" component={MainSignupForm} />
+                <Route path="/restologin" component={RestoMainLogin} />
+                <Route path="/restosignup" component={RestoMainSignup} />
+                <Route path = "/userdash" component={Userdash} />
                 <Route path="/home" component={Userdash} />
                 <Route path="/resteraunts" component={Resteraunts} />
                 <Route path="/user" component={Userinfo} />
