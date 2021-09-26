@@ -1,0 +1,1 @@
+create table resteraunt_owner(fullname varchar(50),address varchar(100), zipcode varchar(10),contact varchar(10), pwd varchar(50),email varchar(50) primary key, userdp longblob); 

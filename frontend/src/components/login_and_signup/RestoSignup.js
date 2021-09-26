@@ -1,4 +1,4 @@
-import React from 'react'
+import {React,useState} from 'react'
 import {Link} from 'react-router-dom'
 const RestoSignup = () => {
     const [oname,setoname] = useState();
@@ -8,6 +8,7 @@ const RestoSignup = () => {
     const [opwd,setopwd] = useState();
     const [oemail,setoemail] = useState();
     const [ocpwd,setocpwd] = useState();
+    const [odp,setodp] = useState();
     const [restdp,setrestdp] = useState();
     const [restname,setrestname] = useState();
     const [restaddr,setrestaddr] = useState();
@@ -61,6 +62,11 @@ const RestoSignup = () => {
                      <label>Confirm Password</label>
                      <input type="password" id="ocpwd" className="form-control" value={ocpwd} onChange={e=>setocpwd(e.target.value)} placeholder="Password" required/>
                   </div>
+                  <div className="form-group">
+                     <label>Upload a profile picture</label>
+                     <input type="file" id="odp" name="odp" value={odp} onChange={e => setodp(e.target.value)}  accept="image/x-png,image/gif,image/jpeg" />
+                  </div>
+                
                 <hr />
                 <h2><b>Resteraunt details</b></h2>
                 <hr />

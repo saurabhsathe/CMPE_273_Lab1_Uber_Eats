@@ -1,0 +1,1 @@
+create table restaurant(restaurant_id int primary key auto_increment, resteraunt_name varchar(50),address varchar(100), zipcode varchar(11), restdp longblob);

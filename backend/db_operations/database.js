@@ -16,11 +16,11 @@ const insert_user = () => {
 const get_connection_user = () => { return new Promise((resolve,reject)=>{
     const pool=createPool({
 
-        host:"10.0.0.72",
+        host:"myubereatsdb.c9uvql1ff7ga.us-east-2.rds.amazonaws.com",
         port:3306,
-        user:"saurabh",
-        password:"Saurabh@123",
-        database:"userdb",
+        user:"admin",
+        password:"saurabh123",
+        database:"myubereatsdb",
         connectionLimit:1000
         })
     
