@@ -1,4 +1,7 @@
 //import the require dependencies
+var insert_user =require('./db_operations/insert_user')
+var s3=require("./aws_handler/aws_credential_store")
+var email_exists =require('./db_operations/email_exists')
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -39,14 +42,10 @@ app.use(function(req, res, next) {
       password : "admin"
   }]
 
-  var books = [
-    {"BookID" : "1", "Title" : "Book 1", "Author" : "Author 1"},
-    {"BookID" : "2", "Title" : "Book 2", "Author" : "Author 2"},
-    {"BookID" : "3", "Title" : "Book 3", "Author" : "Author 3"}
-]
+  
 
 //Route to handle Post Request Call
-app.post('/login',function(req,res){
+app.post('/customerlogin',function(req,res){
     let flag=0  
     for(user of Users){
       if(user.username === req.body.username && user.password === req.body.password){
@@ -80,14 +79,36 @@ app.post('/login',function(req,res){
 
 
 //Route to handle Post Request Call
-app.post('/createUser',function(req,res){
-    
+app.post('/usersignup',function(req,res){
+        let user={}
+        user.fullname = req.body.fullname;
+        user.address= req.body.address;
+        user.zipcode= req.body.zipcode;
+        user.contact= req.body.contact;
+        user.password= req.body.password;
+        user.email= req.body.email;
+        user.userdp= req.body.userdp;
+        let x =email_exists.testemail(req.body.email,"customer") 
+            
         
-        console.log("already present")
-        res.writeHead(202,{
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Book already exists");
+        if(!x){
+            console.log("already present") 
+            res.writeHead(202,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Email id is already registered");
+    
+
+        }
+        else{
+            console.log("new email id found")
+            console.log(user.userdp)
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("User euccessfully registered");
+    
+        }
     
     
     

@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 //import {Redirect} from 'react-router';
 const LoginForm = () => {
 
-    const [uname,setusername]=useState()
+    const [uemail,setuemail]=useState()
     const [upwd,setpassword]=useState()
     const [usertype,setusertype]=useState()
     let [errors,seterrors]=useState()
@@ -19,19 +19,20 @@ const LoginForm = () => {
         alert(usertype)
         e.preventDefault();
         const data = {
-            username : uname,
+            email : uemail,
             password : upwd,
-            usertype:usertype
+            usertype:"customer"
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.post('http://localhost:3001/login',data)
+        axios.post('http://localhost:3001/customerlogin',data)
             .then(response => {
                 
                 if(response.status === 200){
                     dispatch(login({
-                        username:uname,
+                        email:uemail,
+                        userType:usertype
                         
                     }))
 
@@ -64,8 +65,8 @@ const LoginForm = () => {
                <p>{errors}</p>
                <form onSubmit={handleLogin}>
                   <div className="form-group">
-                     <label>User Name</label>
-                     <input id="uname" value={uname} type="text" className="form-control" placeholder="User Name" onChange={e => setusername(e.target.value)} />
+                     <label>Email</label>
+                     <input id="uemail" value={uemail} type="email" className="form-control" placeholder="Registered Email id" onChange={e => setuemail(e.target.value)} />
                   </div>
                   <div className="form-group">
                      <label>Password</label>

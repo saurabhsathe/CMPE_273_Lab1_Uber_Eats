@@ -1,5 +1,8 @@
 import React,{useState} from 'react'
 import {Link} from 'react-router-dom'
+import axios from 'axios';
+import cookie from 'react-cookies';
+
 const SignupForm = () => {
     const [uname,setuname] = useState();
     const [uaddr,setuaddr] = useState();
@@ -9,15 +12,56 @@ const SignupForm = () => {
     const [uemail,setuemail] = useState();
     const [ucpwd,setucpwd] = useState();
     const [udp,setudp] = useState();
+    const [usertype,setusertype] = "customer";
+    const [errors,seterrors]=useState();
+    
     function handleRegister(e){
-        console.log("in the register user")
+        var headers = new Headers();
+        //prevent page from refresh
+       
+        e.preventDefault();
+        const data = {
+            fullname : uname,
+            address:uaddr,
+            zipcode:uzip,
+            contact:ucontact,
+            password : upwd,
+            email:uemail,
+            usertype:"customer"
+        }
+        //set the with credentials to true
+        axios.defaults.withCredentials = true;
+        //make a post request with the user data
+        var formData=new FormData()
+        formData.append("data", JSON.stringify(data));
+        formData.append("image", udp);
+        
+        axios.post('http://localhost:3001/usersignup',formData,{headers: {
+            'Content-Type': 'multipart/form-data'
+          }})
+            .then(response => {
+                
+                if(response.status === 200){
+                   console.log("received response that server has received the file")
+
+                    }else if(response.status === 202){
+                    
+                    seterrors("user already exists")
+
+
+                    
+                }
+            });
+            if(!cookie.load('cookie')){
+               seterrors("not set cookies ")
+            }
     }
 
     return (
         
          
          
-            <div className="register-form sticktop">
+            <div className="register-form">
             <h2><b>Customer Registration</b></h2>
                <form onSubmit={handleRegister}>
                   <div className="form-group">
@@ -56,12 +100,13 @@ const SignupForm = () => {
                   </div>
                 
                   <div className="form-group">
-                     <label>Upload Profile Picture</label>
-                     <input type="file" id="dp" name="dp" value={udp} onChange={e => setudp(e.target.value)} accept="image/x-png,image/gif,image/jpeg" />
+                     <label>Upload Profile Picture</label><br />
+                     <input type="file" id="dp" name="dp" onChange={e => setudp(e.target.files[0])} accept=".png,.gif,.jpeg,.jpg" />
                   </div>
 
 
-                  <button type="submit" className="btn btn-secondary">Register</button>
+                  <button type="submit" className="btn btn-dark">Register</button>
+                  <br />
                   Already have an account? <Link to="/userlogin">Login</Link>&nbsp;
                </form>
             </div>

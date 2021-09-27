@@ -23,18 +23,18 @@ const Restologin = () => {
         const data = {
             username : uname,
             password : upwd,
-            usertype:usertype
+            usertype:"resteraunt_owner"
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.post('http://localhost:3001/login',data)
+        axios.post('http://localhost:3001/restologin',data)
             .then(response => {
                 
                 if(response.status === 200){
                     dispatch(login({
                         username:uname,
-                        
+                        userType:usertype
                     }))
 
                     }else{

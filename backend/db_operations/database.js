@@ -20,7 +20,7 @@ const get_connection_user = () => { return new Promise((resolve,reject)=>{
         port:3306,
         user:"admin",
         password:"saurabh123",
-        database:"myubereatsdb",
+        database:"ubereatsdb",
         connectionLimit:1000
         })
     
