@@ -98,28 +98,37 @@ var storage = multer.diskStorage({
   })
   
   var upload = multer({ storage:storage })
-  app.post('/usersignup',upload.single("dp"),function(req,res){
-        res.send("ok")   
-  });
+ 
 app.post('/usersignup',upload.single("dp"),function(req,res){
-        let user={}
-        res.sendFile(`${__dirname}/public/${req.file.filename}.${file.mimetype.split("/")[1]}`)
-        const file = req.file
-        console.log(file)
-        if (!file) {
-            console.log("no file attached")
-        }
-            console.log(file)
-            res.send(file)
-        
-        
-        /*
+    user=JSON.parse(req.body.data)    
+    console.log(user)        
+    let x = email_exists.testemail(user.email,user.usertype)   
+    if(!x){
+        console.log("already present") 
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("Email id is already registered");
+
+
+    }
+    else{
+        console.log("new email id found")
+        console.log(user.userdp)
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("User euccessfully registered");
+
+    }
+    
+    /*
         const {
             file,
             body:{name}
 
         }=req
-*/
+
         user.fullname = req.body.fullname;
         user.address= req.body.address;
         user.zipcode= req.body.zipcode;

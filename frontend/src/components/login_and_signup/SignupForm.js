@@ -33,7 +33,7 @@ const SignupForm = () => {
         axios.defaults.withCredentials = true;
         //make a post request with the user data
         var formData=new FormData()
-        formData.append("data", data);
+        formData.append("data", JSON.stringify(data));
         formData.append("dp", udp);
         console.log(formData)
         
