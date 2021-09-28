@@ -4,11 +4,21 @@ var s3=require("./aws_handler/aws_credential_store")
 var email_exists =require('./db_operations/email_exists')
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
+const multer = require('multer')
+const path = require("path")
+const fs = require("fs")
+const {promisify} = require("util")
+const pipeline = promisify(require("stream").pipeline)
+
+
 app.set('view engine', 'ejs');
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
@@ -25,7 +35,6 @@ app.use(session({
 // app.use(bodyParser.urlencoded({
 //     extended: true
 //   }));
-app.use(bodyParser.json());
 
 //Allow Access Control
 app.use(function(req, res, next) {
@@ -46,6 +55,7 @@ app.use(function(req, res, next) {
 
 //Route to handle Post Request Call
 app.post('/customerlogin',function(req,res){
+    console.log(Object.keys(req))
     let flag=0  
     for(user of Users){
       if(user.username === req.body.username && user.password === req.body.password){
@@ -77,10 +87,39 @@ app.post('/customerlogin',function(req,res){
     
 });
 
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 //Route to handle Post Request Call
-app.post('/usersignup',function(req,res){
+var storage = multer.diskStorage({
+    destination: './public',
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now()+path.extname(file.originalname))
+    }
+  })
+  
+  var upload = multer({ storage:storage })
+  app.post('/usersignup',upload.single("dp"),function(req,res){
+        res.send("ok")   
+  });
+app.post('/usersignup',upload.single("dp"),function(req,res){
         let user={}
+        res.sendFile(`${__dirname}/public/${req.file.filename}.${file.mimetype.split("/")[1]}`)
+        const file = req.file
+        console.log(file)
+        if (!file) {
+            console.log("no file attached")
+        }
+            console.log(file)
+            res.send(file)
+        
+        
+        /*
+        const {
+            file,
+            body:{name}
+
+        }=req
+*/
         user.fullname = req.body.fullname;
         user.address= req.body.address;
         user.zipcode= req.body.zipcode;
@@ -88,9 +127,15 @@ app.post('/usersignup',function(req,res){
         user.password= req.body.password;
         user.email= req.body.email;
         user.userdp= req.body.userdp;
-        let x =email_exists.testemail(req.body.email,"customer") 
-            
-        
+        const fname = name + file.detectedFileExtension
+        /*
+        let x = false//email_exists.testemail(req.body.email,"customer") 
+        try{
+             await pipeline(file.stream,fs.createWriteStream(`./public/images/${fname}`))            
+            }
+        catch(e){
+            console.log(e)
+        }
         if(!x){
             console.log("already present") 
             res.writeHead(202,{
@@ -109,7 +154,7 @@ app.post('/usersignup',function(req,res){
             res.end("User euccessfully registered");
     
         }
-    
+    */
     
     
 

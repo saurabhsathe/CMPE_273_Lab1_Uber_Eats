@@ -33,12 +33,11 @@ const SignupForm = () => {
         axios.defaults.withCredentials = true;
         //make a post request with the user data
         var formData=new FormData()
-        formData.append("data", JSON.stringify(data));
-        formData.append("image", udp);
+        formData.append("data", data);
+        formData.append("dp", udp);
+        console.log(formData)
         
-        axios.post('http://localhost:3001/usersignup',formData,{headers: {
-            'Content-Type': 'multipart/form-data'
-          }})
+        axios.post('http://localhost:3001/usersignup',formData)
             .then(response => {
                 
                 if(response.status === 200){
@@ -63,7 +62,7 @@ const SignupForm = () => {
          
             <div className="register-form">
             <h2><b>Customer Registration</b></h2>
-               <form onSubmit={handleRegister}>
+               <form onSubmit={handleRegister} enctype="multipart/form-data">
                   <div className="form-group">
                      <label>Name</label>
                      <input type="text" value={uname} id="uname" className="form-control" placeholder="Your Name" onChange={e => setuname(e.target.value)} required/>
