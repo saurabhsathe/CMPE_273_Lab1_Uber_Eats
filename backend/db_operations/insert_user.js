@@ -19,11 +19,13 @@ async function insert_user (person_details,owner_type) {
         const ins_res=await insert(conn_pool,person_details,owner_type)
         //let ins_res=await Promise.all(promises)
         conn_pool.end()
+        console.log(ins_res)
         return ins_res;
         
     }
     catch(e){
         console.log(e)
+        
     }
 
  
@@ -32,8 +34,14 @@ async function insert_user (person_details,owner_type) {
 }
 
 async function insertuser(person_details,owner_type){
-    await insert_user(person_details,owner_type)
-    
+    try{
+
+        await insert_user(person_details,owner_type)
+        return true
+    }
+    catch(error){
+        return false
+    }
     
 
     

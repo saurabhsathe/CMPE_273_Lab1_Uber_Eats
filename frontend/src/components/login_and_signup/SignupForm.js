@@ -25,7 +25,7 @@ const SignupForm = () => {
             address:uaddr,
             zipcode:uzip,
             contact:ucontact,
-            password : upwd,
+            pwd : upwd,
             email:uemail,
             usertype:"customer"
         }
@@ -41,7 +41,7 @@ const SignupForm = () => {
             .then(response => {
                 
                 if(response.status === 200){
-                   console.log("received response that server has received the file")
+                    seterrors("")
 
                     }else if(response.status === 202){
                     
@@ -51,9 +51,10 @@ const SignupForm = () => {
                     
                 }
             });
+            /*
             if(!cookie.load('cookie')){
                seterrors("not set cookies ")
-            }
+            }*/
     }
 
     return (
@@ -62,6 +63,7 @@ const SignupForm = () => {
          
             <div className="register-form">
             <h2><b>Customer Registration</b></h2>
+                
                <form onSubmit={handleRegister} enctype="multipart/form-data">
                   <div className="form-group">
                      <label>Name</label>
@@ -85,7 +87,7 @@ const SignupForm = () => {
          
                   <div className="form-group">
                      <label>Email</label>
-                     <input type="email" id="uemail" value={uemail} className="form-control" placeholder="Your email address" onChange={e => setuemail(e.target.value)} required/>
+                     <input type="email" id="uemail" value={uemail} className="form-control" placeholder="Your email address" onChange={e => {setuemail(e.target.value);seterrors("")}} required/>
                   </div>
                   
                   <div className="form-group">
@@ -102,7 +104,7 @@ const SignupForm = () => {
                      <label>Upload Profile Picture</label><br />
                      <input type="file" id="dp" name="dp" onChange={e => setudp(e.target.files[0])} accept=".png,.gif,.jpeg,.jpg" />
                   </div>
-
+                  <h4 style={{color:"red"}}>{errors}</h4>
 
                   <button type="submit" className="btn btn-dark">Register</button>
                   <br />

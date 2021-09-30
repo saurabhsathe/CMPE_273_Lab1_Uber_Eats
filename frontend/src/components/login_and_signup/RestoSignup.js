@@ -1,5 +1,7 @@
 import {React,useState} from 'react'
 import {Link} from 'react-router-dom'
+import axios from 'axios';
+
 const RestoSignup = () => {
     const [oname,setoname] = useState();
     const [oaddr,setoaddr] = useState();
@@ -8,19 +10,75 @@ const RestoSignup = () => {
     const [opwd,setopwd] = useState();
     const [oemail,setoemail] = useState();
     const [ocpwd,setocpwd] = useState();
-    const [odp,setodp] = useState();
+    const [dp,setdp] = useState();
     const [restdp,setrestdp] = useState();
     const [restname,setrestname] = useState();
     const [restaddr,setrestaddr] = useState();
     const [restzip,setrestzip] = useState();
+    const [restcontact,setrestcontact] = useState();
+    const [errors,seterrors] = useState();
     
     
     
     
     
-    function handleRegister(e){
-        console.log("in the register register resteraunt")
+    async function handleRegister(e){
+        e.preventDefault()
+        let data = {
+            fullname : oname,
+            address:oaddr,
+            zipcode:ozip,
+            contact:ocontact,
+            pwd : opwd,
+            email:oemail,
+            usertype:"restaurant_owner"
+        }
+        //set the with credentials to true
+        axios.defaults.withCredentials = true;
+        //make a post request with the user data
+        let formData=new FormData()
+        formData.append("data", JSON.stringify(data));
+        formData.append("dp", dp);
+        console.log(formData)
+        
+        
+            
+
+            
+
+            
+            
+            let data2 = {
+                fullname : restname,
+                address:restaddr,
+                zipcode:restzip,
+                contact:restcontact,
+                owner_email:oemail,
+                restdp:""
+            }
+            console.log("in the frontend side where we found out")
+            let formData2=new FormData()
+            formData2.append("data", JSON.stringify(data2));
+            formData2.append("restdp", restdp);
+
+            
+            const [firstResponse] = await Promise.all([
+                axios.post('http://localhost:3001/usersignup',formData),
+              ]);
+              console.log(formData2)
+              const [secondResponse] = await Promise.all([
+                axios.post('http://localhost:3001/restosignup',formData2)
+            ]);
+            
+            
+
+            if(secondResponse.status==200){
+                console.log("user registered successfully")
+            }
+            
+            
     }
+    
 
     
     return (
@@ -63,8 +121,8 @@ const RestoSignup = () => {
                      <input type="password" id="ocpwd" className="form-control" value={ocpwd} onChange={e=>setocpwd(e.target.value)} placeholder="Password" required/>
                   </div>
                   <div className="form-group">
-                     <label>Upload a profile picture</label>
-                     <input type="file" id="odp" name="odp" value={odp} onChange={e => setodp(e.target.value)}  accept="image/x-png,image/gif,image/jpeg" />
+                     <label>Upload a profile picture</label><br />
+                     <input type="file" id="dp" name="dp" onChange={e => setdp(e.target.files[0])}  accept="image/x-png,image/gif,image/jpeg" />
                   </div>
                 
                 <hr />
@@ -86,10 +144,15 @@ const RestoSignup = () => {
          
                   <div className="form-group">
                      <label>Upload Resteraunt Picture</label>
-                     <input type="file" id="restdp" name="restdp" value={restdp} onChange={e => setrestdp(e.target.value)}  accept="image/x-png,image/gif,image/jpeg" />
+                     <br />
+                     <input type="file" id="restdp" name="restdp" onChange={e => setrestdp(e.target.files[0])}  accept="image/x-png,image/gif,image/jpeg" />
                   </div>
 
-                  
+                  <div className="form-group">
+                     <label>Resteraunt Contact No.</label>
+                     <input type="tel" id="restcontact" className="form-control" value={restcontact} onChange={e=>setrestcontact(e.target.value)} placeholder="Your contact number please" required/>
+                  </div>
+         
                     
 
                   <button type="submit" className="btn btn-secondary">Register</button>

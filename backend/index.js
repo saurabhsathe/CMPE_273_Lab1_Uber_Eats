@@ -1,7 +1,8 @@
-//import the require dependencies
+
 var insert_user =require('./db_operations/insert_user')
 var s3=require("./aws_handler/aws_credential_store")
 var email_exists =require('./db_operations/email_exists')
+var resto_exists =require('./db_operations/resto_exists')
 var express = require('express');
 var app = express();
 var session = require('express-session');
@@ -12,8 +13,9 @@ const path = require("path")
 const fs = require("fs")
 const {promisify} = require("util")
 const pipeline = promisify(require("stream").pipeline)
-
-
+const s3upload = require("./upload_file")
+var insert_resto =require('./db_operations/insert_resto')
+var verify_user = require('./db_operations/verify_user_credentials')
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -47,25 +49,23 @@ app.use(function(req, res, next) {
   });
 
   var Users = [{
-      username : "admin",
+      username : "admin@gmail.com",
       password : "admin"
   }]
 
   
 
 //Route to handle Post Request Call
-app.post('/customerlogin',function(req,res){
-    console.log(Object.keys(req))
-    let flag=0  
-    for(user of Users){
-      if(user.username === req.body.username && user.password === req.body.password){
-            flag=1;
-            break;
-        }
-      }
-    if(flag==1){
-        res.cookie('cookie',"admin",{maxAge: 900000, httpOnly: false, path : '/'});
-            req.session.user = user;
+app.post('/customerlogin',async function(req,res){
+    var flag
+    try{
+     flag = await verify_user.auth_user(req.body.email,req.body.password,req.body.usertype)
+}
+catch(error){
+    console.log(e)
+}
+    console.log(flag)
+    if(flag==true){
             res.writeHead(200,{
                 'Content-Type' : 'text/plain'
             })
@@ -74,6 +74,7 @@ app.post('/customerlogin',function(req,res){
       
     }
     else{
+            console.log("does not exists")
             res.writeHead(202,{
                 'Content-Type' : 'text/plain'
             })
@@ -99,12 +100,14 @@ var storage = multer.diskStorage({
   
   var upload = multer({ storage:storage })
  
-app.post('/usersignup',upload.single("dp"),function(req,res){
-    user=JSON.parse(req.body.data)    
-    console.log(user)        
-    let x = email_exists.testemail(user.email,user.usertype)   
-    if(!x){
+app.post('/usersignup',upload.single("dp"),async function(req,res){
+    let user=JSON.parse(req.body.data)    
+    x= await email_exists.testemail(user.email,user.usertype)
+    console.log("here-----afterchecking if email exists",x)
+    
+    if(x==true){
         console.log("already present") 
+        
         res.writeHead(202,{
             'Content-Type' : 'text/plain'
         })
@@ -113,8 +116,17 @@ app.post('/usersignup',upload.single("dp"),function(req,res){
 
     }
     else{
-        console.log("new email id found")
+        //ubereatscustomerimagesbucket
+        
+        let fileloc="./public/"+res.req.file.filename
+        let fname=user.email.split("@")[0]+path.extname(res.req.file.originalname)
+       
+        user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatscustomerimagesbucket",fname)
         console.log(user.userdp)
+        console.log("new email id found")
+        
+        x=await insert_user.insertuser(user,user.usertype)
+        fs.unlinkSync(fileloc)
         res.writeHead(200,{
             'Content-Type' : 'text/plain'
         })
@@ -122,131 +134,58 @@ app.post('/usersignup',upload.single("dp"),function(req,res){
 
     }
     
-    /*
-        const {
-            file,
-            body:{name}
-
-        }=req
-
-        user.fullname = req.body.fullname;
-        user.address= req.body.address;
-        user.zipcode= req.body.zipcode;
-        user.contact= req.body.contact;
-        user.password= req.body.password;
-        user.email= req.body.email;
-        user.userdp= req.body.userdp;
-        const fname = name + file.detectedFileExtension
-        /*
-        let x = false//email_exists.testemail(req.body.email,"customer") 
-        try{
-             await pipeline(file.stream,fs.createWriteStream(`./public/images/${fname}`))            
-            }
-        catch(e){
-            console.log(e)
-        }
-        if(!x){
-            console.log("already present") 
-            res.writeHead(202,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("Email id is already registered");
     
-
-        }
-        else{
-            console.log("new email id found")
-            console.log(user.userdp)
-            res.writeHead(200,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("User euccessfully registered");
-    
-        }
-    */
     
     
 
     
 });
 
-app.post('/create',function(req,res){
+app.post('/restosignup',upload.single("restdp"),async function(req,res){
+    console.log("int the resto signup")
+    let resto=JSON.parse(req.body.data)    
+    x= await resto_exists.testresto(resto.fullname,resto.zipcode)
+    console.log("here-----afterchecking if resteraunt exists in restaurant signup",x)
+    let fileloc="./public/"+res.req.file.filename
+        
     
-    
-    flag=0
-    books.filter(function(book){
-        if(book.BookID === req.body.bookid){
-            flag=1
-        }
-    })
-    if(flag==0){
-        res.writeHead(200,{
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Book inserted successfully");
-    
-    
-    books.push({"BookID" : req.body.bookid, "Title" : req.body.title, "Author" : req.body.author})
-    
-    }
-    else{
-        console.log("already present")
+    if(x==true){
+        console.log("already present") 
+        
         res.writeHead(202,{
             'Content-Type' : 'text/plain'
         })
-        res.end("Book already exists");
-    
-    
+        res.end("Restaurant is already registered");
+
+
     }
-
-    
-});
-
-
-
-app.post('/delete',function(req,res){
-    
-    console.log("inside delete",req.body)
-    
-    let flag=0
-    let tempbooks=[]
-    books.filter(function(book){
-        if(book.BookID == req.body.bookid){
-            //book found
-            flag=1
-        }
-        else{
-            //book not found so append
-            tempbooks.push(book)
-        }
-    })
-    if(flag==1){
-        books=tempbooks
+    else{
+        //ubereatscustomerimagesbucket
+        
+        let fname=resto.name+resto.zipcode+path.extname(res.req.file.originalname)
+       
+        resto.restdp = await s3upload.upload_to_s3(fileloc,"ubereatscustomerimagesbucket",fname)
+        
+        x=await insert_resto.insertresto(resto)
+        fs.unlinkSync(fileloc)
         res.writeHead(200,{
             'Content-Type' : 'text/plain'
         })
-        res.end("Book deleted successfully");
-    }
-    else{
-        res.writeHead(202,{
-            'Content-Type' : 'text/plain'
-         })
-        res.end("Book Not found");
-    }
+        res.end("Restaurant registered");
 
+    }
+    
+    
+    
+    
 
     
 });
-//Route to get All Books when user visits the Home Page
-app.get('/home', function(req,res){
-    console.log("Inside Home Login");    
-    res.writeHead(200,{
-        'Content-Type' : 'application/json'
-    });
-    console.log("Books : ",JSON.stringify(books));
-    res.end(JSON.stringify(books));
-    
-})
+
+
+
+
+
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001");

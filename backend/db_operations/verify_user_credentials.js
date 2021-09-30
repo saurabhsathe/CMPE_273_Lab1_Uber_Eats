@@ -1,28 +1,25 @@
 
 
 const database=require('./database')
-const verify = (conn_pool,uemail,upwd)=>{return new Promise((resolve, reject)=>{
-    conn_pool.query(`select * from customer where email="${uemail}" and pwd="${upwd}";`,  (error, results)=>{
-        if(error){
-            return reject(error);
+const verify = (conn_pool,uemail,upwd,usertype)=>{return new Promise((resolve, reject)=>{
+    x=conn_pool.query(`select * from ${usertype} where email="${uemail}" and pwd="${upwd}";`,  (error, results)=>{
+        if(x._rows[0].length==0){
+            return reject(false);
         }
-        return resolve(results);
+        return resolve(true);
     });
 });
 } 
 
-async function insert_user () {
+
+async function verify_user (uname,upwd,usertype) {
     let pwd
     
     try{
         const conn_pool=await database.get_connection_user()
-        const ins_res=await insert(conn_pool)
-        //let ins_res=await Promise.all(promises)
+        const ins_res=await verify(conn_pool,uname,upwd,usertype)
         conn_pool.end()
-        if (ins_res.length < 1) {
-            throw new Error('Post with this id was not found');
-        }
-          return ins_res;
+        return ins_res;
         
     }
     catch(e){
@@ -34,39 +31,12 @@ async function insert_user () {
     
 }
 
-async function verify_user (uname,upwd) {
-    let pwd
-    
-    try{
-        const conn_pool=await database.get_connection_user()
-        const ins_res=await verify(conn_pool,uname,upwd)
-        //let ins_res=await Promise.all(promises)
-        conn_pool.end()
-        if (ins_res.length < 1) {
-            throw new Error('Post with this id was not found');
-        }
-          return ins_res;
-        
-    }
-    catch(e){
-        console.log(e)
-    }
-
- 
-    
-    
+async function auth_user(uname,upwd,usertype){
+        return await verify_user(uname,upwd,usertype)
 }
 
 
-
-async function authenticate_user(){
-    let x= await verify_user()
-    console.log(x[0])
-    
-
-    
-}
-module.exports={authenticate_user};
+module.exports={auth_user};
 
 
 

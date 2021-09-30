@@ -15,39 +15,39 @@ const SideBar = () => {
     
     return (
        
-            <div>
             <nav id="usersidebar" >
 
-                <div class="sidebar-header sidepanel">
-            <h3 >Bootstrap Sidebar</h3>
-        </div>
+                
 
         <ul class="list-unstyled components">
-            <p>Dummy Heading</p>
-            <li class="active">
-                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+            
+            <li >
+                <a href="/home" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
                 
             </li>
-            <li>
-                <a href="#">About</a>
+            <li >
+                <a href="/userdash/resteraunts" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Resto</a>
+                
             </li>
             <li>
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
                 
             </li>
-            <li>
-                <a href="#">Portfolio</a>
+            <li >
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                
             </li>
-            <li>
-                <a href="#">Contact</a>
+            <li >
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                
             </li>
             <li><button classname="btn btn-dark" onClick={setcontentbar("/login")}>Login</button></li>
-        </ul>
+                 </ul>
         
             </nav>
             
             
-            </div>
+            
             
             
             

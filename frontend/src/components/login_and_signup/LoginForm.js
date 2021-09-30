@@ -16,7 +16,6 @@ const LoginForm = () => {
     function handleLogin(e){
         var headers = new Headers();
         //prevent page from refresh
-        alert(usertype)
         e.preventDefault();
         const data = {
             email : uemail,
@@ -30,6 +29,7 @@ const LoginForm = () => {
             .then(response => {
                 
                 if(response.status === 200){
+                    alert("successfull login")
                     dispatch(login({
                         email:uemail,
                         userType:usertype

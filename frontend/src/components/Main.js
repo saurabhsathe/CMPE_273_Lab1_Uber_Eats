@@ -25,6 +25,7 @@ class Main extends Component {
                 <Route path="/home" component={Userdash} />
                 <Route path="/resteraunts" component={Resteraunts} />
                 <Route path="/user" component={Userinfo} />
+                <Route path="/userdash/home" component={Resteraunts} />
                 </div>
                 
 
