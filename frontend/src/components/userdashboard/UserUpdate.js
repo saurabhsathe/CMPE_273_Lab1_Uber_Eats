@@ -1,43 +1,22 @@
-import React,{useState} from 'react'
-import {login} from '../../features/user_slice'
-import axios from 'axios';
-import cookie from 'react-cookies';
-import {Link} from 'react-router-dom'
-import {useSelector,useDispatch} from 'react-redux'
+import React from 'react'
 
-import {selectuser} from '../../features/user_slice'
-import {Redirect} from 'react-router';
-const LoginForm = () => {
-    
-    const [uemail,setuemail]=useState()
-    const [upwd,setpassword]=useState()
-    const [usertype,setusertype]=useState()
-    let [errors,seterrors]=useState()
-    const dispatch = useDispatch()
+const UserUpdate = () => {
 
-    function handleLogin(e){
+    function handleUpdate(e){
         var headers = new Headers();
         //prevent page from refresh
         e.preventDefault();
         const data = {
-            email : uemail,
-            password : upwd,
-            usertype:"customer"
+            
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.post('http://localhost:3001/customerlogin',data)
+        axios.post('http://localhost:3001/updateUser',data)
             .then(response => {
                 console.log(response)
                 if(response.status === 200){
-                    alert("successfull login")
-                    dispatch(login({
-                        email:uemail,
-                        userType:usertype
-                        
-                    }))
-
+                    alert("successfull update")
                     }else{
                     
                     seterrors("User does not exists or Invalid credentials")
@@ -46,11 +25,7 @@ const LoginForm = () => {
                     
                 }
             });
-    
-    /*        if(!cookie.load('cookie')){
-               seterrors("not set cookies ")
-            }
-    */
+
 
 
 
@@ -58,20 +33,10 @@ const LoginForm = () => {
         
       
     }
-    /*if(!cookie.load('cookie')){
-        seterrors("not set cookies ")
-     }
-*/
-const user = useSelector(selectuser)
-console.log(user)
-let redirectVar = null;
     
-if(user){
-       redirectVar = <Redirect to="/userdash"/>
-    }
-    return (<div>
-        {redirectVar}
-        <div className="login-form" >
+    return (
+        <div>
+            <div className="login-form" >
             <h2><b>Customer Login</b></h2>
                <p>{errors}</p>
                <form onSubmit={handleLogin}>
@@ -93,8 +58,9 @@ if(user){
                   <button className="btn btn-dark" >Register</button>&nbsp;</Link>&nbsp;
                </form>
             </div>
-            </div>
+            
+        </div>
     )
 }
 
-export default LoginForm
+export default UserUpdate

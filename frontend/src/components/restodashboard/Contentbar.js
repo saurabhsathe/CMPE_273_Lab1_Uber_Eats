@@ -6,7 +6,7 @@ import Userinfo from './Userinfo'
 const Contentbar = () => {
     return (
             <BrowserRouter><Switch>
-            <Route path='/userdash/' component={Resteraunts} />
+            <Route path='/' component={Resteraunts} />
             <Route path='/userdash/resteraunts' component={Resteraunts} />
             <Route path='/userinfo' component={Userinfo} />
             </Switch></BrowserRouter>

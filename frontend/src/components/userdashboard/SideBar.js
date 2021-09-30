@@ -6,15 +6,26 @@ import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import "./side.css"
 import "./user.css"
+import {useSelector,useDispatch} from 'react-redux'
+import {logout} from '../../features/user_slice'
+import {selectuser} from '../../features/user_slice'
 
 const SideBar = () => {
+    const dispatch = useDispatch()
+    function handleLogout(){
+        
+        dispatch(logout())
+    }
+    const user = useSelector(selectuser)
+    console.log(user)
+    let redirectVar = null;
+    if(!user){
+        redirectVar=<Redirect to="/userlogin" />
 
-    let contentbar = null
-    function setcontentbar(val){
     }
     
-    return (
-       
+    return (<div>
+            {redirectVar}
             <nav id="usersidebar" >
 
                 
@@ -41,12 +52,12 @@ const SideBar = () => {
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
                 
             </li>
-            <li><button classname="btn btn-dark" onClick={setcontentbar("/login")}>Login</button></li>
+            <li><button classname="btn btn-dark" onClick={handleLogout}>Logout</button></li>
                  </ul>
         
             </nav>
             
-            
+            </div>
             
             
             

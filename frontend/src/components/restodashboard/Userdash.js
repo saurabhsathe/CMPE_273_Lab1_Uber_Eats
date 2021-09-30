@@ -7,20 +7,7 @@ import {BrowserRouter, Route , Switch} from 'react-router-dom'
 import Resteraunts from './Resteraunts'
 import Userinfo from './Userinfo'
 import Contentbar from './Contentbar'
-import {selectuser} from '../../features/user_slice'
-import {Redirect} from 'react-router';
-import {useSelector,useDispatch} from 'react-redux'
-
 const Userdash = () => {
-    const user = useSelector(selectuser)
-    console.log(user)
-    let redirectVar = null;
-    
-    
-    if(!user){
-           redirectVar = <Redirect to="/userlogin"/>
-    }
-
     return (
         <div >
 
