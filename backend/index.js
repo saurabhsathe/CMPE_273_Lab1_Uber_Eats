@@ -59,6 +59,7 @@ app.use(function(req, res, next) {
 app.post('/customerlogin',async function(req,res){
     var flag
     try{
+        console.log(req.body)
      flag = await verify_user.auth_user(req.body.email,req.body.password,req.body.usertype)
 }
 catch(error){

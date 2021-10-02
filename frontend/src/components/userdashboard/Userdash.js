@@ -10,17 +10,17 @@ import Contentbar from './Contentbar'
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
 import {useSelector,useDispatch} from 'react-redux'
-
+import Prosidebar from './Prosidebar'
 const Userdash = () => {
     const user = useSelector(selectuser)
     console.log(user)
     let redirectVar = null;
     
-    
+    /*
     if(!user){
            redirectVar = <Redirect to="/userlogin"/>
     }
-
+*/
     return (
         <div >
 
@@ -29,8 +29,8 @@ const Userdash = () => {
             <Navbar />
             
             <div className="row">
-                    <div className="col-md-3 userdashdiv">
-                        <SideBar />
+                    <div className="col-md-3 userdashdiv" style={{marginTop:"50px"}}>
+                        <Prosidebar />
                     </div>
                     <div className="col-md-9 userdashdiv" id="user-contentbar" >
 

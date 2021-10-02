@@ -1,17 +1,15 @@
 import React,{useState} from 'react'
-import {login} from '../../features/user_slice'
 import axios from 'axios';
-import cookie from 'react-cookies';
 import {Link} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
-
+import {login} from '../../features/user_slice'
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
 const LoginForm = () => {
     
     const [uemail,setuemail]=useState()
     const [upwd,setpassword]=useState()
-    const [usertype,setusertype]=useState()
+    const [usertype,setusertype]="customer"
     let [errors,seterrors]=useState()
     const dispatch = useDispatch()
 
@@ -29,12 +27,12 @@ const LoginForm = () => {
         //make a post request with the user data
         axios.post('http://localhost:3001/customerlogin',data)
             .then(response => {
-                console.log(response)
+                
                 if(response.status === 200){
                     alert("successfull login")
                     dispatch(login({
                         email:uemail,
-                        userType:usertype
+                        userType:"customer"
                         
                     }))
 
@@ -47,27 +45,20 @@ const LoginForm = () => {
                 }
             });
     
-    /*        if(!cookie.load('cookie')){
-               seterrors("not set cookies ")
-            }
-    */
-
+   
 
 
 
         
       
     }
-    /*if(!cookie.load('cookie')){
-        seterrors("not set cookies ")
-     }
-*/
+    
 const user = useSelector(selectuser)
-console.log(user)
+
 let redirectVar = null;
     
 if(user){
-       redirectVar = <Redirect to="/userdash"/>
+    redirectVar = <Redirect to="/userdash"/>
     }
     return (<div>
         {redirectVar}

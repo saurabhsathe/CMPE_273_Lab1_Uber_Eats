@@ -1,7 +1,10 @@
 import React,{useState} from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios';
-import cookie from 'react-cookies';
+import {useSelector,useDispatch} from 'react-redux'
+import {signup} from '../../features/user_slice'
+import {selectuser} from '../../features/user_slice'
+import {Redirect} from 'react-router';
 
 const SignupForm = () => {
     const [uname,setuname] = useState();
@@ -14,6 +17,8 @@ const SignupForm = () => {
     const [udp,setudp] = useState();
     const [usertype,setusertype] = "customer";
     const [errors,seterrors]=useState();
+    const dispatch = useDispatch()
+
     
     function handleRegister(e){
         var headers = new Headers();
@@ -41,7 +46,11 @@ const SignupForm = () => {
             .then(response => {
                 
                 if(response.status === 200){
-                    seterrors("")
+                    dispatch(signup({
+                        email:uemail,
+                        userType:"customer"
+                        
+                    }))
 
                     }else if(response.status === 202){
                     
@@ -51,15 +60,18 @@ const SignupForm = () => {
                     
                 }
             });
-            /*
-            if(!cookie.load('cookie')){
-               seterrors("not set cookies ")
-            }*/
+            
     }
+    const user = useSelector(selectuser)
 
-    return (
+    let redirectVar = null;
         
-         
+    if(user){
+        redirectVar = <Redirect to="/userdash"/>
+        }
+    return (
+        <div>
+         {redirectVar}
          
             <div className="register-form">
             <h2><b>Customer Registration</b></h2>
@@ -111,7 +123,7 @@ const SignupForm = () => {
                   Already have an account? <Link to="/userlogin">Login</Link>&nbsp;
                </form>
             </div>
-         
+            </div>
     )
 }
 

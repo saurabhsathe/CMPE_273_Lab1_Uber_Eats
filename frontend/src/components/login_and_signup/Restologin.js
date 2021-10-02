@@ -1,13 +1,17 @@
 import React,{useState} from 'react'
-import {useDispatch} from 'react-redux'
 import {login} from '../../features/user_slice'
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom'
+import {useSelector,useDispatch} from 'react-redux'
+
+import {selectuser} from '../../features/user_slice'
+import {Redirect} from 'react-router';
+
 
 const Restologin = () => {
     
-    const [uname,setusername]=useState()
+    const [uemail,setuemail]=useState()
     const [upwd,setpassword]=useState()
     const [usertype,setusertype]=useState()
     let [errors,seterrors]=useState()
@@ -18,23 +22,23 @@ const Restologin = () => {
     function handleLogin(e){
         var headers = new Headers();
         //prevent page from refresh
-        alert(usertype)
+        
         e.preventDefault();
         const data = {
-            username : uname,
+            email : uemail,
             password : upwd,
-            usertype:"resteraunt_owner"
+            usertype:"restaurant_owner"
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.post('http://localhost:3001/restologin',data)
+        axios.post('http://localhost:3001/customerlogin',data)
             .then(response => {
                 
                 if(response.status === 200){
                     dispatch(login({
-                        username:uname,
-                        userType:usertype
+                        email:uemail,
+                        userType:"restaurant_owner"
                     }))
 
                     }else{
@@ -45,9 +49,7 @@ const Restologin = () => {
                     
                 }
             });
-            if(!cookie.load('cookie')){
-               seterrors("not set cookies ")
-            }
+            
 
 
 
@@ -56,16 +58,25 @@ const Restologin = () => {
         
       
     }
+    const user = useSelector(selectuser)
 
+    let redirectVar = null;
+        
+    if(user){
+        redirectVar = <Redirect to="/restodash"/>
+        }
+    
     
     return (
+        <div>
+            {redirectVar}
         <div className="login-form">
             <h2><b> Resteraunt Owner Login</b></h2>
                <p>{errors}</p>
                <form onSubmit={handleLogin}>
-                  <div className="form-group">
-                     <label>User Name</label>
-                     <input id="uname" value={uname} type="text" className="form-control" placeholder="User Name" onChange={e => setusername(e.target.value)} />
+               <div className="form-group">
+                     <label>Email</label>
+                     <input id="uemail" value={uemail} type="email" className="form-control" placeholder="Registered Email id" onChange={e => setuemail(e.target.value)} />
                   </div>
                   <div className="form-group">
                      <label>Password</label>
@@ -81,7 +92,7 @@ const Restologin = () => {
                   <button className="btn btn-dark" >Register</button>&nbsp;</Link>&nbsp;
                </form>
             
-        </div>
+        </div></div>
     )
 }
 

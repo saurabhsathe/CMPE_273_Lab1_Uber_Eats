@@ -1,11 +1,14 @@
 .wrapper {
     display: flex;
     align-items: stretch;
+    overflow: hidden;
 }
 
 #usersidebar {
     min-width: 250px;
     max-width: 100%;
+    margin-bottom: -5000px; /* any large number will do */
+    padding-bottom: 5000px; 
 
 }
 
@@ -15,7 +18,7 @@
 #usersidebar {
     min-width: 250px;
     max-width: 250px;
-    min-height: 100vh;
+   
     
 }
 a[data-toggle="collapse"] {
@@ -87,7 +90,13 @@ a, a:hover, a:focus {
     color: #fff;
     padding: 10px;
 }
-
+.log_btn{
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
 #usersidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
@@ -106,4 +115,11 @@ ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
     background: black;
+}
+.log_btn{
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
 }

@@ -1,6 +1,10 @@
 import {React,useState} from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios';
+import {useSelector,useDispatch} from 'react-redux'
+import {signup} from '../../features/user_slice'
+import {selectuser} from '../../features/user_slice'
+import {Redirect} from 'react-router';
 
 const RestoSignup = () => {
     const [oname,setoname] = useState();
@@ -17,7 +21,8 @@ const RestoSignup = () => {
     const [restzip,setrestzip] = useState();
     const [restcontact,setrestcontact] = useState();
     const [errors,seterrors] = useState();
-    
+    const dispatch = useDispatch()
+    let redirectVar = null
     
     
     
@@ -73,16 +78,30 @@ const RestoSignup = () => {
             
 
             if(secondResponse.status==200){
-                console.log("user registered successfully")
+                dispatch(signup({
+                    email:oemail,
+                    userType:"restaurant_owner"
+                    
+                }))
+                
+                
+
             }
             
             
     }
+    const user = useSelector(selectuser)
+
     
+        
+    if(user){
+        redirectVar = <Redirect to="/restodash"/>
+        }  
 
     
     return (
         <div>
+            {redirectVar}
             <div className="register-form sticktop">
             <h2><b>New Business </b></h2>
                <form onSubmit={handleRegister}>
@@ -126,30 +145,30 @@ const RestoSignup = () => {
                   </div>
                 
                 <hr />
-                <h2><b>Resteraunt details</b></h2>
+                <h2><b>Restaurant details</b></h2>
                 <hr />
 
                 <div className="form-group">
-                     <label>Resteraunt Name</label>
+                     <label>Restaurant Name</label>
                      <input type="text" id="restname" className="form-control" value={restname} onChange={e=>setrestname(e.target.value)} placeholder="Your Name" required/>
                   </div>
                   <div className="form-group">
-                     <label>Resteraunt Address</label>
+                     <label>Restaurant Address</label>
                      <input type="text" id="restaddr" className="form-control" value={restaddr} onChange={e=>setrestaddr(e.target.value)} placeholder="Address" required/>
                   </div>
                   <div className="form-group">
-                     <label>Resteraunt Zipcode</label>
+                     <label>Restaurant Zipcode</label>
                      <input type="text" pattern="[0-9]{5}" id="restzip" className="form-control" value={restzip} onChange={e=>setrestzip(e.target.value)} placeholder="Zipcode" required/>
                   </div>
          
                   <div className="form-group">
-                     <label>Upload Resteraunt Picture</label>
+                     <label>Upload Restaurant Picture</label>
                      <br />
                      <input type="file" id="restdp" name="restdp" onChange={e => setrestdp(e.target.files[0])}  accept="image/x-png,image/gif,image/jpeg" />
                   </div>
 
                   <div className="form-group">
-                     <label>Resteraunt Contact No.</label>
+                     <label>Restaurant Contact No.</label>
                      <input type="tel" id="restcontact" className="form-control" value={restcontact} onChange={e=>setrestcontact(e.target.value)} placeholder="Your contact number please" required/>
                   </div>
          

@@ -5,5 +5,5 @@ export default configureStore({
     reducer:{
         user:userReducer
     },
-    devTools:true
+    devTools:true//to enable redux devtools
 })

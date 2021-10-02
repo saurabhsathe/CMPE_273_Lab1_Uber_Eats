@@ -2,10 +2,7 @@ import React from 'react'
 import Navbar from '../Navbar'
 import BootCdnUser from './BootCdnUser'
 import BootCdn from './BootCdn'
-import SideBar from './SideBar'
-import {BrowserRouter, Route , Switch} from 'react-router-dom'
-import Resteraunts from './Resteraunts'
-import Userinfo from './Userinfo'
+import SideBar from './RestoSideBar'
 import Contentbar from './Contentbar'
 const Userdash = () => {
     return (
