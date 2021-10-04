@@ -27,7 +27,7 @@ const SideBar = () => {
  
     return (<div>
             {redirectVar}
-            <nav id="usersidebar" >
+            <nav id="usersidebar" style={{fontSize: "x-large"}}>
 
                 
 
@@ -37,11 +37,7 @@ const SideBar = () => {
                 <a href="/user/home" data-toggle="" aria-expanded="false" className="dropdown-toggle">Home</a>
                 
             </li>
-            <li >
-                <div id="advance_search" style={{background:"black",color:"white"}}>
-                    <p >Advance Search</p>    
-                </div>        
-            </li>
+
             <li >
                 <a href="/home" data-toggle="" aria-expanded="false" className="dropdown-toggle">Update Profile</a>
                 
@@ -51,7 +47,7 @@ const SideBar = () => {
                 
             </li>
             <li>
-                <a href="#pageSubmenu" data-toggle="" aria-expanded="false" className="dropdown-toggle">Cart</a>
+                <a href="/userdash/userupdate" data-toggle="" aria-expanded="false" className="dropdown-toggle">Cart</a>
                 
             </li>
             <li >

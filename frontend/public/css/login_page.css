@@ -29,6 +29,7 @@ body {
 @media screen and (max-width: 450px) {
     .login-form{
         margin-top: 10%;
+
     }
 
     .register-form{
@@ -72,4 +73,10 @@ body {
 .btn-black{
     background-color: #000 !important;
     color: #fff;
+}
+.login-form input{
+    width: 50%
+}
+.register-form input{
+    width: 50%
 }

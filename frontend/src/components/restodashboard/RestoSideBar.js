@@ -18,12 +18,12 @@ const SideBar = () => {
     const user = useSelector(selectuser)
     console.log(user)
     let redirectVar = null;
-    
+    /*
     if(!user){
         redirectVar=<Redirect to="/restologin" />
 
     }
-    
+    */
     return (<div>
             {redirectVar}
             <nav id="usersidebar" >

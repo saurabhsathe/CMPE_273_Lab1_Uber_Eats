@@ -3,12 +3,12 @@ import React from 'react'
 const Resteraunts = () => {
     return (
             <div id="services" className="container">
-   <h2 className="display-4 text-center mt-5 mb-3">Resteraunts</h2>
+   <h2 className="display-4 text-center mt-5 mb-3">Restaurants</h2>
    
    <div className="row text-center">
       <div className="col-md-4 mb-4">
          <div className="card h-100">
-            <img className="card-img-top" src="design.jpg" alt="Design" />
+            <img className="card-img-top" src="https://ubereatscustomerimagesbucket.s3.us-east-2.amazonaws.com/sathesaurabh97.png" alt="Design" />
             <div className="card-body">
                <h4 className="card-title">Design</h4>
                <p className="card-text">Deliver the best user experience 

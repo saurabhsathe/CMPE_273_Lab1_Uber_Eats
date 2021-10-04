@@ -5,31 +5,33 @@ import './proside.css'
 import {Link} from 'react-router-dom';
 import {Redirect} from 'react-router';
 const Prosidebar = () => {
-/*
-  <!--
-    <h3><SubMenu title="Advance Search" >
-      <MenuItem>
-      Option 1
-      </MenuItem>
-      <MenuItem>Component 2</MenuItem>
-    </SubMenu></h3>
 
-*/ 
 
-    return (<nav stye={{overflow:"hidden"}}>
+    return (
+    
+    <nav stye={{overflow:"hidden"}}>
         <ProSidebar style={{fontSize:"20px",marginBottom:"-5000px",paddingBottom:"5000px"}}>
   <Menu iconShape="square">
-    <MenuItem ><a href="/userdash" >Dashboard</a></MenuItem>
+    <MenuItem ><a href="/restodash" >Dashboard</a></MenuItem>
     <hr />
     <MenuItem >
-    <a href="/userdash/userupdate" >Update Profile</a>
+    <a href="/restodash/updateowner">Update Profile</a>
+    </MenuItem>
+    <hr />
+    <MenuItem >
+    <a href="/restodash/createdish" >Add Dish</a>
+    </MenuItem>
+    <hr />
+    <MenuItem >
+    <a href="/restodash/currentorders" >CurrentOrder</a>
     </MenuItem>
     <hr />
     
     
-    <MenuItem >Cart</MenuItem>
+    
+    <MenuItem >Customers</MenuItem>
     <hr />
-    <MenuItem ><a href="/userdash/pastorders" >Past Orders</a></MenuItem>
+    <MenuItem ><a href="/restodash/pastorders" >Past Orders</a></MenuItem>
     <hr />
     <MenuItem ><button onClick="" style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></MenuItem>
     

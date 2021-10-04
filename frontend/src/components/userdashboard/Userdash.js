@@ -1,14 +1,10 @@
 import React from 'react'
-import Navbar from '../Navbar'
+import Navbar from './Navbar'
 import BootCdnUser from './BootCdnUser'
 import BootCdn from './BootCdn'
-import SideBar from './SideBar'
-import {BrowserRouter, Route , Switch} from 'react-router-dom'
-import Resteraunts from './Resteraunts'
-import Userinfo from './Userinfo'
 import Contentbar from './Contentbar'
 import {selectuser} from '../../features/user_slice'
-import {Redirect} from 'react-router';
+import Sidebar from './SideBar'
 import {useSelector,useDispatch} from 'react-redux'
 import Prosidebar from './Prosidebar'
 const Userdash = () => {
