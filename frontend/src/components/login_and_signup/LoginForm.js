@@ -5,6 +5,7 @@ import {useSelector,useDispatch} from 'react-redux'
 import {login} from '../../features/user_slice'
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
+import cookie from 'react-cookies'
 const LoginForm = () => {
     
     const [uemail,setuemail]=useState()
@@ -35,7 +36,8 @@ const LoginForm = () => {
                         userType:"customer"
                         
                     }))
-
+                    
+                    
                     }else{
                     
                     seterrors("User does not exists or Invalid credentials")
@@ -56,11 +58,11 @@ const LoginForm = () => {
 const user = useSelector(selectuser)
 
 let redirectVar = null;
-    
-if(user){
-    redirectVar = <Redirect to="/userdash"/>
-    }
-    return (<div>
+        if(cookie.load('cookie')){
+            console.log("loaded successfully")
+            redirectVar = <Redirect to= "/userdash"/>
+        }    
+return (<div>
         {redirectVar}
         <div className="login-form" >
             <h2><b>Customer Login</b></h2>

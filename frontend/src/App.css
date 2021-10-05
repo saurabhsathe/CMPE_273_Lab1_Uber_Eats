@@ -67,3 +67,7 @@ body {
 .pro-sidebar .pro-menu .pro-menu-item > .pro-inner-item{
   font-size: x-large;
 }
+.pro-sidebar > .pro-sidebar-inner{
+  margin-bottom: -5000px;
+    padding-bottom: 5000px;
+}

@@ -16,13 +16,13 @@ const SideBar = () => {
 
     const dispatch = useDispatch()
     function handleLogout(){
-        
         dispatch(logout())
+        cookie.remove('cookie', { path: '/' })
+        
     }
     const user = useSelector(selectuser)
-    console.log(user)
     let redirectVar = null;
-   
+    
  
  
     return (<div>

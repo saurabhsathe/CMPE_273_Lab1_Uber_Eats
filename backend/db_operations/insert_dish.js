@@ -4,9 +4,10 @@ const database=require('./database')
 const insert = (conn_pool,dishdetails)=>{return new Promise((resolve, reject)=>{
     conn_pool.query(`insert into dishes(dish_name,resteraunt_name,zipcode,dish_desc,dishdp) values("${dishdetails.dish_name}","${dishdetails.resteraunt_name}","${dishdetails.zipcode}","${dishdetails.dish_desc}","${dishdetails.dishdp}")`,  (error, results)=>{
         if(error){
-            return reject(error);
+            
+            return reject(false);
         }
-        return resolve(results);
+        return resolve(true);
     });
 });
 } 
@@ -36,10 +37,11 @@ async function insert_dish (dish_details) {
 async function insertdish(dish_details){
     try{
 
-        await insert_dish(dish_details)
-        return true
+        return await insert_dish(dish_details)
+        
     }
     catch(error){
+        console.log("error atthe bottom",error)
         return false
     }
     

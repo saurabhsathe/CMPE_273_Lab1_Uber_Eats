@@ -1,8 +1,17 @@
 import React from 'react'
-
+import {Redirect} from 'react-router';
+import cookie from 'react-cookies'
 const PastOrders = () => {
+    let redirectVar = null;
+    
+    
+    if(!cookie.load('cookie')){
+        redirectVar = <Redirect to= "/userlogin"/>
+    }
+    
     return (
         <div>
+            {redirectVar}
             <div id="services" className="container">
    <h2 className="display-4 text-center mt-5 mb-3">Past Orders</h2>
             <div className="row text-center">

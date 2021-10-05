@@ -4,13 +4,13 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import {Link} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
-
+import Cookies from 'universal-cookie' 
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
-
+import { useCookies } from "react-cookie";
 
 const Restologin = () => {
-    
+    const [cookies, setCookie] = useCookies(["restaurant"]);
     const [uemail,setuemail]=useState()
     const [upwd,setpassword]=useState()
     const [usertype,setusertype]=useState()
@@ -40,7 +40,10 @@ const Restologin = () => {
                         email:uemail,
                         userType:"restaurant_owner"
                     }))
-
+                    let restodata = response.data
+                    console.log("here is restodata", restodata)
+                    setCookie("resteraunt_name", restodata.resteraunt_name, {path: "/"});
+                    setCookie("zipcode", restodata.zipcode, {path: "/"});
                     }else{
                     
                     seterrors("User does not exists or Invalid credentials")

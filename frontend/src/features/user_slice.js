@@ -1,4 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit"
+import cookie from "react-cookies";
+
 export const userSlice=createSlice({
     name:"user",
     initialState:{
@@ -10,6 +12,8 @@ export const userSlice=createSlice({
         login:(state,action)=>{
             state.user={"email":action.payload.email,"userType":action.payload.userType}
             
+            
+            
            
         },
         signup:(state,action)=>{
@@ -19,6 +23,7 @@ export const userSlice=createSlice({
         },
         logout:(state,action)=>{
             state.user=null
+            cookie.remove('loggedin', { path: '/' })
         }
     }
 })

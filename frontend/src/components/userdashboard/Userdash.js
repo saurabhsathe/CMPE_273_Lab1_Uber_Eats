@@ -7,19 +7,21 @@ import {selectuser} from '../../features/user_slice'
 import Sidebar from './SideBar'
 import {useSelector,useDispatch} from 'react-redux'
 import Prosidebar from './Prosidebar'
+import {Redirect} from 'react-router';
+import cookie from 'react-cookies'
 const Userdash = () => {
     const user = useSelector(selectuser)
     console.log(user)
     let redirectVar = null;
     
-    /*
-    if(!user){
-           redirectVar = <Redirect to="/userlogin"/>
+    
+    if(!cookie.load('cookie')){
+        redirectVar = <Redirect to= "/userlogin"/>
     }
-*/
+    
     return (
         <div >
-
+            {redirectVar}
             <BootCdn />
             <BootCdnUser />
             <Navbar />

@@ -4,20 +4,31 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import './proside.css'
 import {Link} from 'react-router-dom';
 import {Redirect} from 'react-router';
+import {useSelector,useDispatch} from 'react-redux'
+import {logout} from '../../features/user_slice'
+import {selectuser} from '../../features/user_slice'
+import cookie from 'react-cookies'
+
 const Prosidebar = () => {
-/*
-  <!--
-    <h3><SubMenu title="Advance Search" >
-      <MenuItem>
-      Option 1
-      </MenuItem>
-      <MenuItem>Component 2</MenuItem>
-    </SubMenu></h3>
+  const dispatch = useDispatch()
+  let redirectVar = null;
+function handleLogout(){
+  alert("I am here")
+  dispatch(logout())
+  cookie.remove('cookie', { path: '/' })
+  
+}
 
-*/ 
+    
+    
+if(!cookie.load('cookie')){
+    redirectVar = <Redirect to= "/userlogin"/>
+}
 
-    return (<nav stye={{overflow:"hidden"}}>
-        <ProSidebar style={{fontSize:"20px",marginBottom:"-5000px",paddingBottom:"5000px"}}>
+    return (
+      <div>{redirectVar}
+    <nav stye={{overflow:"hidden"}}>
+        <ProSidebar id= "sidenav" style={{fontSize:"20px",marginBottom:"-5000px",paddingBottom:"5000px"}}>
   <Menu iconShape="square">
     <MenuItem ><a href="/userdash" >Dashboard</a></MenuItem>
     <hr />
@@ -31,11 +42,12 @@ const Prosidebar = () => {
     <hr />
     <MenuItem ><a href="/userdash/pastorders" >Past Orders</a></MenuItem>
     <hr />
-    <MenuItem ><button onClick="" style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></MenuItem>
+    <MenuItem ><button onClick={handleLogout} style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></MenuItem>
     
   </Menu>
 </ProSidebar>
 </nav>
+</div>
     )
 }
 

@@ -16,6 +16,9 @@ const pipeline = promisify(require("stream").pipeline)
 const s3upload = require("./upload_file")
 var insert_resto =require('./db_operations/insert_resto')
 var verify_user = require('./db_operations/verify_user_credentials')
+var getresto  = require('./db_operations/getresto_info')
+var insert_dish = require('./db_operations/insert_dish')
+var get_dishes =  require('./db_operations/get_dishes')
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -67,10 +70,22 @@ catch(error){
 }
     console.log(flag)
     if(flag==true){
+        res.cookie('cookie',"admin",{maxAge: 900000, httpOnly: false, path : '/'});
             res.writeHead(200,{
                 'Content-Type' : 'text/plain'
             })
-            res.end("Successful Login");
+            if (req.body.usertype=="restaurant_owner"){
+                data=await getresto.getown(req.body.email)
+                res.end(JSON.stringify(data));
+            }
+            else{
+                res.end("Successful Login");
+
+            }
+
+                
+
+            
 
       
     }
@@ -142,6 +157,43 @@ app.post('/usersignup',upload.single("dp"),async function(req,res){
     
 });
 
+app.post('/addDish',upload.single("dp"),async function(req,res){
+    let dish=JSON.parse(req.body.data)    
+    
+        let fileloc="./public/"+res.req.file.filename
+        let fname=dish.resteraunt_name+dish.zipcode+dish.dish_name+path.extname(res.req.file.originalname)
+       
+        dish.dishdp = await s3upload.upload_to_s3(fileloc,"ubereatsdishimages",fname)
+        
+        x=await insert_dish.insertdish(dish)
+        console.log(x)
+        fs.unlinkSync(fileloc)
+        if(x==true){
+        console.log("in the new dish section")
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("Dish successfully registered");
+        }
+        else{
+            res.writeHead(202,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Dish could not be added");
+                
+        }
+    
+    
+    
+    
+    
+
+    
+});
+
+
+
+
 app.post('/restosignup',upload.single("restdp"),async function(req,res){
     console.log("int the resto signup")
     let resto=JSON.parse(req.body.data)    
@@ -183,10 +235,36 @@ app.post('/restosignup',upload.single("restdp"),async function(req,res){
     
 });
 
+app.post('/getDishes',async function(req,res){
+    
+    try{
+     
+     result = await get_dishes.getdishes_resto(req.body.resteraunt_name,req.body.zipcode)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end(JSON.stringify(result))
+    }
+    else{
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("No data found")
+    }
 
 
+}
+catch(error){
+    console.log(error)
+}
+        
+    
 
+    
 
+    
+});
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001");
