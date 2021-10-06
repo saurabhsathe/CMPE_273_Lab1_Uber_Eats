@@ -3,7 +3,9 @@ import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
 
-const Resteraunts = () => {
+import Cart from './Cart'
+import DishCard from './DishCard'
+const Resteraunt2 = (props) => {
     
     let [dishes_received,setdishes]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
@@ -12,6 +14,7 @@ const Resteraunts = () => {
             
            
     useEffect(()=>{
+        if(Object.keys(props).length == 0){
         console.log("herhehrehrhehrehrehh")
              var headers = new Headers(); 
            const data = {
@@ -38,27 +41,28 @@ const Resteraunts = () => {
 
         })
        
-    },[]);
+    }
+    else{
+        console.log("got some props")
+    }
+
+
+
+},[]);
   
 
-let details_received= dishes_received.map(dish => {
+let details_received= dishes_received.map((dish,index) => {
     return(
-        <div className="col-md-4 mb-4" >
-<div className="card h-100" id={dish.dish_id}>
-    <img className="card-img-top" style={{width: "100%",
-    height: "15vw",
-    objectFit: "cover"}} src = {dish.dishdp} alt="Design" />
-    <div className="card-body">
-    <h4 className="card-title">{dish.dish_name}</h4>
-    <p className="card-text">{dish.dish_desc}</p>
-    <p><b style={{color:"black"}}>{dish.price}$</b></p>
-    </div>
-    <div className="card-footer py-4">
+        
+    <DishCard id = {dish.id} 
+    key ={dish.dish_id} 
+    dishdp={dish.dishdp} 
+    dish_name ={dish.dish_name}
+    dish_desc={dish.dish_desc}
+    dish={dish}
+    price = {dish.price}
     
-    <button type="button" class="btn btn-dark">Add to cart</button>
-        </div>
-</div>
-</div>
+    />
 
     )
 })
@@ -80,10 +84,10 @@ let details_received= dishes_received.map(dish => {
 
     </div>
     
-
+<Cart />
 
 </div>
     )
 }
 
-export default Resteraunts
+export default Resteraunt2

@@ -5,7 +5,8 @@ import Resteraunts from './userdashboard/Resteraunts'
 import Userinfo from './userdashboard/Userinfo'
 import MainLoginForm from './login_and_signup/MainLoginForm'
 import MainSignupForm from './login_and_signup/MainSignupForm'
-import Dashboard from './dashboard/Dashboard'
+//import Dashboard from './dashboard/Dashboard'
+import Dashboard from './carts/Dashboard'
 import RestoMainLogin from './login_and_signup/RestoMainLogin'
 import RestoMainSignup from './login_and_signup/RestoMainSignup'
 import Restodash from './restodashboard/Restodash'
@@ -19,6 +20,7 @@ class Main extends Component {
         return(
             <div>
                 <Route exact path="/" component={Dashboard} />
+                
                 <Route path="/userlogin" component={MainLoginForm} />
                 <Route path="/usersignup" component={MainSignupForm} />
                 <Route path="/restologin" component={RestoMainLogin} />

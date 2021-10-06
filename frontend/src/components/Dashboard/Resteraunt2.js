@@ -3,7 +3,7 @@ import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
 
-const Resteraunts = () => {
+const Resteraunt2 = (props) => {
     
     let [dishes_received,setdishes]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
@@ -12,6 +12,7 @@ const Resteraunts = () => {
             
            
     useEffect(()=>{
+        if(Object.keys(props).length == 0){
         console.log("herhehrehrhehrehrehh")
              var headers = new Headers(); 
            const data = {
@@ -38,7 +39,14 @@ const Resteraunts = () => {
 
         })
        
-    },[]);
+    }
+    else{
+        console.log("got some props")
+    }
+
+
+
+},[]);
   
 
 let details_received= dishes_received.map(dish => {
@@ -86,4 +94,4 @@ let details_received= dishes_received.map(dish => {
     )
 }
 
-export default Resteraunts
+export default Resteraunt2

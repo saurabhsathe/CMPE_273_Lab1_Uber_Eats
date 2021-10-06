@@ -1,12 +1,5 @@
 import React from 'react'
-import {useState} from 'react'
-import Searchbar from './Searchbar'
-import Vegnonvegoption from './Vegnonvegoption'
-import Location from './Location' 
-import Resteraunts from './Resteraunts'
-import $ from 'jquery'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+
 const Navbar = () => {
  
     return (

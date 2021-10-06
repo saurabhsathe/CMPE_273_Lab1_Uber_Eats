@@ -19,6 +19,7 @@ var verify_user = require('./db_operations/verify_user_credentials')
 var getresto  = require('./db_operations/getresto_info')
 var insert_dish = require('./db_operations/insert_dish')
 var get_dishes =  require('./db_operations/get_dishes')
+var getall_dishes =  require('./db_operations/getalldishes')
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -265,6 +266,38 @@ catch(error){
 
     
 });
+
+app.post('/getallDishes',async function(req,res){
+    
+    try{
+     
+     result = await getall_dishes.getdishes_resto()
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end(JSON.stringify(result))
+    }
+    else{
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("No data found")
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001");
