@@ -27,6 +27,7 @@ const Cart = () => {
                             items.map((item)=>{
                                 return(
                                 <tr>
+                                    
                                     <td>
                                         <img src={item.dishdp} style={{height:"6rem"}} />
                                         

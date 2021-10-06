@@ -1,7 +1,11 @@
 import React from 'react'
-
+import {useState,useEffect} from 'react'
+import Checkout from './Checkout'
+import Cart from './Cart'
 const Navbar = () => {
- 
+    const [checkbtn,setcheckbtn] = useState(false)
+    
+
     return (
         <div>
             <nav id="user-nav" className="navbar navbar-expand-lg fixed-top navbar-inner" >
@@ -54,7 +58,19 @@ const Navbar = () => {
             
             
             </form>
+            <div className="col-sm input-group">
             
+            </div>
+            <span class="input-group-btn">
+                        <button onClick={()=>setcheckbtn(true)} class="btn btn-dark" data-target="#search-form" name="q">
+                            Cart
+                              
+		                 </button></span>
+                         <Checkout trigger={checkbtn} setTrigger={setcheckbtn}>
+
+                        <Cart />
+
+                         </ Checkout>
         
             </div>
         </div>

@@ -3,7 +3,6 @@ import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
 
-import Cart from './Cart'
 import DishCard from './DishCard'
 const Resteraunt2 = (props) => {
     
@@ -84,7 +83,7 @@ let details_received= dishes_received.map((dish,index) => {
 
     </div>
     
-<Cart />
+
 
 </div>
     )
