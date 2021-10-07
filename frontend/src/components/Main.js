@@ -6,15 +6,10 @@ import Userinfo from './userdashboard/Userinfo'
 import MainLoginForm from './login_and_signup/MainLoginForm'
 import MainSignupForm from './login_and_signup/MainSignupForm'
 //import Dashboard from './dashboard/Dashboard'
-import Dashboard from './carts/Dashboard'
+import Dashboard from './dashboard/Dashboard'
 import RestoMainLogin from './login_and_signup/RestoMainLogin'
 import RestoMainSignup from './login_and_signup/RestoMainSignup'
 import Restodash from './restodashboard/Restodash'
-import CreateDish from './restodashboard/CreateDish'
-
-//Create a Main Component
-import MainLayout from './MainLayout'
-import {BrowserRouter as Router,Switch} from "react-router-dom";
 class Main extends Component {
     render(){
         return(

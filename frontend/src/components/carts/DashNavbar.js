@@ -2,6 +2,7 @@ import React from 'react'
 import {useState,useEffect} from 'react'
 import Checkout from './Checkout'
 import Cart from './Cart'
+import {FaShoppingCart} from 'react-icons/fa'
 const Navbar = () => {
     const [checkbtn,setcheckbtn] = useState(false)
     
@@ -63,7 +64,7 @@ const Navbar = () => {
             </div>
             <span class="input-group-btn">
                         <button onClick={()=>setcheckbtn(true)} class="btn btn-dark" data-target="#search-form" name="q">
-                            Cart
+                            <FaShoppingCart />
                               
 		                 </button></span>
                          <Checkout trigger={checkbtn} setTrigger={setcheckbtn}>

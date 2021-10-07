@@ -1,14 +1,12 @@
 import React from 'react'
-import {useState} from 'react'
-import Searchbar from './Searchbar'
-import Vegnonvegoption from './Vegnonvegoption'
-import Location from './Location' 
-import Resteraunts from './Resteraunts'
-import $ from 'jquery'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import {useState,useEffect} from 'react'
+import Checkout from './Checkout'
+import Cart from './Cart'
+import {FaShoppingCart} from 'react-icons/fa'
 const Navbar = () => {
- 
+    const [checkbtn,setcheckbtn] = useState(false)
+    
+
     return (
         <div>
             <nav id="user-nav" className="navbar navbar-expand-lg fixed-top navbar-inner" >
@@ -61,7 +59,19 @@ const Navbar = () => {
             
             
             </form>
+            <div className="col-sm input-group">
             
+            </div>
+            <span class="input-group-btn">
+                        <button onClick={()=>setcheckbtn(true)} class="btn btn-dark" data-target="#search-form" name="q">
+                            <FaShoppingCart />
+                              
+		                 </button></span>
+                         <Checkout trigger={checkbtn} setTrigger={setcheckbtn}>
+
+                        <Cart />
+
+                         </ Checkout>
         
             </div>
         </div>

@@ -6,7 +6,7 @@ import Userinfo from './Userinfo'
 import PastOrder from './PastOrders'
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies'
-
+import Cart from './Cart'
 const Contentbar = () => {
 
     let redirectVar = null;
@@ -21,7 +21,7 @@ const Contentbar = () => {
             <Switch>
             
             <Route exact path='/userdash/' component={Resteraunts} />
-            
+            <Route path= "/userdash/cart" component={Cart} />        
             <Route path="/userdash/userupdate" component={UpdateProfile} />
             <Route path='/userdash/userinfo' component={Userinfo} />
             <Route path="/userdash/pastorders" component={PastOrder} />

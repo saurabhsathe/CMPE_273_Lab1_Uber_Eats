@@ -36,9 +36,13 @@ if(!cookie.load('cookie')){
     <a href="/userdash/userupdate" >Update Profile</a>
     </MenuItem>
     <hr />
+    <MenuItem ><a href="/userdash/cart" >Favourites</a></MenuItem>
+    <hr />
     
+    <MenuItem ><a href="/userdash/cart" >Ongoing Orders</a></MenuItem>
+    <hr />
     
-    <MenuItem >Cart</MenuItem>
+    <MenuItem ><a href="/userdash/cart" >Your Cart</a></MenuItem>
     <hr />
     <MenuItem ><a href="/userdash/pastorders" >Past Orders</a></MenuItem>
     <hr />

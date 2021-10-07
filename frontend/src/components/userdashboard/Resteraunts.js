@@ -1,102 +1,86 @@
-import React from 'react'
+import React, {Component}  from 'react'
+import {useEffect,useState} from 'react'
+import axios from 'axios'
+import { useCookies } from "react-cookie";
 
-const Resteraunts = () => {
+import DishCard from './DishCard'
+const Resteraunts = (props) => {
+    
+    let [dishes_received,setdishes]=useState([])
+    
+    
+            
+           
+    useEffect(()=>{
+        if(true){
+        console.log("herhehrehrhehrehrehh")
+             var headers = new Headers(); 
+           const data = {
+                
+            }
+  
+        axios.post("http://localhost:3001/getallDishes",data).then(response=>{
+                
+                if(response.status === 200)
+                {
+                    
+                    console.log(response.data,typeof response.data)
+                    setdishes(response.data[0])
+                    console.log("gsdfsdfds",dishes_received)
+                    
+                    
+                }
+                else if(response.status === 202)
+                {
+                    console.log("no data found")
+                }
+
+        })
+       
+    }
+    else{
+        console.log("got some props")
+    }
+
+
+
+},[]);
+  
+
+let details_received= dishes_received.map((dish,index) => {
+    return(
+        
+    <DishCard id = {dish.id} 
+    key ={dish.dish_id} 
+    dishdp={dish.dishdp} 
+    dish_name ={dish.dish_name}
+    dish_desc={dish.dish_desc}
+    dish={dish}
+    price = {dish.price}
+    
+    />
+
+    )
+})
+
+
     return (
+
+
+        
             <div id="services" className="container">
-   <h2 className="display-4 text-center mt-5 mb-3">Restaurants</h2>
-   
+            
+   <h2 className="display-4 text-center mt-5 mb-3">Dishes</h2>
+   <hr />
+        
    <div className="row text-center">
-      <div className="col-md-4 mb-4">
-         <div className="card h-100">
-            <img className="card-img-top" src="https://ubereatscustomerimagesbucket.s3.us-east-2.amazonaws.com/sathesaurabh97.png" alt="Design" />
-            <div className="card-body">
-               <h4 className="card-title">Design</h4>
-               <p className="card-text">Deliver the best user experience 
-               with our carefully designed responsive websites and applications!</p>
-            </div>
-            <div className="card-footer py-4">
-               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
-            </div>
-         </div>
-      </div>
-        
-      <div className="col-md-4 mb-4">
-         <div className="card h-100">
-            <img className="card-img-top" src="design.jpg" alt="Design" />
-            <div className="card-body">
-               <h4 className="card-title">Design</h4>
-               <p className="card-text">Deliver the best user experience 
-               with our carefully designed responsive websites and applications!</p>
-            </div>
-            <div className="card-footer py-4">
-               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
-            </div>
-         </div>
-      </div>
-      <div className="col-md-4 mb-4">
-         <div className="card h-100">
-            <img className="card-img-top" src="design.jpg" alt="Design" />
-            <div className="card-body">
-               <h4 className="card-title">Design</h4>
-               <p className="card-text">Deliver the best user experience 
-               with our carefully designed responsive websites and applications!</p>
-            </div>
-            <div className="card-footer py-4">
-               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
-            </div>
-         </div>
-      </div>
-
+      {details_received}
+     
 
 
 
     </div>
-    <div className="row text-center">
-      <div className="col-md-4 mb-4">
-         <div className="card h-100">
-            <img className="card-img-top" src="design.jpg" alt="Design" />
-            <div className="card-body">
-               <h4 className="card-title">Design</h4>
-               <p className="card-text">Deliver the best user experience 
-               with our carefully designed responsive websites and applications!</p>
-            </div>
-            <div className="card-footer py-4">
-               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
-            </div>
-         </div>
-      </div>
-        
-      <div className="col-md-4 mb-4">
-         <div className="card h-100">
-            <img className="card-img-top" src="design.jpg" alt="Design" />
-            <div className="card-body">
-               <h4 className="card-title">Design</h4>
-               <p className="card-text">Deliver the best user experience 
-               with our carefully designed responsive websites and applications!</p>
-            </div>
-            <div className="card-footer py-4">
-               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
-            </div>
-         </div>
-      </div>
-      <div className="col-md-4 mb-4">
-         <div className="card h-100">
-            <img className="card-img-top" src="design.jpg" alt="Design" />
-            <div className="card-body">
-               <h4 className="card-title">Design</h4>
-               <p className="card-text">Deliver the best user experience 
-               with our carefully designed responsive websites and applications!</p>
-            </div>
-            <div className="card-footer py-4">
-               <a href="#" className="btn btn-secondary">See portfolio &raquo;</a>
-            </div>
-         </div>
-      </div>
-
-
-
-
-    </div>
+    
 
 
 </div>

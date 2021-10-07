@@ -3,7 +3,11 @@ import {useCart} from 'react-use-cart'
 import {FaTrash} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
 const Cart = () => {
-
+    function placeOrder(){
+        if(isEmpty){
+            alert("Cart is empty!!Please add some thing in your card")
+        }
+    }
     const {
         isEmpty,
         totalItems,
@@ -15,6 +19,8 @@ const Cart = () => {
         emptyCart
 
     } = useCart();
+
+
     if (isEmpty) return <h1 className="text-center">Your cart is empty</h1>
 
     return (
@@ -35,13 +41,13 @@ const Cart = () => {
                                         
                                     </td>
                                     <td>
-                                        {item.dish_name}
+                                        <h4>{item.dish_name}</h4>
                                     </td>
                                     <td>
-                                        {item.quantity*item.price}
+                                    <h4>{item.quantity*item.price}$</h4>
                                     </td>
                                     <td>
-                                        {item.quantity}
+                                    <h4>{item.quantity}</h4>
                                     </td>
                                     <td>
                                         <button className="btn btn-light" onClick={()=>updateItemQuantity(item.id,item.quantity-1)}>-</button>
@@ -61,7 +67,31 @@ const Cart = () => {
                                         
                                     </td>
                                     <td>
-                                       <Link to="/userdash/cart"> <button className = "btn btn-dark">Checkout</button></Link>
+                                        <h4>Total amount</h4>
+                                    </td>
+                                    <td>
+                                        
+                                    </td>
+                                        <td>
+                                        <h4>    {cartTotal}$</h4>
+
+                                    </td>
+                                    <td>
+                                        
+                                    </td>
+
+
+                                </tr>
+
+
+                        <tr>
+                                    
+                                    <td>
+                                        
+                                        
+                                    </td>
+                                    <td>
+                                        <button className = "btn btn-dark" onClick={()=>placeOrder()}>Confirm and Place order</button>
                                     </td>
                                     <td>
                                         

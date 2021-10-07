@@ -1,11 +1,6 @@
-import React, {Component}  from 'react'
-import {useEffect,useState} from 'react'
-import axios from 'axios'
-import { useCookies } from "react-cookie";
+import React from 'react'
 
-import DishCard from './DishCard'
-const Resteraunt = (props) => {
-    
+const Dishes = () => {
     let [dishes_received,setdishes]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
 
@@ -89,4 +84,4 @@ let details_received= dishes_received.map((dish,index) => {
     )
 }
 
-export default Resteraunt
+export default Dishes
