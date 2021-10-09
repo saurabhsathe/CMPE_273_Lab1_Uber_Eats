@@ -1,28 +1,106 @@
 import React from 'react'
 import {useCart} from 'react-use-cart'
+import {useState,useEffect} from 'react'
+import axios from 'axios'
+import { useCookies } from "react-cookie";
 
+import {Redirect} from 'react-router-dom'
 const Checkout = () => {
+    
+    const [addr_update,setaddr_update]=useState(true)
+    const [cookies, setCookie] = useCookies(["customer"]);
+    const [addr,setaddr]=useState()
+    let redirectVar = null;
+    const [inserted,setinserted]=useState(false)
+    useEffect(()=>{
+        
+        var headers = new Headers(); 
+      const data = {
+          email:cookies.email
+      }
 
+   axios.post("http://localhost:3001/getaddress",data).then(response=>{
+           
+           if(response.status === 200)
+           {
+               
+               console.log(response.data,typeof response.data)
+               console.log("details",response.data[0][0])
+               let details=response.data[0][0]
+               setCookie("fullname", details.fullname, {path: "/"});
+               setCookie("address", details.address, {path: "/"});
+                setaddr(details.address)
+               
+               setCookie("contact", details.contact, {path: "/"});
+           }
+           else if(response.status === 202)
+           {
+               console.log("no data found")
+           }
+
+   })
+  
+
+
+
+
+
+
+},[]);
+    
+    
+    
+const {
+    isEmpty,
+    items,
+    cartTotal,
+    emptyCart
+
+} = useCart();
+
+    
+    
     function placeOrder(){
-        if(isEmpty){
-            alert("Cart is empty!!Please add some thing in your card")
+        let data={
+            customer_email:cookies.email,
+            restaurant_name:items[0].resteraunt_name,
+            restaurant_zipcode:items[0].zipcode,
+            amount:cartTotal,
+            delivery_address:addr
         }
-        else{
-            
-        }
+        
+        axios.post("http://localhost:3001/placeOrder",data).then(response=>{
+             
+             if(response.status === 200)
+             {
+                 console.log()
+                
+                setinserted(true)
+                 
+             }
+             else if(response.status === 202)
+             {
+                
+             }
+             
+     })
+    
+
+
+
+
     }
-    const {
-        isEmpty,
-        items,
-        cartTotal,
-        emptyCart
-
-    } = useCart();
-
+    
 
     if (isEmpty) return <h1 className="text-center">Your cart is empty</h1>
-
-    return (
+    
+    if(inserted==true){
+        console.log("added successfully")
+        emptyCart()
+        redirectVar = <Redirect to= "/userdash/success"/>
+    }
+    return (<div>
+        {redirectVar}
         <section className="py-4 container">
             <div className="row justify-content-center">
                 <h4>Order Details</h4>
@@ -70,13 +148,20 @@ const Checkout = () => {
                         
                     </tbody>
                 </table>
+                <hr />
                 <h4>Total Amount {cartTotal}$</h4>
-                             
-                <button className = "btn btn-dark" style={{width:"30%"}} onClick={()=>placeOrder()}>Confirm and Place order</button>
-                                        &nbsp;<button  className = "btn btn-dark" style={{width:"30%"}} onClick={()=>emptyCart()}>EmptyCart</button>
+                <hr />
+                <h4>Delivery Address</h4>
+                <textarea name="address" value={addr} onChange={e => setaddr(e.target.value)} rows="10" cols="30" disabled={addr_update}>{addr}</textarea>    
+                <button className="btn btn-dark" onClick={()=>{setaddr_update(!addr_update)} } style={{width:"30%"}}>Update Address</button>
+               
+                <button className = "btn btn-dark" onClick={()=>placeOrder()} style={{width:"30%"}} >Confirm and Place order</button>
+                
+                                        <button  className = "btn btn-dark"  onClick={()=>emptyCart()} style={{width:"30%"}}>EmptyCart</button>
          
             </div>
         </section>
+        </div>
     )}
 
 export default Checkout

@@ -29,13 +29,7 @@ const Dashboard = () => {
    
       <div id="root">
        
-        <div className="landing">
-            <DashNavbar />
-            <Jumbo />
-            
-
-
-        </div>
+       
             <Resteraunts />
       </div>
       </body>

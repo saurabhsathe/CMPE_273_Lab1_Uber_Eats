@@ -9,7 +9,13 @@ import {useSelector,useDispatch} from 'react-redux'
 import Prosidebar from './Prosidebar'
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies'
+import {useCookies} from 'react-cookie'
+import {useState,useEffect} from 'react'
+import axios from 'axios'
+
+
 const Userdash = () => {
+    const [cookies, setCookie] = useCookies(["customer"]);
     const user = useSelector(selectuser)
     console.log(user)
     let redirectVar = null;
@@ -20,6 +26,11 @@ const Userdash = () => {
     }
     console.log("here is the redirectvar",redirectVar)
     
+    
+
+
+
+
     return (
         <div >
             {redirectVar}

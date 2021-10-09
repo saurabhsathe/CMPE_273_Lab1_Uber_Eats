@@ -11,6 +11,7 @@ import RestoMenu from './RestoMenu'
 import {useLocation} from 'react-router-dom'
 import Checkout from './Checkout'
 import Favourites from './Favourites'
+import Successful from './Successful'
 const Contentbar = (props) => {
 
     let redirectVar = null;
@@ -33,6 +34,7 @@ const Contentbar = (props) => {
             <Route path="/userdash/restoprofile" component={RestoMenu} />
             <Route path="/userdash/checkout" component={Checkout} />
             <Route path="/userdash/favourites" component={Favourites} />
+            <Route path="/userdash/success" component={Successful} />
             </Switch></BrowserRouter>
       
     )

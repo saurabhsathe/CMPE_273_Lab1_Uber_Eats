@@ -23,8 +23,8 @@ var getall_dishes =  require('./db_operations/getalldishes')
 var getall_restos = require('./db_operations/getall_restaurants')
 var insert_favourite = require('./db_operations/add_favourites')
 var get_favourite = require('./db_operations/get_favourites')
-
-
+var getcust_addr = require('./db_operations/getcust_addr')
+var place_order = require('./db_operations/insert_order')
 
 
 
@@ -393,6 +393,68 @@ catch(error){
     
 });
 
+app.post('/getaddress',async function(req,res){
+    
+    try{
+        let details=req.body.email
+        result = await getcust_addr.getcust_address(details)
+        if(result!=false){
+          console.log("here is your result")
+           res.writeHead(200,{
+               'Content-Type' : 'text/plain'
+           })
+           res.end(JSON.stringify(result))
+       }
+       else{
+           res.writeHead(202,{
+               'Content-Type' : 'text/plain'
+           })
+           res.end("No data found")
+       }
+   
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+app.post('/placeOrder',async function(req,res){
+    
+    try{
+     let details=req.body
+     result = await place_order.insertorder(details)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        console.log("inserted_successfully")
+        res.end("Inserted successfully")
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("Some technical issue")
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
 
 
 //start your server on port 3001

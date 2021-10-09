@@ -1,13 +1,20 @@
 import React, {Component}  from 'react'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
+import Jumbo from './Jumbo'
+import DashNavbar from './DashNavbar'
+
 import { useCookies } from "react-cookie";
 import RestoCard from './RestoCard'
 
 const Resteraunts = (props) => {
-    
+    const [original_restos,setoriginal_restos]=useState([])
     let [restos_received,setrestos]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
+
+    function filter_restos(){
+
+    }
 
     useEffect(()=>{
         if(Object.keys(props).length == 0){
@@ -23,6 +30,7 @@ const Resteraunts = (props) => {
                 {
                     
                     console.log(response.data,typeof response.data)
+                    setoriginal_restos(response.data[0])
                     setrestos(response.data[0])
                     console.log("got the restaurants",restos_received)
                     
@@ -63,8 +71,17 @@ let details_received= restos_received.map((resto,index) => {
     return (
 
 
-        
+            <div>
+
+                 <div className="landing">
+            <DashNavbar filter={filter_restos} orestos={original_restos} setrestos={setrestos} />
+            <Jumbo />
+            
+
+
+        </div>
             <div id="services" className="container">
+            
             
    <h2 className="display-4 text-center mt-5 mb-3">Resteraunts</h2>
         
@@ -79,6 +96,8 @@ let details_received= restos_received.map((resto,index) => {
 
 
 </div>
+</div>
+
     )
 }
 
