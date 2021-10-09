@@ -4,8 +4,8 @@ import axios from 'axios'
 import { useCookies } from "react-cookie";
 import { useLocation, Link } from 'react-router-dom';
 import DishCard from './DishCard'
-const Dishes = (props) => {
-    let [dishes_received,setdishes]=useState([])
+const Orders = (props) => {
+    let [orders_received,setorders]=useState([])
     const location=useLocation()
 
     
@@ -92,4 +92,4 @@ else{
     )
 }
 
-export default Dishes
+export default Orders

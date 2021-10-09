@@ -6,6 +6,7 @@ import {login} from '../../features/user_slice'
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies'
+import {useCookies} from 'react-cookie'
 const LoginForm = () => {
     
     const [uemail,setuemail]=useState()
@@ -13,6 +14,8 @@ const LoginForm = () => {
     const [usertype,setusertype]="customer"
     let [errors,seterrors]=useState()
     const dispatch = useDispatch()
+    const [cookies, setCookie] = useCookies(["customer"]);
+
 
     function handleLogin(e){
         var headers = new Headers();
@@ -36,6 +39,7 @@ const LoginForm = () => {
                         userType:"customer"
                         
                     }))
+                    setCookie("email", uemail, {path: "/"});
                     
                     
                     }else{

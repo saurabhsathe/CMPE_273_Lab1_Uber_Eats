@@ -2,32 +2,32 @@ import React, {Component}  from 'react'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
+import RestoCard from './RestoCard'
+import {Redirect} from 'react-router';
+import cookie from 'react-cookies'
 
-import DishCard from './DishCard'
 const Resteraunts = (props) => {
+    let redirectVar = null
+    let [restos_received,setrestos]=useState([])
+    const [cookies, setCookie] = useCookies(["restaurant"]);
     
-    let [dishes_received,setdishes]=useState([])
-    
-    
-            
-           
+
     useEffect(()=>{
-        if(true){
+        
         console.log("herhehrehrhehrehrehh")
              var headers = new Headers(); 
            const data = {
-                
-            }
+               resteraunt_name:"dasdsadsa"
+           }
   
-        axios.post("http://localhost:3001/getallDishes",data).then(response=>{
+        axios.post("http://localhost:3001/getallResto",data).then(response=>{
                 
                 if(response.status === 200)
                 {
                     
                     console.log(response.data,typeof response.data)
-                    setdishes(response.data[0])
-                    console.log("gsdfsdfds",dishes_received)
-                    
+                    setrestos(response.data[0])
+                    console.log("got the restaurants",restos_received)
                     
                 }
                 else if(response.status === 202)
@@ -37,27 +37,27 @@ const Resteraunts = (props) => {
 
         })
        
-    }
-    else{
-        console.log("got some props")
-    }
+   
+        console.log("got some props",props);
+    
 
 
 
 },[]);
   
-
-let details_received= dishes_received.map((dish,index) => {
+if(!cookie.load('cookie')){
+    redirectVar = <Redirect to= "/userlogin"/>
+}
+let details_received= restos_received.map((resto,index) => {
     return(
-        
-    <DishCard id = {dish.id} 
-    key ={dish.dish_id} 
-    dishdp={dish.dishdp} 
-    dish_name ={dish.dish_name}
-    dish_desc={dish.dish_desc}
-    dish={dish}
-    price = {dish.price}
-    
+     
+    <RestoCard
+    resto={resto}  
+    restdp={resto.restdp} 
+    resteraunt_name ={resto.resteraunt_name}
+    address={resto.address}
+    zipcode={resto.zipcode}
+
     />
 
     )
@@ -69,9 +69,8 @@ let details_received= dishes_received.map((dish,index) => {
 
         
             <div id="services" className="container">
-            
-   <h2 className="display-4 text-center mt-5 mb-3">Dishes</h2>
-   <hr />
+            {redirectVar}
+   <h2 className="display-4 text-center mt-5 mb-3">Restaurants</h2>
         
    <div className="row text-center">
       {details_received}

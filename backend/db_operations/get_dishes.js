@@ -1,9 +1,10 @@
 const database=require('./database')
 const getdishes = (conn_pool,resto_name,zipcode)=>{return new Promise((resolve, reject)=>{
-    //console.log(`select * from dishes where resteraunt_name = "${resto_name}"and zipcode ="${zipcode}";`)
+    console.log(`select * from dishes where resteraunt_name = "${resto_name}" and zipcode ="${zipcode}";`)
     x=conn_pool.query(`select * from dishes where resteraunt_name = "${resto_name}"and zipcode ="${zipcode}";`,  (error, results)=>{
     //console.log("rows affected",x._rows.length,x._rows)   
-        if(error){
+    console.log(x._rows)    
+    if(error){
             reject(false);
         }
         if(x._rows.length>0){

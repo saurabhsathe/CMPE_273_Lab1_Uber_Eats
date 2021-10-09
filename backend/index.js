@@ -20,6 +20,14 @@ var getresto  = require('./db_operations/getresto_info')
 var insert_dish = require('./db_operations/insert_dish')
 var get_dishes =  require('./db_operations/get_dishes')
 var getall_dishes =  require('./db_operations/getalldishes')
+var getall_restos = require('./db_operations/getall_restaurants')
+var insert_favourite = require('./db_operations/add_favourites')
+var get_favourite = require('./db_operations/get_favourites')
+
+
+
+
+
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -248,10 +256,10 @@ app.post('/getDishes',async function(req,res){
         res.end(JSON.stringify(result))
     }
     else{
-        res.writeHead(200,{
+        res.writeHead(202,{
             'Content-Type' : 'text/plain'
         })
-        res.end("No data found")
+        res.end()
     }
 
 
@@ -279,7 +287,7 @@ app.post('/getallDishes',async function(req,res){
         res.end(JSON.stringify(result))
     }
     else{
-        res.writeHead(200,{
+        res.writeHead(202,{
             'Content-Type' : 'text/plain'
         })
         res.end("No data found")
@@ -297,6 +305,95 @@ catch(error){
 
     
 });
+
+app.post('/getallResto',async function(req,res){
+    
+    try{
+     
+     result = await getall_restos.getrestos_all()
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end(JSON.stringify(result))
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("No data found")
+    }
+
+
+}
+    catch(error){
+        console.log(error)
+    }
+});
+
+app.post('/addTofavourites',async function(req,res){
+    
+    try{
+     let details=req.body
+     result = await insert_favourite.insertfavourite(details)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("Inserted successfully")
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("Some technical issue")
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+app.post('/getfavourites',async function(req,res){
+    
+    try{
+        let details=req.body.email
+        result = await get_favourite.getfavourite(details)
+        if(result!=false){
+           res.writeHead(200,{
+               'Content-Type' : 'text/plain'
+           })
+           res.end(JSON.stringify(result))
+       }
+       else{
+           res.writeHead(202,{
+               'Content-Type' : 'text/plain'
+           })
+           res.end("No data found")
+       }
+   
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+
 
 //start your server on port 3001
 app.listen(3001);

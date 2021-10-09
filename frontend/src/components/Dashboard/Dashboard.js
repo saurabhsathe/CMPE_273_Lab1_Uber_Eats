@@ -1,10 +1,10 @@
 import React from 'react'
 import Jumbo from './Jumbo'
 import DashNavbar from './DashNavbar'
-import Resteraunts from './Resteraunt2'
+import Resteraunts from './Resteraunts'
 import{useState,useEffect} from 'react'
 import {useCart} from 'react-use-cart'
-
+import {BrowserRouter, Route , Switch} from 'react-router-dom'
 const Dashboard = () => {
     const {emptyCart} = useCart()
     useEffect(()=>{
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
 
         </div>
-        <Resteraunts />
+            <Resteraunts />
       </div>
       </body>
 

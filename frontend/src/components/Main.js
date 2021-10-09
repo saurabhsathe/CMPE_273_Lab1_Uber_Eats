@@ -10,11 +10,13 @@ import Dashboard from './dashboard/Dashboard'
 import RestoMainLogin from './login_and_signup/RestoMainLogin'
 import RestoMainSignup from './login_and_signup/RestoMainSignup'
 import Restodash from './restodashboard/Restodash'
+import RestoMenu from './dashboard/RestoMenu'
 class Main extends Component {
     render(){
         return(
             <div>
                 <Route exact path="/" component={Dashboard} />
+                <Route exact path="/main" component={Dashboard} />
                 
                 <Route path="/userlogin" component={MainLoginForm} />
                 <Route path="/usersignup" component={MainSignupForm} />
@@ -27,6 +29,7 @@ class Main extends Component {
                 <Route path="/user" component={Userinfo} />
                 <Route path="/userdash/home" component={Resteraunts} />
                 <Route path="/restodash" component={Restodash} />
+                <Route path="/main/restoProfile" component={RestoMenu} />
                 </div>
                 
 

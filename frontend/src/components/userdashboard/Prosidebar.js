@@ -13,10 +13,10 @@ const Prosidebar = () => {
   const dispatch = useDispatch()
   let redirectVar = null;
 function handleLogout(){
-  alert("I am here")
+ 
   dispatch(logout())
   cookie.remove('cookie', { path: '/' })
-  
+  redirectVar = <Redirect to= "/"/>
 }
 
     
@@ -36,7 +36,7 @@ if(!cookie.load('cookie')){
     <a href="/userdash/userupdate" >Update Profile</a>
     </MenuItem>
     <hr />
-    <MenuItem ><a href="/userdash/cart" >Favourites</a></MenuItem>
+    <MenuItem ><a href="/userdash/favourites" >Favourites</a></MenuItem>
     <hr />
     
     <MenuItem ><a href="/userdash/cart" >Ongoing Orders</a></MenuItem>
@@ -45,8 +45,9 @@ if(!cookie.load('cookie')){
     <MenuItem ><a href="/userdash/cart" >Your Cart</a></MenuItem>
     <hr />
     <MenuItem ><a href="/userdash/pastorders" >Past Orders</a></MenuItem>
+
     <hr />
-    <MenuItem ><button onClick={handleLogout} style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></MenuItem>
+    <MenuItem ><form onSubmit={handleLogout} action="/"><button style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></form></MenuItem>
     
   </Menu>
 </ProSidebar>

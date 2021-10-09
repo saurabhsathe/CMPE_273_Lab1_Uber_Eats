@@ -29,11 +29,13 @@ const Cart = () => {
                 <h4>Your Cart</h4>
                 <table className="table table-light table-hover m-0">
                     <tbody>
-                         
+                    {console.log(items[0])}
                         {
                             
                             items.map((item)=>{
+
                                 return(
+                                
                                 <tr>
                                     
                                     <td>
@@ -91,7 +93,7 @@ const Cart = () => {
                                         
                                     </td>
                                     <td>
-                                        <button className = "btn btn-dark" onClick={()=>placeOrder()}>Confirm and Place order</button>
+                                        <Link to="/userdash/checkout"><button className = "btn btn-dark" onClick={()=>placeOrder()}>Confirm and Place order</button></Link>
                                     </td>
                                     <td>
                                         

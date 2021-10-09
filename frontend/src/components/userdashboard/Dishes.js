@@ -1,28 +1,27 @@
-import React, {Component}  from 'react'
+import React from 'react'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
-
+import { useLocation, Link } from 'react-router-dom';
 import DishCard from './DishCard'
-const Resteraunt = (props) => {
-    
+const Dishes = (props) => {
     let [dishes_received,setdishes]=useState([])
-    const [cookies, setCookie] = useCookies(["restaurant"]);
+    const location=useLocation()
 
     
             
            
     useEffect(()=>{
-        if(Object.keys(props).length == 0){
-        console.log("herhehrehrhehrehrehh")
+        if(Object.keys(props).length != 0){
+        console.log("herhehrehrhehrehrehh",location.state)
              var headers = new Headers(); 
            const data = {
-                resteraunt_name:cookies.resteraunt_name,
-                 zipcode:cookies.zipcode,
+                resteraunt_name:location.state.resto.resteraunt_name,
+                 zipcode:location.state.resto.zipcode,
          
             }
   
-        axios.post("http://localhost:3001/getallDishes",data).then(response=>{
+        axios.post("http://localhost:3001/getDishes",data).then(response=>{
                 
                 if(response.status === 200)
                 {
@@ -42,7 +41,7 @@ const Resteraunt = (props) => {
        
     }
     else{
-        console.log("got some props")
+        console.log("got NO props")
     }
 
 
@@ -50,7 +49,10 @@ const Resteraunt = (props) => {
 },[]);
   
 
-let details_received= dishes_received.map((dish,index) => {
+let details_received
+console.log(dishes_received)
+if(dishes_received.length>0)
+{details_received = dishes_received.map((dish,index) => {
     return(
         
     <DishCard id = {dish.id} 
@@ -66,20 +68,21 @@ let details_received= dishes_received.map((dish,index) => {
     )
 })
 
-
+}
+else{
+    details_received=<h1>No Dishes available in the menu</h1>
+}
     return (
 
 
         
             <div id="services" className="container">
             
-   <h2 className="display-4 text-center mt-5 mb-3">Dishes</h2>
+   <h2 className="display-4 text-center mt-5 mb-3">Menu Card</h2>
         
    <div className="row text-center">
       {details_received}
-     
-
-
+     <br />
 
     </div>
     
@@ -89,4 +92,4 @@ let details_received= dishes_received.map((dish,index) => {
     )
 }
 
-export default Resteraunt
+export default Dishes

@@ -7,14 +7,19 @@ import PastOrder from './PastOrders'
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies'
 import Cart from './Cart'
-const Contentbar = () => {
+import RestoMenu from './RestoMenu'
+import {useLocation} from 'react-router-dom'
+import Checkout from './Checkout'
+import Favourites from './Favourites'
+const Contentbar = (props) => {
 
     let redirectVar = null;
-    
+ const location=useLocation()
     
     if(!cookie.load('cookie')){
         redirectVar = <Redirect to= "/userlogin"/>
     }
+
     return (
             <BrowserRouter>
             
@@ -25,6 +30,9 @@ const Contentbar = () => {
             <Route path="/userdash/userupdate" component={UpdateProfile} />
             <Route path='/userdash/userinfo' component={Userinfo} />
             <Route path="/userdash/pastorders" component={PastOrder} />
+            <Route path="/userdash/restoprofile" component={RestoMenu} />
+            <Route path="/userdash/checkout" component={Checkout} />
+            <Route path="/userdash/favourites" component={Favourites} />
             </Switch></BrowserRouter>
       
     )
