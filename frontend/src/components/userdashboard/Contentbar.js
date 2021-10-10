@@ -27,7 +27,7 @@ const Contentbar = (props) => {
             
             <Switch>
             
-            <Route exact path='/userdash/' component={()=><Resteraunts restos={props.restos}/>} />
+            <Route exact path='/userdash/' component={()=><Resteraunts filters={props.filters}/>} />
             <Route path= "/userdash/cart" component={Cart} />        
             <Route path="/userdash/userupdate" component={UpdateProfile} />
             <Route path='/userdash/userinfo' component={Userinfo} />

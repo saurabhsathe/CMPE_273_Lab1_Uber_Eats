@@ -460,12 +460,13 @@ catch(error){
 app.post('/getCustOrders',async function(req,res){
     console.log("received request")
     try{
-     console.log(order_type)
+     console.log(req.body.order_type)
      result = await getcust_orders.getorders_cust(req.body.email,req.body.order_type)
      if(result!=false){
         res.writeHead(200,{
             'Content-Type' : 'text/plain'
         })
+        console.log("returning request")
         res.end(JSON.stringify(result))
     }
     else{

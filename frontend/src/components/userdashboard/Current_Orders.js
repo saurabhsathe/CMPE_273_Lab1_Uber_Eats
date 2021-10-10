@@ -46,7 +46,7 @@ const Current_Orders = (props) => {
 
 
 
-},[orders_received]);
+},[]);
   console.log("In the current orders")
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/userlogin"/>

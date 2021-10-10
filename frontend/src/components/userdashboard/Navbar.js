@@ -3,7 +3,7 @@ import Searchbar from './Searchbar'
 import Vegnonvegoption from './Vegnonvegoption'
 import Location from './Location' 
 import './vegnonveg.css'
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 const Navbar = (props) => {
     const [checkbtn,setcheckbtn] = useState(false)
     const [radioval,setradioval]=useState("all")
@@ -11,41 +11,9 @@ const Navbar = (props) => {
     const [restzip,setrestzip]=useState("")
     function filterRestos(e){
         e.preventDefault()
-      
-        let radio_filtered=[]
-        let name_filtered=[]
-        let zip_filtered=[]
-        let final=[]        
-        if(radioval!="all"){
-            radio_filtered = props.orestos.filter(resto => resto.pickup_drop === radioval)
-            final=radio_filtered 
-        }
-        else{
-            radio_filtered=props.orestos
-            final=radio_filtered 
-        }
-        if(restzip.length!="" & restzip.length==5){
-            console.log("in the restzip",restzip)
-            zip_filtered = radio_filtered.filter(resto => resto.zipcode === restzip)
-            final=zip_filtered 
-        }
-        
-        console.log("restname is ",restname.length)
-        if(restname.length!=0){
-            console.log("in the restname",restname)
-            name_filtered = zip_filtered.filter(resto => resto.resteraunt_name === restname)
-            final=name_filtered 
-        }
-          
-         
-        console.log("filtered_list by radio",radio_filtered)
-        console.log("filtered_list by zip",zip_filtered)
-        console.log("filtered_list by name",name_filtered)
-        console.log(final)
-        props.setrestos(final)
+        props.setfilters({restzip:{restzip},radioval:{radioval},restname:{restname}})
         
     }
-    
     
     return (
         <div class="wrapper">

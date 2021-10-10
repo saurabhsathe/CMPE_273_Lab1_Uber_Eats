@@ -14,32 +14,33 @@ const Resteraunts = (props) => {
     const [radioval,setradioval]=useState("all")
     const [restname,setrestname]=useState("")
     const [restzip,setrestzip]=useState("")
-
-    function filterRestos(e){
-        e.preventDefault()
-      
+    const [filters,setfilter]=useState({})
+    function filterRestos(filters){
+        console.log("these are the filters",filters)
         let radio_filtered=[]
         let name_filtered=[]
         let zip_filtered=[]
-        let final=[]        
-        if(radioval!="all"){
-            radio_filtered = props.orestos.filter(resto => resto.pickup_drop === radioval)
+        let final=[]
+        
+        if(filters.radioval.radioval!='all'){
+            console.log("here")
+            console.log(filters.radioval)
+            radio_filtered = original_restos.filter(resto => resto.pickup_drop === filters.radioval)
             final=radio_filtered 
         }
         else{
-            radio_filtered=props.orestos
+            radio_filtered=original_restos
             final=radio_filtered 
         }
-        if(restzip.length!="" & restzip.length==5){
+        if(filters.restzip.restzip.length!=0 & filters.restzip.restzip.length==5){
             console.log("in the restzip",restzip)
-            zip_filtered = radio_filtered.filter(resto => resto.zipcode === restzip)
+            zip_filtered = radio_filtered.filter(resto => resto.zipcode === filters.restzip.restzip)
             final=zip_filtered 
         }
         
         console.log("restname is ",restname.length)
-        if(restname.length!=0){
-            console.log("in the restname",restname)
-            name_filtered = zip_filtered.filter(resto => resto.resteraunt_name === restname)
+        if(filters.restname.restname.length!=0){
+            name_filtered = zip_filtered.filter(resto => resto.resteraunt_name === filters.restname.restname)
             final=name_filtered 
         }
           
@@ -48,7 +49,8 @@ const Resteraunts = (props) => {
         console.log("filtered_list by zip",zip_filtered)
         console.log("filtered_list by name",name_filtered)
         console.log(final)
-        props.setrestos(final)
+        console.log("props received2",props)
+        setrestos_rcvd(final)
         
     }
 
@@ -58,16 +60,39 @@ const Resteraunts = (props) => {
     useEffect(()=>{
 
 {
-        console.log("herhehrehrhehrehrehh")
-             var headers = new Headers(); 
-           const data = {
-               resteraunt_name:"dasdsadsa"
-           }
-           setrestos_rcvd(props.restos)
+
+
+    var headers = new Headers(); 
+    const data = {
+            resteraunt_name:"dasdsadsa"
+        }
+        
+     axios.post("http://localhost:3001/getallResto",data).then(response=>{
+             
+             if(response.status === 200)
+             {
+                 
+                 //console.log(response.data,typeof response.data)
+                 //console.log("herhehrehrhehrehrehh")
+                 var headers = new Headers(); 
+                 setoriginal_restos(response.data[0])
+                setrestos_rcvd(response.data[0])
+                //console.log("props received1",props)
+                filterRestos(props.filters);
+
+                 //console.log("got the restaurants",response.data[0])
+                 
+             }
+             else if(response.status === 202)
+             {
+                 //console.log("no data found")
+             }
+
+     })
+    
        
     }
     
-
 
 
 },[]);

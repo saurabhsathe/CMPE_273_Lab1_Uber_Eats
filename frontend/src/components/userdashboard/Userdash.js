@@ -22,44 +22,13 @@ const Userdash = () => {
     let redirectVar=null
     const [original_restos,setoriginal_restos]=useState([])
     let [restos_modified,setrestos]=useState([])
+    const [filters,setfilters]=useState({restzip:"",
+    restname:"",
+    radioval:"all"})
 
     useEffect(()=>{
 
-        {
-            
-                     var headers = new Headers(); 
-                   const data = {
-                       resteraunt_name:"dasdsadsa"
-                   }
-          
-                axios.post("http://localhost:3001/getallResto",data).then(response=>{
-                        
-                        if(response.status === 200)
-                        {
-                            
-                            console.log(response.data,typeof response.data)
-                            setoriginal_restos(response.data[0])
-                            setrestos(response.data[0])
-                            
-                            console.log("got the restaurants",response.data[0])
-                            
-                        }
-                        else if(response.status === 202)
-                        {
-                            console.log("no data found")
-                        }
-        
-                })
-               
-            }
-            
-        
-        
-        
-        },[]);
-
-
-
+},[]);
 
 
 
@@ -79,7 +48,7 @@ const Userdash = () => {
             {redirectVar}
             <BootCdn />
             <BootCdnUser />
-            <Navbar orestos={original_restos} setrestos={setrestos}/>
+            <Navbar filters={filters} setfilters={setfilters} />
             
             <div className="row">
                     <div className="col-md-3 userdashdiv" style={{marginTop:"50px"}}>
@@ -87,7 +56,7 @@ const Userdash = () => {
                     </div>
                     <div className="col-md-9 userdashdiv" id="user-contentbar" >
 
-                        <Contentbar restos={restos_modified}/>
+                        <Contentbar filters={filters}/>
                     </div>
             </div>
             

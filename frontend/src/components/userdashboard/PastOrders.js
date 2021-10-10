@@ -46,7 +46,7 @@ const Past_Orders = (props) => {
 
 
 
-},[orders_received]);
+},[]);
 console.log(" in the past orders")  
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/restologin"/>
