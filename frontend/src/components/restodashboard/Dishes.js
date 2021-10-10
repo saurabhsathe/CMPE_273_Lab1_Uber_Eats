@@ -2,7 +2,7 @@ import React, {Component}  from 'react'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
-
+import cookie from 'react-cookies'
 const Resteraunts = () => {
     
     let [dishes_received,setdishes]=useState([])

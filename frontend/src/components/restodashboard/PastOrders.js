@@ -18,13 +18,14 @@ const Past_Orders = (props) => {
     
     useEffect(()=>{
         
-        const data = {
-            email:cookies.email,
-            order_type:"past"
-            
-        }
-
-        axios.post("http://localhost:3001/getCustOrders",data).then(response=>{
+           const data = {
+            restaurant_name:cookies.resteraunt_name,
+            zipcode:cookies.zipcode,
+            type:"past"
+    
+           }
+  
+        axios.post("http://localhost:3001/getRestoOrders",data).then(response=>{
                 
                 if(response.status === 200)
                 {
@@ -46,13 +47,13 @@ const Past_Orders = (props) => {
 
 
 
-},[orders_received]);
-console.log(" in the past orders")  
+},[]);
+  
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/restologin"/>
 }
 
-console.log(orders_received)
+console.log(orders_received.length)
 let details_received= orders_received.map((order,index) => {
     return(
      
@@ -72,7 +73,7 @@ let details_received= orders_received.map((order,index) => {
         
             <div id="services" className="container">
             {redirectVar}
-   <h2 className="display-4 text-center mt-5 mb-3">Past Orders</h2>
+   <h2 className="display-4 text-center mt-5 mb-3">Current Orders</h2>
         
    <div className="row text-center">
       {details_received}

@@ -2,13 +2,14 @@ const database=require('./database')
 //insert into orders(customer_email,restaurant_name,restaurant_zipcode,amount,order_date,order_status,delivery_addrees) values ();
 const getorders = (conn_pool,email,type)=>{return new Promise((resolve, reject)=>{
     //console.log(`select * from orders where customer_email = "${resto_name}"and zipcode ="${zipcode}";`)
-    if (type=="all"){
-        query_str=`select * from orders where customer_email=${email};`
+    let query_str
+    if (type=="current"){
+        query_str=`select * from orders where customer_email="${email}" and (order_status="placed" or order_status="confirm");`
     }
     else{
-        query_str=`select * from orders where customer_email="${email}" and order_status=${type};`
+        query_str=`select * from orders where customer_email="${email}" and (order_status="completed" or order_status="cancel");`    
     }
-    x=conn_pool.query(`select * from orders`,  (error, results)=>{
+    x=conn_pool.query(query_str,  (error, results)=>{
     //console.log("rows affected",x._rows.length,x._rows)   
         if(error){
             reject(false);

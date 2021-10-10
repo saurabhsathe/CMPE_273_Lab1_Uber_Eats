@@ -5,6 +5,8 @@ import Userinfo from './Userinfo'
 import Dishes from './Dishes'
 import CreateDish from './CreateDish'
 import UpdateOwner from './UpdateOwner'
+import Current_Orders from './Current_Orders'
+import PastOrders from './PastOrders'
 const Contentbar = () => {
     return (
             <BrowserRouter><Switch>
@@ -13,6 +15,8 @@ const Contentbar = () => {
             <Route path='/userinfo' component={Userinfo} />
             <Route path="/restodash/createdish" component={CreateDish} />
             <Route path="/restodash/updateowner" component={UpdateOwner} />
+            <Route path="/restodash/current" component={Current_Orders} />
+            <Route path="/restodash/pastorders" component={PastOrders} />
             </Switch></BrowserRouter>
       
     )

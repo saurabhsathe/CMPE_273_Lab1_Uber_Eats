@@ -25,8 +25,9 @@ var insert_favourite = require('./db_operations/add_favourites')
 var get_favourite = require('./db_operations/get_favourites')
 var getcust_addr = require('./db_operations/getcust_addr')
 var place_order = require('./db_operations/insert_order')
-
-
+var getcust_orders =require('./db_operations/get_cust_orders')
+var update_order = require('./db_operations/update_order')
+var get_resto_orders=require('./db_operations/get_resto_orders')
 
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
@@ -455,6 +456,103 @@ catch(error){
 
     
 });
+
+app.post('/getCustOrders',async function(req,res){
+    console.log("received request")
+    try{
+     console.log(order_type)
+     result = await getcust_orders.getorders_cust(req.body.email,req.body.order_type)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end(JSON.stringify(result))
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end()
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+app.post('/updateOrder',async function(req,res){
+    
+    try{
+     
+     result = await update_order.update_order_status(req.body.id,req.body.status)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("updation done")
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end()
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+
+app.post('/getRestoOrders',async function(req,res){
+    
+    try{
+     
+     result = await get_resto_orders.getorders_resto(req.body.restaurant_name,req.body.zipcode,req.body.type)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end(JSON.stringify(result))
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end()
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+
+
+
 
 
 //start your server on port 3001

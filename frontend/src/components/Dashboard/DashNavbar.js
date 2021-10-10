@@ -7,32 +7,31 @@ const Navbar = (props) => {
     const [checkbtn,setcheckbtn] = useState(false)
     const [radioval,setradioval]=useState("all")
     const [restname,setrestname]=useState("")
-    const [restzip,setrestzip]=useState()
+    const [restzip,setrestzip]=useState("")
     function filterRestos(e){
         e.preventDefault()
-        alert("in the filter")
-        alert(props.orestos)
+      
         let radio_filtered=[]
         let name_filtered=[]
         let zip_filtered=[]
-        console.log(props.orestos)
-        console.log(restzip)
         let final=[]        
         if(radioval!="all"){
             radio_filtered = props.orestos.filter(resto => resto.pickup_drop === radioval)
-            
+            final=radio_filtered 
         }
         else{
             radio_filtered=props.orestos
             final=radio_filtered 
         }
-        if(restzip.length==5){
+        if(restzip.length!="" & restzip.length==5){
+            console.log("in the restzip",restzip)
             zip_filtered = radio_filtered.filter(resto => resto.zipcode === restzip)
             final=zip_filtered 
         }
         
         console.log("restname is ",restname.length)
         if(restname.length!=0){
+            console.log("in the restname",restname)
             name_filtered = zip_filtered.filter(resto => resto.resteraunt_name === restname)
             final=name_filtered 
         }

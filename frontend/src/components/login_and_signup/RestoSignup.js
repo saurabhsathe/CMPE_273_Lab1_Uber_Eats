@@ -7,6 +7,8 @@ import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
 
 const RestoSignup = () => {
+    const [radioval,setradioval]=useState("all")
+    const [radioval2,setradioval2]=useState("all")
     const [oname,setoname] = useState();
     const [oaddr,setoaddr] = useState();
     const [ozip,setozip] = useState();
@@ -22,6 +24,7 @@ const RestoSignup = () => {
     const [restcontact,setrestcontact] = useState();
     const [errors,seterrors] = useState();
     const dispatch = useDispatch()
+    const [diet,setdiet] = useState();
     let redirectVar = null
     
     
@@ -59,6 +62,7 @@ const RestoSignup = () => {
                 zipcode:restzip,
                 contact:restcontact,
                 owner_email:oemail,
+                diet:radioval,
                 restdp:""
             }
             console.log("in the frontend side where we found out")
@@ -171,8 +175,38 @@ const RestoSignup = () => {
                      <label>Restaurant Contact No.</label>
                      <input type="tel" id="restcontact" className="form-control" value={restcontact} onChange={e=>setrestcontact(e.target.value)} placeholder="Your contact number please" required/>
                   </div>
-         
-                    
+                  <h4>Types of dishes served</h4>
+                  <div className="col-sm">    
+            <div className="mainradio" data-toggle="buttons">
+                
+              <input type="radio" value="all" onChange={e=>setradioval(e.target.value)} className="radio_button" id="all" name="options2" defaultChecked/>
+              <label for="all" className="radio_label">all</label>
+    
+             <input type="radio" className="radio_button" value="veg" onChange={e=>setradioval(e.target.value)} id="veg" name="options2"  />
+             <label for="veg" className="radio_label">veg</label>
+    
+              <input type="radio" className="radio_button" value="non-veg" onChange={e=>setradioval(e.target.value)} id="nonveg" name="options2" /> 
+              <label for="nonveg" className="radio_label">non-veg</label>
+    
+                </div>      
+            </div>
+            <h4>Delivery Options?</h4>
+            <div className="col-sm">    
+            <div className="mainradio" data-toggle="buttons">
+                
+              <input type="radio" value="all" onChange={e=>setradioval2(e.target.value)} className="radio_button" id="all" name="options" defaultChecked/>
+              <label for="all" className="radio_label">both</label>
+    
+             <input type="radio" className="radio_button" value="pickup" onChange={e=>setradioval2(e.target.value)} id="veg" name="options"  />
+             <label for="veg" className="radio_label">pickup</label>
+    
+              <input type="radio" className="radio_button" value="drop" onChange={e=>setradioval2(e.target.value)} id="nonveg" name="options" /> 
+              <label for="nonveg" className="radio_label">drop</label>
+    
+                </div>      
+            </div>
+
+                <hr />
 
                   <button type="submit" className="btn btn-secondary">Register</button>
                   Already have an account? <Link to="/restologin">Login</Link>&nbsp;

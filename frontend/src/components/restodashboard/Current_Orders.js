@@ -8,8 +8,7 @@ import cookie from 'react-cookies'
 import {selectuser} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
 import CurrentOrderCard from './CurrentOrderCard'
-import PastOrderCard from './PastOrderCard'
-const Past_Orders = (props) => {
+const Current_Orders = (props) => {
     const user = useSelector(selectuser)
     let redirectVar = null
     let [orders_received,setorders]=useState([])
@@ -18,13 +17,15 @@ const Past_Orders = (props) => {
     
     useEffect(()=>{
         
-        const data = {
-            email:cookies.email,
-            order_type:"past"
-            
-        }
-
-        axios.post("http://localhost:3001/getCustOrders",data).then(response=>{
+             var headers = new Headers(); 
+           const data = {
+            restaurant_name:cookies.resteraunt_name,
+            zipcode:cookies.zipcode,
+            type:"current"
+    
+           }
+  
+        axios.post("http://localhost:3001/getRestoOrders",data).then(response=>{
                 
                 if(response.status === 200)
                 {
@@ -46,17 +47,17 @@ const Past_Orders = (props) => {
 
 
 
-},[orders_received]);
-console.log(" in the past orders")  
+},[]);
+  
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/restologin"/>
 }
 
-console.log(orders_received)
+console.log(orders_received.length)
 let details_received= orders_received.map((order,index) => {
     return(
      
-    <PastOrderCard
+    <CurrentOrderCard
     
    order={order}
     
@@ -72,7 +73,7 @@ let details_received= orders_received.map((order,index) => {
         
             <div id="services" className="container">
             {redirectVar}
-   <h2 className="display-4 text-center mt-5 mb-3">Past Orders</h2>
+   <h2 className="display-4 text-center mt-5 mb-3">Current Orders</h2>
         
    <div className="row text-center">
       {details_received}
@@ -90,4 +91,4 @@ let details_received= orders_received.map((order,index) => {
     
 }
 
-export default Past_Orders
+export default Current_Orders

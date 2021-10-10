@@ -2,35 +2,35 @@ import React, {Component}  from 'react'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
-
+import RestoCard from './RestoCard'
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies'
 import {selectuser} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
 import CurrentOrderCard from './CurrentOrderCard'
-import PastOrderCard from './PastOrderCard'
-const Past_Orders = (props) => {
+const Current_Orders = (props) => {
     const user = useSelector(selectuser)
     let redirectVar = null
-    let [orders_received,setorders]=useState([])
-    const [cookies, setCookie] = useCookies(["restaurant"]);
+    const [orders_received,set_curr_orders]=useState([])
+    const [cookies, setCookie] = useCookies(["customer"]);
     console.log(user)
-    
     useEffect(()=>{
         
-        const data = {
-            email:cookies.email,
-            order_type:"past"
-            
-        }
-
+             var headers = new Headers(); 
+           const data = {
+               email:cookies.email,
+               order_type:"current"
+               
+           }
+  
         axios.post("http://localhost:3001/getCustOrders",data).then(response=>{
                 
                 if(response.status === 200)
                 {
                     
-                    console.log("received response here",response.data[0])
-                    setorders(response.data[0])
+                    console.log("--------------------here is the response in current",response.data)
+                    set_curr_orders(response.data[0])
+                  
                     
                 }
                 else if(response.status === 202)
@@ -47,16 +47,15 @@ const Past_Orders = (props) => {
 
 
 },[orders_received]);
-console.log(" in the past orders")  
+  console.log("In the current orders")
 if(!cookie.load('cookie')){
-    redirectVar = <Redirect to= "/restologin"/>
+    redirectVar = <Redirect to= "/userlogin"/>
 }
-
 console.log(orders_received)
 let details_received= orders_received.map((order,index) => {
     return(
      
-    <PastOrderCard
+    <CurrentOrderCard
     
    order={order}
     
@@ -72,7 +71,7 @@ let details_received= orders_received.map((order,index) => {
         
             <div id="services" className="container">
             {redirectVar}
-   <h2 className="display-4 text-center mt-5 mb-3">Past Orders</h2>
+   <h2 className="display-4 text-center mt-5 mb-3">Current Orders</h2>
         
    <div className="row text-center">
       {details_received}
@@ -90,4 +89,4 @@ let details_received= orders_received.map((order,index) => {
     
 }
 
-export default Past_Orders
+export default Current_Orders

@@ -19,7 +19,7 @@ function handleLogout(){
   redirectVar = <Redirect to= "/"/>
 }
 
-    
+
     
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/userlogin"/>
@@ -39,7 +39,7 @@ if(!cookie.load('cookie')){
     <MenuItem ><a href="/userdash/favourites" >Favourites</a></MenuItem>
     <hr />
     
-    <MenuItem ><a href="/userdash/cart" >Ongoing Orders</a></MenuItem>
+    <MenuItem ><a href="/userdash/current" >Ongoing Orders</a></MenuItem>
     <hr />
     
     <MenuItem ><a href="/userdash/cart" >Your Cart</a></MenuItem>

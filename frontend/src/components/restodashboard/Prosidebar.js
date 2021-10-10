@@ -4,8 +4,23 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import './proside.css'
 import {Link} from 'react-router-dom';
 import {Redirect} from 'react-router';
-const Prosidebar = () => {
+import {useSelector,useDispatch} from 'react-redux'
+import {logout} from '../../features/user_slice'
+import {selectuser} from '../../features/user_slice'
+import cookie from 'react-cookies'
 
+
+const Prosidebar = () => {
+    const dispatch = useDispatch()
+    let redirectVar = null;
+  
+    function handleLogout(){
+ 
+        dispatch(logout())
+        cookie.remove('cookie', { path: '/' })
+        redirectVar = <Redirect to= "/"/>
+      }
+      
 
     return (
     
@@ -23,7 +38,7 @@ const Prosidebar = () => {
     </MenuItem>
     <hr />
     <MenuItem >
-    <a href="/restodash/currentorders" >CurrentOrder</a>
+    <a href="/restodash/current" >Current Orders</a>
     </MenuItem>
     <hr />
     
@@ -33,7 +48,7 @@ const Prosidebar = () => {
     <hr />
     <MenuItem ><a href="/restodash/pastorders" >Past Orders</a></MenuItem>
     <hr />
-    <MenuItem ><button onClick="" style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></MenuItem>
+    <MenuItem ><form onSubmit={handleLogout} action="/"><button style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></form></MenuItem>
     
   </Menu>
 </ProSidebar>
