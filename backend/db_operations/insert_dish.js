@@ -2,7 +2,7 @@
 
 const database=require('./database')
 const insert = (conn_pool,dishdetails)=>{return new Promise((resolve, reject)=>{
-    conn_pool.query(`insert into dishes(dish_name,resteraunt_name,zipcode,dish_desc,dishdp,price) values("${dishdetails.dish_name}","${dishdetails.resteraunt_name}","${dishdetails.zipcode}","${dishdetails.dish_desc}","${dishdetails.dishdp}","${dishdetails.price}")`,  (error, results)=>{
+    conn_pool.query(`insert into dishes(dish_name,resteraunt_name,zipcode,dish_desc,dishdp,price) values("${dishdetails.dish_name}","${dishdetails.resteraunt_name}","${dishdetails.zipcode}","${dishdetails.dish_desc}","${dishdetails.dishdp}","${dishdetails.dish_price}")`,  (error, results)=>{
         if(error){
             
             return reject(false);

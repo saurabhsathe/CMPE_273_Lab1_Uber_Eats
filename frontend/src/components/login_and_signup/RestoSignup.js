@@ -20,9 +20,12 @@ const RestoSignup = () => {
     const [restdp,setrestdp] = useState();
     const [restname,setrestname] = useState();
     const [restaddr,setrestaddr] = useState();
+    const [restcity,setrestcity] = useState();
+    const [restdesc,setrestdesc] = useState();
     const [restzip,setrestzip] = useState();
     const [restcontact,setrestcontact] = useState();
     const [errors,seterrors] = useState();
+    const [isnerted,setinserted]=useState()
     const dispatch = useDispatch()
     const [diet,setdiet] = useState();
     let redirectVar = null
@@ -63,7 +66,11 @@ const RestoSignup = () => {
                 contact:restcontact,
                 owner_email:oemail,
                 diet:radioval,
+                pickup_drop:radioval2,
+                city:restcity,
+                restdesc:restdesc,
                 restdp:""
+                
             }
             console.log("in the frontend side where we found out")
             let formData2=new FormData()
@@ -82,26 +89,25 @@ const RestoSignup = () => {
             
 
             if(secondResponse.status==200){
-                dispatch(signup({
-                    email:oemail,
-                    userType:"restaurant_owner"
-                    
-                }))
-                
+              
+                console.log("data insertion sucessful")
+                setinserted(true)
                 
 
             }
-            
+            else{
+                console.log("data insertion unsucessful")
+            }
             
     }
     const user = useSelector(selectuser)
 
     
         
-    if(user){
-        redirectVar = <Redirect to="/restodash"/>
+   
+        if(isnerted){
+            redirectVar = <Redirect to= "/restologin"/>
         }  
-
     
     return (
         <div>
@@ -161,6 +167,14 @@ const RestoSignup = () => {
                      <input type="text" id="restaddr" className="form-control" value={restaddr} onChange={e=>setrestaddr(e.target.value)} placeholder="Address" required/>
                   </div>
                   <div className="form-group">
+                     <label>Restaurant City</label>
+                     <input type="text" id="restaddr" className="form-control" value={restcity} onChange={e=>setrestcity(e.target.value)} placeholder="City" required/>
+                  </div>
+                  <div className="form-group">
+                     <label>Restaurant Description</label>
+                     <input type="text" id="restdesc" className="form-control" value={restdesc} onChange={e=>setrestdesc(e.target.value)} placeholder="Description" required/>
+                  </div>
+                  <div className="form-group">
                      <label>Restaurant Zipcode</label>
                      <input type="text" pattern="[0-9]{5}" id="restzip" className="form-control" value={restzip} onChange={e=>setrestzip(e.target.value)} placeholder="Zipcode" required/>
                   </div>
@@ -185,7 +199,7 @@ const RestoSignup = () => {
              <input type="radio" className="radio_button" value="veg" onChange={e=>setradioval(e.target.value)} id="veg" name="options2"  />
              <label for="veg" className="radio_label">veg</label>
     
-              <input type="radio" className="radio_button" value="non-veg" onChange={e=>setradioval(e.target.value)} id="nonveg" name="options2" /> 
+              <input type="radio" className="radio_button" value="nonveg" onChange={e=>setradioval(e.target.value)} id="nonveg" name="options2" /> 
               <label for="nonveg" className="radio_label">non-veg</label>
     
                 </div>      
@@ -194,14 +208,14 @@ const RestoSignup = () => {
             <div className="col-sm">    
             <div className="mainradio" data-toggle="buttons">
                 
-              <input type="radio" value="all" onChange={e=>setradioval2(e.target.value)} className="radio_button" id="all" name="options" defaultChecked/>
-              <label for="all" className="radio_label">both</label>
+              <input type="radio" value="all" onChange={e=>setradioval2(e.target.value)} className="radio_button" id="both" name="options" defaultChecked/>
+              <label for="both" className="radio_label">both</label>
     
-             <input type="radio" className="radio_button" value="pickup" onChange={e=>setradioval2(e.target.value)} id="veg" name="options"  />
-             <label for="veg" className="radio_label">pickup</label>
+             <input type="radio" className="radio_button" value="pickup" onChange={e=>setradioval2(e.target.value)} id="pickup" name="options"  />
+             <label for="pickup" className="radio_label">pickup</label>
     
-              <input type="radio" className="radio_button" value="drop" onChange={e=>setradioval2(e.target.value)} id="nonveg" name="options" /> 
-              <label for="nonveg" className="radio_label">drop</label>
+              <input type="radio" className="radio_button" value="delivery" onChange={e=>setradioval2(e.target.value)} id="drop" name="options" /> 
+              <label for="drop" className="radio_label">drop</label>
     
                 </div>      
             </div>

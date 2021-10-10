@@ -73,7 +73,7 @@ let details_received= orders_received.map((order,index) => {
         
             <div id="services" className="container">
             {redirectVar}
-   <h2 className="display-4 text-center mt-5 mb-3">Current Orders</h2>
+   <h2 className="display-4 text-center mt-5 mb-3">Past Orders</h2>
         
    <div className="row text-center">
       {details_received}

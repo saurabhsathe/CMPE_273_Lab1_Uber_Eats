@@ -3,6 +3,9 @@
 const database=require('./database')
 const verify = (conn_pool,uemail,upwd,usertype)=>{return new Promise((resolve, reject)=>{
     x=conn_pool.query(`select * from ${usertype} where email="${uemail}" and pwd="${upwd}";`,  (error, results)=>{
+        if(x==null){
+            return reject(false)
+        }
         if(x._rows[0].length==0){
             return reject(false);
         }

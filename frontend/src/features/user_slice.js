@@ -18,7 +18,8 @@ export const userSlice=createSlice({
         },
         signup:(state,action)=>{
             state.user={"email":action.payload.email,"userType":action.payload.userType}
-            
+        
+
            
         },
         logout:(state,action)=>{

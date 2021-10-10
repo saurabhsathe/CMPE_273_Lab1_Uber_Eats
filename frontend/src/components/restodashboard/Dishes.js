@@ -3,6 +3,7 @@ import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
 import cookie from 'react-cookies'
+import {Link} from 'react-router-dom'
 const Resteraunts = () => {
     
     let [dishes_received,setdishes]=useState([])
@@ -51,13 +52,12 @@ let details_received= dishes_received.map(dish => {
     <div className="card-body">
     <h4 className="card-title">{dish.dish_name}</h4>
     <p className="card-text">{dish.dish_desc}</p>
+    <p className="card-text"><b style={{color:"black"}}>{dish.price}$</b></p>
     </div>
     <div className="card-footer py-4">
-    <table><tr>
     
-    <td><button type="button" class="btn btn-dark">Delete</button></td>
-    <td><button type="button" class="btn btn-dark">Update</button></td>
-    </tr></table>
+    <Link to={{pathname:"/restodash/updateDish",state:{resto:dish}}} ><button type="button" class="btn btn-dark" >Update</button></Link>
+    
         </div>
 </div>
 </div>

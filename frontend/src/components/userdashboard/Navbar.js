@@ -4,19 +4,25 @@ import Vegnonvegoption from './Vegnonvegoption'
 import Location from './Location' 
 import './vegnonveg.css'
 import {useState,useEffect} from 'react'
+import Cart from './Cart'
+import {FaShoppingCart} from 'react-icons/fa'
+import UserCart from './UserCart'
+import { useCookies } from "react-cookie";
+
 const Navbar = (props) => {
     const [checkbtn,setcheckbtn] = useState(false)
     const [radioval,setradioval]=useState("all")
     const [restname,setrestname]=useState("")
     const [restzip,setrestzip]=useState("")
+    const [cookies, setCookie] = useCookies(["customer"]);
     function filterRestos(e){
         e.preventDefault()
         props.setfilters({restzip:{restzip},radioval:{radioval},restname:{restname}})
         
     }
-    
+        
     return (
-        <div class="wrapper">
+        <div className="wrapper container">
             
             <div id="sidenav">
             <nav className="navbar navbar-expand-lg fixed-top navbar-inner" >
@@ -26,51 +32,28 @@ const Navbar = (props) => {
         
             <div className="col-sm brand" >
             <a className="navbar-brand"><img style={{border:0}} src="/ue2.png" /></a>
-            
-            </div>
-            <div className="col-sm">    
-            <input type="text" value={restzip} class="form-control location-form" onChange={e => setrestzip(e.target.value)} placeholder="Enter Zipcode" />
-            </div>
-            
-                
-            
-            <div className="col-sm">    
-            <div className="mainradio" data-toggle="buttons">
-        
-        <input type="radio" value="all" onChange={e=>setradioval(e.target.value)} className="radio_button" id="all" name="options" defaultChecked/>
-        <label for="all" className="radio_label">all</label>
-
-       <input type="radio" className="radio_button" value="pickup" onChange={e=>setradioval(e.target.value)} id="veg" name="options"  />
-       <label for="veg" className="radio_label">pickup</label>
-
-        <input type="radio" className="radio_button" value="drop" onChange={e=>setradioval(e.target.value)} id="nonveg" name="options" /> 
-        <label for="nonveg" className="radio_label">drop</label>
-
-          </div>      
-
-            </div>
-            
-            <div className="col-sm">
-                    <div class="input-group">
-                    <input type="text" value={restname} class="form-control search-form" onChange={e => setrestname(e.target.value)} placeholder="Enter Restaurant Name" />
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-dark search-btn" data-target="#search-form" name="q">
-                            search
-                    
-		                 </button></span>
-        
-                    </div>
-            </div>
-            
-            
-            
-
-
-            
-           
+            </div>     
+            <h4>Hello, {cookies.email}!!!!</h4>
+          
             </form>
             
-        
+          
+            
+            <div className="col-sm">
+            
+            <span class="input-group-btn">
+            
+                        <button onClick={()=>setcheckbtn(true)} class="btn btn-dark" data-target="#search-form" name="q">
+                            <FaShoppingCart />
+                              
+		                 </button></span>
+                         < UserCart trigger={checkbtn} setTrigger={setcheckbtn}>
+
+                        <Cart />
+
+                         </ UserCart>
+
+            </div>
         
         </div>
         

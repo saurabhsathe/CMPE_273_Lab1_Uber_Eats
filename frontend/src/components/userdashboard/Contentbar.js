@@ -13,21 +13,30 @@ import Checkout from './Checkout'
 import Favourites from './Favourites'
 import Successful from './Successful'
 import Current_Orders from './Current_Orders'
+import {useEffect,useState} from 'react'
+import axios from 'axios'
+
 const Contentbar = (props) => {
 
     let redirectVar = null;
  const location=useLocation()
-    
+     const [toggler,setToggler]=useState(false)
     if(!cookie.load('cookie')){
         redirectVar = <Redirect to= "/userlogin"/>
     }
+ 
 
+
+
+
+
+    
     return (
             <BrowserRouter>
             
             <Switch>
             
-            <Route exact path='/userdash/' component={()=><Resteraunts filters={props.filters}/>} />
+            <Route exact path='/userdash/' component={()=><Resteraunts filters={props.filters} toggler={!toggler} setToggler={setToggler}/>} />
             <Route path= "/userdash/cart" component={Cart} />        
             <Route path="/userdash/userupdate" component={UpdateProfile} />
             <Route path='/userdash/userinfo' component={Userinfo} />

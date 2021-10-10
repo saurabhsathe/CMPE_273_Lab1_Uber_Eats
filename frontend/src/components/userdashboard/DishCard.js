@@ -3,6 +3,8 @@ import {useCart} from 'react-use-cart'
 const DishCard = (props) => {
 
     const {addItem} = useCart();
+
+
     return (
  
         <div className="col-md-4 mb-4" id={props.id}>

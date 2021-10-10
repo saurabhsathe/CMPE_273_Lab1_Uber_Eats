@@ -28,6 +28,7 @@ var place_order = require('./db_operations/insert_order')
 var getcust_orders =require('./db_operations/get_cust_orders')
 var update_order = require('./db_operations/update_order')
 var get_resto_orders=require('./db_operations/get_resto_orders')
+var updatedish=require('./db_operations/update_dish')
 
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
@@ -552,7 +553,36 @@ catch(error){
 });
 
 
+app.post('/updateDish',async function(req,res){
+    console.log("Request received",req.body)
+    try{
+     
+     result = await updatedish.update_dish(req.body)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("done")
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("had some issues")
+    }
 
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
 
 
 
