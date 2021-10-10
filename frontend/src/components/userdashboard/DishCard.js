@@ -1,9 +1,30 @@
 import React from 'react'
 import {useCart} from 'react-use-cart' 
 const DishCard = (props) => {
-
-    const {addItem} = useCart();
-
+    let mydish
+    let adish
+    const {addItem,isEmpty,items} = useCart(mydish);
+    function additemincart(mydish){
+        if(isEmpty){
+            addItem(mydish,1)
+        }
+        else{
+            let flag=0
+            console.log("items",items)
+            for(adish of items){
+                if(adish.resteraunt_name!=mydish.resteraunt_name){
+                    console.log(adish.resteraunt_name)
+                    console.log(mydish)
+                    alert("You cannot add dish from some other restaurant in the same cart")
+                    flag=1
+                    break
+                }
+            }
+            if(flag!=1){
+                addItem(mydish,1)
+            }
+        }
+    }
 
     return (
  
@@ -19,8 +40,8 @@ const DishCard = (props) => {
             </div>
             <div className="card-footer py-4">
             
-            <button type="button" class="btn btn-dark" onClick={()=>addItem(props.dish,1)}>Add to cart</button>
-            &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-dark" onClick={()=>addItem(props.dish,1)}>Add to Favourites</button>
+            <button type="button" class="btn btn-dark" onClick={()=>additemincart(props.dish)}>Add to cart</button>
+
                 </div>
         </div>
         </div>
