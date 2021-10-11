@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from './Navbar'
 import BootCdnUser from './BootCdnUser'
 import BootCdn from './BootCdn'
-import SideBar from './RestoSideBar'
+
 import Contentbar from './Contentbar'
 import Prosidebar from './Prosidebar'
 import cookie from 'react-cookies'
