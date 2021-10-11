@@ -1,7 +1,8 @@
 import React from 'react'
 import {useCart} from 'react-use-cart' 
 const DishCard = (props) => {
-
+    let mydish
+    let adish
     const {addItem,isEmpty,items} = useCart();
     function additemincart(mydish){
         if(isEmpty){

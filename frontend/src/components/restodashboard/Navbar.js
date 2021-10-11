@@ -1,10 +1,11 @@
 import React from 'react'
 import {FaBars} from 'react-icons/fa'
+import { useCookies } from "react-cookie";
 const Navbar = (props) => {
     function sidehandle(e){
-        document.getElementById("sidebar").classList.toggle("active")
+        e.preventDefault();
     }
-    
+    const [cookies, setCookie] = useCookies(["restaurant"]);
     
     return (
         <div class="wrapper">
@@ -15,7 +16,7 @@ const Navbar = (props) => {
         
         <div className="container-fluid navcontainer row" >
         
-         
+        <form id="search-form" class="form-inline" role="form" onSubmit={sidehandle}>
             <div className="col-sm brand" >
             <a className="navbar-brand"><img style={{border:0}} src="/ue2.png" /></a>
             
@@ -25,15 +26,17 @@ const Navbar = (props) => {
             
                 
             
-            <div className="col-sm">    
-            </div>
+            <h2> Helllo, {cookies.resteraunt_name}</h2>
+            <a className="navbar-brand"><img style={{border:0}} src={cookies.restdp} /></a>
+           
             
             <div className="col-sm">
+            
             </div>
 
             
            
-            
+           </form> 
         
         
         </div>

@@ -5,6 +5,7 @@ import Resteraunts from './Resteraunts'
 import{useState,useEffect} from 'react'
 import {useCart} from 'react-use-cart'
 import {BrowserRouter, Route , Switch} from 'react-router-dom'
+import Footer from './Footer'
 const Dashboard = () => {
     const {emptyCart} = useCart()
     useEffect(()=>{
@@ -33,6 +34,7 @@ const Dashboard = () => {
             <Resteraunts />
       </div>
       </body>
+      <Footer />
 
 </html>
 

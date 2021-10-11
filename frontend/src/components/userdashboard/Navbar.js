@@ -17,7 +17,7 @@ const Navbar = (props) => {
     const [cookies, setCookie] = useCookies(["customer"]);
     function filterRestos(e){
         e.preventDefault()
-        props.setfilters({restzip:{restzip},radioval:{radioval},restname:{restname}})
+    
         
     }
         

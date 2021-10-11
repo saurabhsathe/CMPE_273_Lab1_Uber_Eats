@@ -38,15 +38,18 @@ const Prosidebar = () => {
     </MenuItem>
     <hr />
     <MenuItem >
-    <a href="/restodash/current" >Current Orders</a>
+    <a href="/restodash/neworders" >New Orders</a>
     </MenuItem>
     <hr />
     
-    
-    
-    <MenuItem >Customers</MenuItem>
+    <MenuItem >
+    <a href="/restodash/current" >Current Orders</a>
+    </MenuItem>
     <hr />
     <MenuItem ><a href="/restodash/pastorders" >Past Orders</a></MenuItem>
+    <hr />
+    
+    <MenuItem >Customers</MenuItem>
     <hr />
     <MenuItem ><form onSubmit={handleLogout} action="/"><button style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></form></MenuItem>
     

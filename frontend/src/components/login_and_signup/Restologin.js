@@ -44,6 +44,7 @@ const Restologin = () => {
                     console.log("here is restodata", restodata)
                     setCookie("resteraunt_name", restodata.resteraunt_name, {path: "/"});
                     setCookie("zipcode", restodata.zipcode, {path: "/"});
+                    setCookie("restdp",restodata.restdp, {path: "/"});
                     }else{
                     
                     seterrors("User does not exists or Invalid credentials")

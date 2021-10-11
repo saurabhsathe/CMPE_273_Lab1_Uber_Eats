@@ -3,11 +3,14 @@ const database=require('./database')
 const getorders = (conn_pool,name,zipcode,type)=>{return new Promise((resolve, reject)=>{
     //console.log(`select * from orders where customer_name = "${resto_name}"and zipcode ="${zipcode}";`)
     let query_str
-    if (type=="current"){
-        query_str=`select * from orders where restaurant_name="${name}" and restaurant_zipcode="${zipcode}" and (order_status="placed" or order_status="confirm");`
+    if (type=="new"){
+        query_str=`select * from orders where restaurant_name="${name}" and restaurant_zipcode="${zipcode}" and order_status="placed";`
     }
-    else{
-        query_str=`select * from orders where restaurant_name="${name}" and restaurant_zipcode="${zipcode}" and (order_status="cancel" or order_status="delivered");`    
+    else if(type=="current"){
+        query_str=`select * from orders where restaurant_name="${name}" and restaurant_zipcode="${zipcode}" and order_status="preparing";`    
+    }
+    else if(type=="past"){
+        query_str=`select * from orders where restaurant_name="${name}" and restaurant_zipcode="${zipcode}" and (order_status="delivered" or order_status="cancelled");`
     }
     console.log(query_str)
     x=conn_pool.query(query_str,  (error, results)=>{
