@@ -24,7 +24,7 @@ const RestoCard = (props) => {
             zipcode:props.zipcode
         }
         console.log(data)
-     axios.post("http://localhost:3001/addTofavourites",data).then(response=>{
+     axios.post("http://54.176.82.69:3001/addTofavourites",data).then(response=>{
              
              if(response.status === 200)
              {

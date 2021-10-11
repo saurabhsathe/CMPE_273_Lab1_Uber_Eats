@@ -29,7 +29,7 @@ const UpdateDish = (props) => {
         axios.defaults.withCredentials = true;
         //make a post request with the user data
         
-        axios.post('http://localhost:3001/updateDish',data)
+        axios.post('http://54.176.82.69:3001/updateDish',data)
             .then(response => {
                 
                 if(response.status === 200){

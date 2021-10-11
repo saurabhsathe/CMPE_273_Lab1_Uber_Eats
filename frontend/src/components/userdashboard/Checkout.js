@@ -19,7 +19,7 @@ const Checkout = () => {
           email:cookies.email
       }
 
-   axios.post("http://localhost:3001/getaddress",data).then(response=>{
+   axios.post("http://54.176.82.69:3001/getaddress",data).then(response=>{
            
            if(response.status === 200)
            {
@@ -69,7 +69,7 @@ const {
             delivery_address:addr
         }
         
-        axios.post("http://localhost:3001/placeOrder",data).then(response=>{
+        axios.post("http://54.176.82.69:3001/placeOrder",data).then(response=>{
              
              if(response.status === 200)
              {

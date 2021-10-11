@@ -24,7 +24,7 @@ const Past_Orders = (props) => {
             
         }
 
-        axios.post("http://localhost:3001/getCustOrders",data).then(response=>{
+        axios.post("http://54.176.82.69:3001/getCustOrders",data).then(response=>{
                 
                 if(response.status === 200)
                 {

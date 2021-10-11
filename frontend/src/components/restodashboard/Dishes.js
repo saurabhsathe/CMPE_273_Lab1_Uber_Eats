@@ -21,7 +21,7 @@ const Resteraunts = () => {
          
             }
   
-        axios.post("http://localhost:3001/getDishes",data).then(response=>{
+        axios.post("http://54.176.82.69:3001/getDishes",data).then(response=>{
                 
                 if(response.status === 200)
                 {

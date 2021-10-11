@@ -42,7 +42,7 @@ const SignupForm = () => {
         formData.append("dp", udp);
         console.log(formData)
         
-        axios.post('http://localhost:3001/usersignup',formData)
+        axios.post('http://54.176.82.69:3001/usersignup',formData)
             .then(response => {
                 
                 if(response.status === 200){
