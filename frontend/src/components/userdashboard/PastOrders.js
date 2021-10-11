@@ -13,18 +13,20 @@ const Past_Orders = (props) => {
     const user = useSelector(selectuser)
     let redirectVar = null
     let [orders_received,setorders]=useState([])
-    const [cookies, setCookie] = useCookies(["restaurant"]);
+    const [cookies, setCookie] = useCookies(["customer"]);
     console.log(user)
     
     useEffect(()=>{
         
+        var headers = new Headers(); 
+        var headers = new Headers(); 
         const data = {
             email:cookies.email,
-            order_type:"past"
+            order_type:"current"
             
         }
 
-        axios.post("http://54.176.82.69:3001/getCustOrders",data).then(response=>{
+     axios.post("http://54.176.82.69:3001/getCustOrders",data).then(response=>{
                 
                 if(response.status === 200)
                 {
@@ -47,12 +49,12 @@ const Past_Orders = (props) => {
 
 
 },[]);
-console.log(" in the past orders")  
+  
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/restologin"/>
 }
 
-console.log(orders_received)
+console.log(orders_received.length)
 let details_received= orders_received.map((order,index) => {
     return(
      

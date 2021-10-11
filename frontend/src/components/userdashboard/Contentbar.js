@@ -46,6 +46,7 @@ const Contentbar = (props) => {
             <Route path="/userdash/favourites" component={Favourites} />
             <Route path="/userdash/success" component={Successful} />
             <Route path="/userdash/current" component={Current_Orders} />
+            <Route path="/userdash/past" component={PastOrders} />
             </Switch></BrowserRouter>
       
     )

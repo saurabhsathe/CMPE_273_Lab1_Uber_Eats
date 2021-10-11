@@ -49,7 +49,9 @@ const CurrentOrderCard = (props) => {
             </div>
             <div className="card-footer py-4">
             
-           
+            <button type="button" class="btn btn-dark" onClick={()=>{ConfirmOrder("preparing")}}>Confirm</button>
+            &nbsp; &nbsp;<button type="button" class="btn btn-dark" onClick={()=>{ConfirmOrder("cancelled")}}>Cancel</button>
+            
                 </div>
         </div>
         </div>

@@ -8,24 +8,25 @@ import cookie from 'react-cookies'
 import {selectuser} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
 import CurrentOrderCard from './CurrentOrderCard'
-const Current_Orders = (props) => {
+import NewOrderCard from './NewOrderCard'
+const NewOrders = (props) => {
     const user = useSelector(selectuser)
     let redirectVar = null
     let [orders_received,setorders]=useState([])
-    const [cookies, setCookie] = useCookies(["customer"]);
+    const [cookies, setCookie] = useCookies(["restaurant"]);
     console.log(user)
     
     useEffect(()=>{
         
              var headers = new Headers(); 
-             var headers = new Headers(); 
-             const data = {
-                 email:cookies.email,
-                 order_type:"current"
-                 
-             }
+           const data = {
+            restaurant_name:cookies.resteraunt_name,
+            zipcode:cookies.zipcode,
+            type:"new"
     
-          axios.post("http://54.176.82.69:3001/getCustOrders",data).then(response=>{
+           }
+  
+        axios.post("http://54.176.82.69:3001/getRestoOrders",data).then(response=>{
                 
                 if(response.status === 200)
                 {
@@ -57,7 +58,7 @@ console.log(orders_received.length)
 let details_received= orders_received.map((order,index) => {
     return(
      
-    <CurrentOrderCard
+    <NewOrderCard
     
    order={order}
     
@@ -91,4 +92,4 @@ let details_received= orders_received.map((order,index) => {
     
 }
 
-export default Current_Orders
+export default NewOrders

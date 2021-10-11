@@ -55,6 +55,7 @@ const RestoCard = (props) => {
             <h4 className="card-title">{props.resteraunt_name}</h4>
             <p className="card-text">{props.address}</p>
             <p><b style={{color:"black"}}>{props.zipcode}</b></p>
+            <p><b style={{color:"black"}}>{props.resto.restdesc}</b></p>
             </div>
             <div className="card-footer py-4">
             

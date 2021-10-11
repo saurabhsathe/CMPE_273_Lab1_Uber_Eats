@@ -4,10 +4,10 @@ const getorders = (conn_pool,email,type)=>{return new Promise((resolve, reject)=
     //console.log(`select * from orders where customer_email = "${resto_name}"and zipcode ="${zipcode}";`)
     let query_str
     if (type=="current"){
-        query_str=`select * from orders where customer_email="${email}" and (order_status="placed" or order_status="confirm");`
+        query_str=`select * from orders where customer_email="${email}" and (order_status="placed" or order_status="preparing");`
     }
     else{
-        query_str=`select * from orders where customer_email="${email}" and (order_status="completed" or order_status="cancel");`    
+        query_str=`select * from orders where customer_email="${email}" and (order_status="delivered" or order_status="cancelled");`    
     }
     x=conn_pool.query(query_str,  (error, results)=>{
     //console.log("rows affected",x._rows.length,x._rows)   
