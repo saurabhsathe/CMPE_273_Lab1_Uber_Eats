@@ -19,7 +19,7 @@ const Resteraunts = (props) => {
                 
             }
   
-        axios.post("http://54.176.82.69:3001/getallDishes",data).then(response=>{
+        axios.post(process.env.REACT_APP_BACKEND+"getallDishes",data).then(response=>{
                 
                 if(response.status === 200)
                 {

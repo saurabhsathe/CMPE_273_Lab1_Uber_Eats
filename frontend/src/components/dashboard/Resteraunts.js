@@ -15,16 +15,17 @@ const Resteraunts = (props) => {
     function filter_restos(){
 
     }
-
+    console.log(process.env.REACT_APP_BACKEND+"getallResto")
     useEffect(()=>{
+        console.log(process.env.REACT_APP_BACKEND+"getallResto")
         if(Object.keys(props).length == 0){
         console.log("herhehrehrhehrehrehh")
              var headers = new Headers(); 
            const data = {
                resteraunt_name:"dasdsadsa"
            }
-  
-        axios.post("http://54.176.82.69:3001/getallResto",data).then(response=>{
+
+        axios.post(process.env.REACT_APP_BACKEND+"getallResto",data).then(response=>{
                 
                 if(response.status === 200)
                 {

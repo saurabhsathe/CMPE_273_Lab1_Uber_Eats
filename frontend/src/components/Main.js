@@ -11,6 +11,7 @@ import RestoMainLogin from './login_and_signup/RestoMainLogin'
 import RestoMainSignup from './login_and_signup/RestoMainSignup'
 import Restodash from './restodashboard/Restodash'
 import RestoMenu from './dashboard/RestoMenu'
+import Example from './Example';
 class Main extends Component {
     render(){
         return(
@@ -30,6 +31,7 @@ class Main extends Component {
                 <Route path="/userdash/home" component={Resteraunts} />
                 <Route path="/restodash" component={Restodash} />
                 <Route path="/main/restoProfile" component={RestoMenu} />
+                <Route path="/example" component={Example} />
                 </div>
                 
 

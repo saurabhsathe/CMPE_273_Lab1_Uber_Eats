@@ -21,7 +21,7 @@ const Favourites = (props) => {
                email:cookies.email
            }
   
-        axios.post("http://54.176.82.69:3001/getfavourites",data).then(response=>{
+        axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data).then(response=>{
                 
                 if(response.status === 200)
                 {

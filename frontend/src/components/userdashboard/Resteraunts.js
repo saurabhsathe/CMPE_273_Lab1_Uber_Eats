@@ -97,7 +97,7 @@ let redirectVar=null
             resteraunt_name:"dasdsadsa"
         }
         
-     axios.post("http://54.176.82.69:3001/getallResto",data).then(response=>{
+     axios.post(process.env.REACT_APP_BACKEND+"getallResto",data).then(response=>{
              
              if(response.status === 200)
              {
