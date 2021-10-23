@@ -29,6 +29,7 @@ var getcust_orders =require('./db_operations/get_cust_orders')
 var update_order = require('./db_operations/update_order')
 var get_resto_orders=require('./db_operations/get_resto_orders')
 var updatedish=require('./db_operations/update_dish')
+var connect_mongo = require('./example2')
 var host="http://localhost"
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
@@ -62,7 +63,15 @@ app.use(function(req, res, next) {
     next();
   });
 
- 
+var options={
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    maxpoolSize:500,
+    
+}
+const mongo=require("mongoose")
+var {mongo_connection_string} = require('./mongo_operations/mongo_connection')
+var mongodb=mongo.connect(mongo_connection_string,options)
   
 
 //Route to handle Post Request Call
@@ -580,7 +589,36 @@ catch(error){
     
 });
 
+app.get('/connect_mongo',async function(req,res){
+    
+    try{
+     console.log(mongodb)
+     
+     if(mongodb!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("done")
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("had some issues")
+    }
 
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
 
 //start your server on port 3001
 app.listen(3001);

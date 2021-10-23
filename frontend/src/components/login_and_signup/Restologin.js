@@ -32,7 +32,7 @@ const Restologin = () => {
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.post('http://54.176.82.69:3001/customerlogin',data)
+        axios.post(process.env.REACT_APP_BACKEND+'customerlogin',data)
             .then(response => {
                 
                 if(response.status === 200){

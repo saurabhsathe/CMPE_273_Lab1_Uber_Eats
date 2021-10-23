@@ -29,6 +29,7 @@ var getcust_orders =require('./db_operations/get_cust_orders')
 var update_order = require('./db_operations/update_order')
 var get_resto_orders=require('./db_operations/get_resto_orders')
 var updatedish=require('./db_operations/update_dish')
+var connect_mongo = require('./example2')
 var host="http://localhost"
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
@@ -62,54 +63,20 @@ app.use(function(req, res, next) {
     next();
   });
 
- 
+var options={
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    maxpoolSize:500,
+    
+}
+const mongo=require("mongoose")
+let Dummy=require("./mongo_operations/models/DummyModel")
+let Customer=require("./mongo_operations/models/CustomerModel")
+var {mongo_connection_string} = require('./mongo_operations/mongo_connection')
+var mongodb=mongo.connect(mongo_connection_string,options)
   
 
 //Route to handle Post Request Call
-app.post('/customerlogin',async function(req,res){
-    var flag
-    try{
-        console.log(req.body)
-     flag = await verify_user.auth_user(req.body.email,req.body.password,req.body.usertype)
-}
-catch(error){
-    console.log(e)
-}
-    console.log(flag)
-    if(flag==true){
-        res.cookie('cookie',"admin",{maxAge: 900000, httpOnly: false, path : '/'});
-            res.writeHead(200,{
-                'Content-Type' : 'text/plain'
-            })
-            if (req.body.usertype=="restaurant_owner"){
-                data=await getresto.getown(req.body.email)
-                res.end(JSON.stringify(data));
-            }
-            else{
-                res.end("Successful Login");
-
-            }
-
-                
-
-            
-
-      
-    }
-    else{
-            console.log("does not exists")
-            res.writeHead(202,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("User does not exists");
-    }
-
-    
-
-    
-
-    
-});
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -579,6 +546,176 @@ catch(error){
 
     
 });
+
+app.get('/connect_mongo',async function(req,res){
+    
+    try{
+     console.log(mongodb)
+     
+     if(mongodb!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("done")
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("had some issues")
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+app.get('/add',async function(req,res){
+    console.log("request received")
+    let user={email:"sathesaurabh30@gmail.com",pwd:"saurabh123"}
+    let dummydata = new Dummy(user);
+    Dummy.findOne({email:user.email},(err,dummy)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+        if(dummy){
+            res.writeHead(400,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("dummy exists")
+        }
+        else{
+            dummydata.save((err,data)=>{
+                if (err){
+                    res.writeHead(500,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
+        }
+    })
+    try{
+     console.log(mongodb)
+     
+     if(mongodb!=false){
+        
+    }
+    else{
+       
+    }
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+app.post('/add_customer',upload.single("dp"),async function(req,res){
+    console.log("request received")
+    let user=JSON.parse(req.body.data)
+    user = new Customer(user)
+    Customer.findOne({email:user.email},async (err,dummy)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+        if(dummy){
+            res.writeHead(400,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("dummy exists")
+        }
+        else{
+            let fileloc="./public/"+res.req.file.filename
+            let fname=user.email.split("@")[0]+path.extname(res.req.file.originalname)
+       
+            user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatscustomerimagesbucket",fname)
+            user.save((err,data)=>{
+                if (err){
+                    res.writeHead(500,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
+        }
+    })
+    
+        
+    
+
+    
+
+    
+});
+
+//Route to handle Post Request Call
+app.post('/customerlogin',async function(req,res){
+    
+    
+    console.log("login request received")
+    let user=req.body
+    
+    Customer.findOne({email:user.email,pwd:user.password},async (err,dummy)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+      
+        if(dummy){
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("account exists")
+        }
+        else{
+            res.writeHead(202,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("account does not exist")
+        }
+    })
+
+    
+
+    
+});
+
 
 
 

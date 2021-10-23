@@ -12,7 +12,7 @@ const PastOrderCard = (props) => {
             id:props.order.id,
             status:type
         }
-        axios.post('http://54.176.82.69:3001/updateOrder',data)
+        axios.post(process.env.REACT_APP_BACKEND+'updateOrder',data)
             .then(response => {
                 if(response.status === 200){
                     console.log("updated")

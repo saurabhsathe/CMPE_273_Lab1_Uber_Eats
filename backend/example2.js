@@ -1,12 +1,18 @@
 const database = require("./example")
-
-async function insert_user (person_details,owner_type) {
+ 
+async function insert_user () {
     let pwd
     
     try{
-        const conn_pool=await database.get_connection_user()
-        console.log(conn_pool)
-        return conn_pool;
+        return new Promise((resolve, reject)=>{
+            const pool = database.get_connection_user()
+            if (pool!=false){
+                return resolve(pool)
+            }
+            else{
+                return reject(pool)
+            }
+        });
         
     }
     catch(e){
@@ -19,10 +25,10 @@ async function insert_user (person_details,owner_type) {
     
 }
 
-async function insertuser(person_details,owner_type){
+async function insertuser(){
     try{
 
-        await insert_user(person_details,owner_type)
+        await insert_user()
         return true
     }
     catch(error){
@@ -33,11 +39,4 @@ async function insertuser(person_details,owner_type){
     
 }
 
-async function normalfun(){
- console.log(await insertuser({},"customer").then(resp=>{
-    console.log("hero")   
-    return "done"
-   
- }))
-}
-normalfun()
+module.exports={insertuser}

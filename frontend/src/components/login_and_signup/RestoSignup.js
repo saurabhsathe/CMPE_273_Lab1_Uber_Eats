@@ -79,11 +79,11 @@ const RestoSignup = () => {
 
             
             const [firstResponse] = await Promise.all([
-                axios.post('http://54.176.82.69:3001/usersignup',formData),
+                axios.post(process.env.REACT_APP_BACKEND+'usersignup',formData),
               ]);
               console.log(formData2)
               const [secondResponse] = await Promise.all([
-                axios.post('http://54.176.82.69:3001/restosignup',formData2)
+                axios.post(process.env.REACT_APP_BACKEND+'restosignup',formData2)
             ]);
             
             

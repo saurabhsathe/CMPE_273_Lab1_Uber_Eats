@@ -33,7 +33,7 @@ const CreateDish = () => {
         formData.append("dp", dp);
         
         
-        axios.post('http://54.176.82.69:3001/addDish',formData)
+        axios.post(process.env.REACT_APP_BACKEND+'addDish',formData)
             .then(response => {
                 
                 if(response.status === 200){

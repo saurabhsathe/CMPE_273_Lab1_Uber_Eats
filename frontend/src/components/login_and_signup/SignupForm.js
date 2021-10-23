@@ -32,7 +32,7 @@ const SignupForm = () => {
             contact:ucontact,
             pwd : upwd,
             email:uemail,
-            usertype:"customer"
+        
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
@@ -42,7 +42,7 @@ const SignupForm = () => {
         formData.append("dp", udp);
         console.log(formData)
         
-        axios.post('http://54.176.82.69:3001/usersignup',formData)
+        axios.post(process.env.REACT_APP_BACKEND+'add_customer',formData)
             .then(response => {
                 
                 if(response.status === 200){

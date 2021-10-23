@@ -14,5 +14,5 @@ const CustomerModel = new Schema ({
 }
 );
 
-const customermodel = mongoose.model('customermodel',CustomerModel)
+const customermodel = mongoose.model('customer',CustomerModel)
 module.exports=customermodel;
