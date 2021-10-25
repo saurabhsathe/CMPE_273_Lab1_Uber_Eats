@@ -1,4 +1,4 @@
-import React from 'react'
+
 var mongoose=require("mongoose")
 const Schema= mongoose.Schema
 const RestaurantOwnerModel = new Schema ({
@@ -11,5 +11,5 @@ const RestaurantOwnerModel = new Schema ({
     userdp:{type:String,required:true},
 })
 
-const resto_owner_model = mongoose.model('restoOwnerModel',RestaurantOwnerModel)
+const resto_owner_model = mongoose.model('RestoOwner',RestaurantOwnerModel)
 module.exports=resto_owner_model;

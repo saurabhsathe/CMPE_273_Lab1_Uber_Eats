@@ -69,10 +69,16 @@ var options={
     maxpoolSize:500,
     
 }
+var {mongo_connection_string} = require('./mongo_operations/mongo_connection')
 const mongo=require("mongoose")
 let Dummy=require("./mongo_operations/models/DummyModel")
 let Customer=require("./mongo_operations/models/CustomerModel")
-var {mongo_connection_string} = require('./mongo_operations/mongo_connection')
+var Restaurant=require("./mongo_operations/models/RestaurantsModel")
+var RestoOwner = require("./mongo_operations/models/RestaurantOwnerModel")
+
+
+
+
 var mongodb=mongo.connect(mongo_connection_string,options)
   
 
@@ -89,7 +95,7 @@ var storage = multer.diskStorage({
   })
   
   var upload = multer({ storage:storage })
- 
+/*
 app.post('/usersignup',upload.single("dp"),async function(req,res){
     let user=JSON.parse(req.body.data)    
     x= await email_exists.testemail(user.email,user.usertype)
@@ -124,51 +130,7 @@ app.post('/usersignup',upload.single("dp"),async function(req,res){
 
     }
     
-    
-    
-    
-
-    
-});
-
-app.post('/addDish',upload.single("dp"),async function(req,res){
-    let dish=JSON.parse(req.body.data)    
-    
-        let fileloc="./public/"+res.req.file.filename
-        let fname=dish.resteraunt_name+dish.zipcode+dish.dish_name+path.extname(res.req.file.originalname)
-       
-        dish.dishdp = await s3upload.upload_to_s3(fileloc,"ubereatsdishimages",fname)
-        
-        x=await insert_dish.insertdish(dish)
-        console.log(x)
-        fs.unlinkSync(fileloc)
-        if(x==true){
-        console.log("in the new dish section")
-        res.writeHead(200,{
-            'Content-Type' : 'text/plain'
-        })
-        res.end("Dish successfully registered");
-        }
-        else{
-            res.writeHead(202,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("Dish could not be added");
-                
-        }
-    
-    
-    
-    
-    
-
-    
-});
-
-
-
-
-app.post('/restosignup',upload.single("restdp"),async function(req,res){
+    app.post('/restosignup',upload.single("restdp"),async function(req,res){
     console.log("int the resto signup")
     let resto=JSON.parse(req.body.data)    
     x= await resto_exists.testresto(resto.fullname,resto.zipcode)
@@ -208,6 +170,50 @@ app.post('/restosignup',upload.single("restdp"),async function(req,res){
 
     
 });
+
+    
+    
+
+    
+});
+*/
+app.post('/addDish',upload.single("dp"),async function(req,res){
+    let dish=JSON.parse(req.body.data)    
+    
+        let fileloc="./public/"+res.req.file.filename
+        let fname=dish.resteraunt_name+dish.zipcode+dish.dish_name+path.extname(res.req.file.originalname)
+       
+        dish.dishdp = await s3upload.upload_to_s3(fileloc,"ubereatsdishimages",fname)
+        
+        x=await insert_dish.insertdish(dish)
+        console.log(x)
+        fs.unlinkSync(fileloc)
+        if(x==true){
+        console.log("in the new dish section")
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("Dish successfully registered");
+        }
+        else{
+            res.writeHead(202,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Dish could not be added");
+                
+        }
+    
+    
+    
+    
+    
+
+    
+});
+
+
+
+
 
 app.post('/getDishes',async function(req,res){
     
@@ -578,63 +584,42 @@ catch(error){
     
 });
 
-app.get('/add',async function(req,res){
-    console.log("request received")
-    let user={email:"sathesaurabh30@gmail.com",pwd:"saurabh123"}
-    let dummydata = new Dummy(user);
-    Dummy.findOne({email:user.email},(err,dummy)=>{
+//Route to handle customer login request
+app.post('/customerlogin',async function(req,res){
+    
+    
+    console.log("login request received")
+    let user=req.body
+    
+    Customer.findOne({email:user.email,pwd:user.password},async (err,dummy)=>{
         if (err){
             res.writeHead(500,{
                 'Content-Type' : 'text/plain'
             })
             res.end("error")
         }
+      
         if(dummy){
-            res.writeHead(400,{
+            res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+            res.writeHead(200,{
                 'Content-Type' : 'text/plain'
             })
-            res.end("dummy exists")
+            res.end("account exists")
         }
         else{
-            dummydata.save((err,data)=>{
-                if (err){
-                    res.writeHead(500,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end("error in inserting")
-                }
-                else{
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end("done")
-                }
+            res.writeHead(202,{
+                'Content-Type' : 'text/plain'
             })
+            res.end("account does not exist")
         }
     })
-    try{
-     console.log(mongodb)
-     
-     if(mongodb!=false){
-        
-    }
-    else{
-       
-    }
-
-
-}
-catch(error){
-    console.log(error)
-}
-        
-    
 
     
 
     
 });
 
+//Route to handle customer signup request
 app.post('/add_customer',upload.single("dp"),async function(req,res){
     console.log("request received")
     let user=JSON.parse(req.body.data)
@@ -682,14 +667,121 @@ app.post('/add_customer',upload.single("dp"),async function(req,res){
     
 });
 
-//Route to handle Post Request Call
-app.post('/customerlogin',async function(req,res){
+//Route to handle restaurant owner signup request
+app.post('/owner_signup',upload.single("dp"),async function(req,res){
+    console.log("request received")
+    let user=JSON.parse(req.body.data)
+    user = new RestoOwner(user)
+    RestoOwner.findOne({email:user.email},async (err,dummy)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+        if(dummy){
+            console.log("found existing user")
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            
+            })
+            res.end("owner exists")
+        }
+        else{
+            let fileloc="./public/"+res.req.file.filename
+            fname=resto.name+resto.zipcode+path.extname(res.req.file.originalname)
+       
+            user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantownerimagedetails",fname)
+            user.save((err,data)=>{
+                if (err){
+                    res.writeHead(500,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
+        }
+    })
+    
+        
+    
+
+    
+
+    
+});
+//Route to handle restaurant signup request
+app.post('/restosignup',upload.single("restdp"),async function(req,res){
+    console.log("int the resto signup")
+    let resto=JSON.parse(req.body.data)    
+    let stored_file_name=res.req.file.originalname
+    resto=new Restaurant(resto)
+    let fileloc="./public/"+res.req.file.filename
+
+    Restaurant.findOne({fullname:resto.fulname,zipcode:resto.zipcode},async (err,result)=>{
+       
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+        else if(result){
+            fs.unlinkSync(fileloc)
+            res.writeHead(400,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Restaurant already exists")
+        }
+        else{
+            
+         fname=resto.fullname+resto.zipcode+path.extname(fileloc)
+            resto.restdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantimages",fname)
+            fs.unlinkSync(fileloc)
+            
+            resto.save((err,data)=>{
+                if (err){
+                    res.writeHead(500,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
+            
+        }
+            })
+        
+
+    
+
     
     
-    console.log("login request received")
+    
+
+    
+});
+
+
+//Route to handle restaurant login request
+app.post('/restologin',async function(req,res){
+    
+    
+    console.log("resto login request received")
     let user=req.body
     
-    Customer.findOne({email:user.email,pwd:user.password},async (err,dummy)=>{
+    RestoOwner.findOne({email:user.email,pwd:user.password},async (err,dummy)=>{
         if (err){
             res.writeHead(500,{
                 'Content-Type' : 'text/plain'
@@ -698,6 +790,7 @@ app.post('/customerlogin',async function(req,res){
         }
       
         if(dummy){
+            res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
             res.writeHead(200,{
                 'Content-Type' : 'text/plain'
             })
@@ -715,9 +808,6 @@ app.post('/customerlogin',async function(req,res){
 
     
 });
-
-
-
 
 //start your server on port 3001
 app.listen(3001);

@@ -42,7 +42,7 @@ const RestoSignup = () => {
             contact:ocontact,
             pwd : opwd,
             email:oemail,
-            usertype:"restaurant_owner"
+           
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
@@ -79,25 +79,27 @@ const RestoSignup = () => {
 
             
             const [firstResponse] = await Promise.all([
-                axios.post(process.env.REACT_APP_BACKEND+'usersignup',formData),
+                axios.post(process.env.REACT_APP_BACKEND+'owner_signup',formData),
               ]);
-              console.log(formData2)
+              if(firstResponse.status==200 || firstResponse.status==400){
               const [secondResponse] = await Promise.all([
                 axios.post(process.env.REACT_APP_BACKEND+'restosignup',formData2)
             ]);
-            
-            
-
-            if(secondResponse.status==200){
+            if(secondResponse.status==200 ){
               
-                console.log("data insertion sucessful")
-                setinserted(true)
-                
+               console.log("data insertion sucessful")
+               setinserted(true)
+               
 
-            }
-            else{
-                console.log("data insertion unsucessful")
-            }
+           }
+           else{
+               console.log("data insertion unsucessful")
+           }
+       
+         }
+            
+
+           
             
     }
     const user = useSelector(selectuser)
@@ -221,7 +223,8 @@ const RestoSignup = () => {
             </div>
 
                 <hr />
-
+                <h4 style={{color:"red"}}>{errors}</h4>
+                <hr />
                   <button type="submit" className="btn btn-secondary">Register</button>
                   Already have an account? <Link to="/restologin">Login</Link>&nbsp;
                </form>
