@@ -6,17 +6,17 @@ const CurrentOrderCard = (props) => {
     let redirectvar=null
     const [updated,setupdated]=useState(false)
 
-
-    function ConfirmOrder(type){
+    
+    function CancelOrder(){
         let data={
-            id:props.order.id,
-            status:type
+            id:props.order._id,
+            status:"cancelled"
         }
         axios.post(process.env.REACT_APP_BACKEND+'updateOrder',data)
             .then(response => {
                 if(response.status === 200){
                     console.log("updated")
-                    setupdated(true)
+                    props.setupdated(true)
                     }else if(response.status === 202){
                     
                     
@@ -30,7 +30,7 @@ const CurrentOrderCard = (props) => {
 
     
     if(updated==true){
-        redirectvar=<Redirect to="/restodash" />
+        redirectvar=<Redirect to="/userdash" />
     }
     return (
  
@@ -48,7 +48,7 @@ const CurrentOrderCard = (props) => {
             <p><b style={{color:"black"}}>Delivery Address:{props.order.delivery_address}</b></p>
             </div>
             <div className="card-footer py-4">
-            <button type="button" class="btn btn-dark" onClick={()=>{alert("cancelling order")}} disabled={props.order.order_status=="placed"? false : true}>Cancel</button>
+            <button type="button" class="btn btn-dark"  onClick={CancelOrder} disabled={props.order.order_status=="placed"? false : true}>Cancel</button>
            
                 </div>
         </div>

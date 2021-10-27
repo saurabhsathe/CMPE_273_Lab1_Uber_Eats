@@ -1180,7 +1180,7 @@ app.post('/updateOrder',async function(req,res){
     
     try{
      
-        Orders.updateOne({id:req.body.id},{order_status:req.body.status},async (err,result)=>{
+        Orders.updateOne({_id:req.body.id},{order_status:req.body.status},async (err,result)=>{
             console.log(result)
              if (err){
                  console.log(err)

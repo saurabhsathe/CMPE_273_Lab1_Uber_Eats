@@ -14,13 +14,14 @@ const Current_Orders = (props) => {
     let [orders_received,setorders]=useState([])
     const [cookies, setCookie] = useCookies(["customer"]);
     console.log(user)
+    const [updated,setupdated]=useState()
     const [radioval2,setradioval2]=useState("all")
     useEffect(()=>{
         
              var headers = new Headers(); 
              const data = {
                  email:cookies.email,
-                 order_type:"current"
+                 order_type:"all"
                  
              }
     
@@ -46,7 +47,7 @@ const Current_Orders = (props) => {
 
 
 
-},[]);
+},[updated]);
   function getOrdersByType(ordertype){
     var headers = new Headers(); 
     const data = {
@@ -83,6 +84,7 @@ let details_received= orders_received.map((order,index) => {
     <CurrentOrderCard
     
    order={order}
+   setupdated={setupdated}
     
     />
 
