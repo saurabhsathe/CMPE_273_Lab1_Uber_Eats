@@ -1,7 +1,7 @@
 var mongoose=require("mongoose")
 const Schema= mongoose.Schema
 const RestaurantsModel = new Schema ({
-    fullname:{type:String,required:true},
+    resteraunt_name:{type:String,required:true},
     address:{type:String,required:true},
     zipcode:{type:String,required:true},
     restdp:{type:String,required:true},

@@ -13,7 +13,7 @@ const RestoCard = (props) => {
         <div className="col-md-4 mb-4" >
         {redirectvar}
         <div className="card h-100" >
-            <img className="card-img-top" style={{width: "100%",height: "15vw", objectFit: "cover"}} src = {props.restdp} alt="Design" />
+            <img className="card-img-top" style={{width: "100%",height: "8vw"}} src = {props.restdp} alt="Design" />
             <div className="card-body">
             <h4 className="card-title">{props.resteraunt_name}</h4>
             <p className="card-text">{props.address}</p>

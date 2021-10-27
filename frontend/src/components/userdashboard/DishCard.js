@@ -36,7 +36,7 @@ const DishCard = (props) => {
             <div className="card-body">
             <h4 className="card-title">{props.dish_name}</h4>
             <p className="card-text">{props.dish_desc}</p>
-            <p><b style={{color:"black"}}>{props.price}$</b></p>
+            <p><b style={{color:"black"}}>{props.dish.price}$</b></p>
             </div>
             <div className="card-footer py-4">
             

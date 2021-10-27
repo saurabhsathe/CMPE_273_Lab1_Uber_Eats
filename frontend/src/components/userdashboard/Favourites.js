@@ -20,14 +20,14 @@ const Favourites = (props) => {
            const data = {
                email:cookies.email
            }
-  
+        console.log(data)
         axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data).then(response=>{
                 
                 if(response.status === 200)
                 {
                     
                     console.log(response.data,typeof response.data)
-                    setrestos(response.data[0])
+                    setrestos(response.data)
                     console.log("got the restaurants",restos_received)
                     
                 }

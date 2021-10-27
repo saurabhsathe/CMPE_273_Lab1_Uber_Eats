@@ -8,7 +8,7 @@ const Resteraunts = () => {
     
     let [dishes_received,setdishes]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
-
+    
     
             
            
@@ -22,19 +22,18 @@ const Resteraunts = () => {
             }
   
         axios.post(process.env.REACT_APP_BACKEND+"getDishes",data).then(response=>{
-                
+                console.log("repsonse is--------->",response.data)
                 if(response.status === 200)
                 {
                     
                     console.log(response.data,typeof response.data)
-                    setdishes(response.data[0])
-                    console.log("gsdfsdfds",dishes_received)
+                    setdishes(response.data)
+                    console.log("gsdfsdfds=================",dishes_received)
                     
                     
                 }
-                else if(response.status === 202)
+                else if(response.status === 400)
                 {
-
                 }
 
         })
@@ -73,7 +72,7 @@ let details_received= dishes_received.map(dish => {
             <div id="services" className="container">
             
    <h2 className="display-4 text-center mt-5 mb-3">Dishes</h2>
-        
+ 
    <div className="row text-center">
       {details_received}
      

@@ -103,7 +103,7 @@ let redirectVar=null
              {
                  
                  setoriginal_restos(response.data[0])
-                setrestos_rcvd(response.data[0])
+                setrestos_rcvd(response.data)
                 console.log("here it is",response.data[0])
                 
                 props.setToggler(!props.toggler)

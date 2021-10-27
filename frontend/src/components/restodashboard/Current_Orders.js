@@ -31,7 +31,7 @@ const Current_Orders = (props) => {
                 {
                     
                     console.log("received response here",response.data[0])
-                    setorders(response.data[0])
+                    setorders(response.data)
                     
                 }
                 else if(response.status === 202)

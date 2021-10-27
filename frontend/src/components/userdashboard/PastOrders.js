@@ -22,33 +22,34 @@ const Past_Orders = (props) => {
         var headers = new Headers(); 
         const data = {
             email:cookies.email,
-            order_type:"current"
+            order_type:"past"
             
         }
 
      axios.post(process.env.REACT_APP_BACKEND+"getCustOrders",data).then(response=>{
-                
-                if(response.status === 200)
-                {
-                    
-                    console.log("received response here",response.data[0])
-                    setorders(response.data[0])
-                    
-                }
-                else if(response.status === 202)
-                {
-                    console.log("no data found")
-                }
+           
+           if(response.status === 200)
+           {
+               
+               console.log("received response here",response.data)
+               setorders(response.data)
+               
+           }
+           else if(response.status === 202)
+           {
+               console.log("no data found")
+           }
 
-        })
-       
-   
+   })
   
-    
+
+
+
 
 
 
 },[]);
+
   
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/restologin"/>

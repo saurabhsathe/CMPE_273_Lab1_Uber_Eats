@@ -41,12 +41,9 @@ if(!cookie.load('cookie')){
     
     <MenuItem ><a href="/userdash/current" >Ongoing Orders</a></MenuItem>
     <hr />
-    <MenuItem ><a href="/userdash/past" >Ongoing Orders</a></MenuItem>
+    <MenuItem ><a href="/userdash/past" >Past Orders</a></MenuItem>
     <hr />
     <MenuItem ><a href="/userdash/cart" >Your Cart</a></MenuItem>
-    <hr />
-    <MenuItem ><a href="/userdash/pastorders" >Past Orders</a></MenuItem>
-
     <hr />
     <MenuItem ><form onSubmit={handleLogout} action="/"><button style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></form></MenuItem>
     

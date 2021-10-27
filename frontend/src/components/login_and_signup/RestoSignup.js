@@ -60,7 +60,7 @@ const RestoSignup = () => {
             
             
             let data2 = {
-                fullname : restname,
+                resteraunt_name : restname,
                 address:restaddr,
                 zipcode:restzip,
                 contact:restcontact,

@@ -25,13 +25,8 @@ const Checkout = () => {
            {
                
                console.log(response.data,typeof response.data)
-               console.log("details",response.data[0][0])
-               let details=response.data[0][0]
-               setCookie("fullname", details.fullname, {path: "/"});
-               setCookie("address", details.address, {path: "/"});
-                setaddr(details.address)
+               setaddr(response.data)               
                
-               setCookie("contact", details.contact, {path: "/"});
            }
            else if(response.status === 202)
            {
@@ -66,7 +61,9 @@ const {
             restaurant_name:items[0].resteraunt_name,
             restaurant_zipcode:items[0].zipcode,
             amount:cartTotal,
-            delivery_address:addr
+            delivery_address:addr,
+            order_status:"placed",
+            
         }
         
         axios.post(process.env.REACT_APP_BACKEND+"placeOrder",data).then(response=>{

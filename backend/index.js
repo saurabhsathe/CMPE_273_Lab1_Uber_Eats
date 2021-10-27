@@ -75,6 +75,10 @@ let Dummy=require("./mongo_operations/models/DummyModel")
 let Customer=require("./mongo_operations/models/CustomerModel")
 var Restaurant=require("./mongo_operations/models/RestaurantsModel")
 var RestoOwner = require("./mongo_operations/models/RestaurantOwnerModel")
+var Dishes = require("./mongo_operations/models/DishesModel")
+var Favourites = require("./mongo_operations/models/FavouritesModel");
+var Orders = require("./mongo_operations/models/OrdersModel");
+const { resolve } = require('path');
 
 
 
@@ -176,7 +180,9 @@ app.post('/usersignup',upload.single("dp"),async function(req,res){
 
     
 });
-*/
+
+
+
 app.post('/addDish',upload.single("dp"),async function(req,res){
     let dish=JSON.parse(req.body.data)    
     
@@ -210,11 +216,6 @@ app.post('/addDish',upload.single("dp"),async function(req,res){
 
     
 });
-
-
-
-
-
 app.post('/getDishes',async function(req,res){
     
     try{
@@ -245,7 +246,6 @@ catch(error){
 
     
 });
-
 app.post('/getallDishes',async function(req,res){
     
     try{
@@ -276,7 +276,6 @@ catch(error){
 
     
 });
-
 app.post('/getallResto',async function(req,res){
     
     try{
@@ -301,7 +300,6 @@ app.post('/getallResto',async function(req,res){
         console.log(error)
     }
 });
-
 app.post('/addTofavourites',async function(req,res){
     
     try{
@@ -363,6 +361,7 @@ catch(error){
 
     
 });
+
 
 app.post('/getaddress',async function(req,res){
     
@@ -458,6 +457,7 @@ catch(error){
 
     
 });
+
 app.post('/updateOrder',async function(req,res){
     
     try{
@@ -522,6 +522,24 @@ catch(error){
 });
 
 
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.post('/updateDish',async function(req,res){
     console.log("Request received",req.body)
     try{
@@ -552,7 +570,7 @@ catch(error){
 
     
 });
-
+//mongo connection
 app.get('/connect_mongo',async function(req,res){
     
     try{
@@ -791,10 +809,26 @@ app.post('/restologin',async function(req,res){
       
         if(dummy){
             res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-            res.writeHead(200,{
-                'Content-Type' : 'text/plain'
+           
+            Restaurant.findOne({owner_email:user.email},async (err,resto_details)=>{
+                if (err){
+                    res.writeHead(500,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("encountered an error")
+        
+
+                }
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end(JSON.stringify(resto_details))
+        
+                
             })
-            res.end("account exists")
+
+
+
         }
         else{
             res.writeHead(202,{
@@ -803,6 +837,423 @@ app.post('/restologin',async function(req,res){
             res.end("account does not exist")
         }
     })
+
+    
+
+    
+});
+
+
+//adding dish
+app.post('/addDish',upload.single("dp"),async function(req,res){
+    let dish=JSON.parse(req.body.data)    
+    
+        let fileloc="./public/"+res.req.file.filename
+       
+        
+        
+
+        
+        Dishes.findOne({resteraunt_name:dish.restaurant_name,zipcode:dish.zipcode,dish_name:dish.dish_name},async (err,result)=>{
+        dish=new Dishes(dish)   
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+        else if(result){
+            fs.unlinkSync(fileloc) 
+            res.writeHead(400,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Restaurant already exists")
+        }
+        else{
+            
+         
+            let fname=dish.resteraunt_name+dish.zipcode+dish.dish_name+path.extname(res.req.file.originalname)
+       
+            dish.dishdp = await s3upload.upload_to_s3(fileloc,"ubereatsdishimages",fname)
+            fs.unlinkSync(fileloc)
+            
+            dish.save((err,data)=>{
+                if (err){
+                    res.writeHead(500,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
+            
+        }
+        })
+    
+    
+    
+    
+    
+
+    
+});
+//getdishes for a restaurant
+app.post('/getDishes',async function(req,res){
+    
+    try{
+     
+        
+    Dishes.find({resteraunt_name:req.body.resteraunt_name,zipcode:req.body.zipcode},async (err,result)=>{
+       
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+        else if(result){
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result))
+        }
+        else{
+            res.writeHead(400,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("No dishes added")
+            
+        }
+        })
+
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+//to get all restaurants
+app.post('/getallResto',async function(req,res){
+    
+    try{
+     
+        
+        Restaurant.find({},async (err,result)=>{
+           
+            if (err){
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+            }
+            else if(result){
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(JSON.stringify(result))
+            }
+            else{
+                res.writeHead(400,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("No Restaurants found")
+                
+            }
+            })
+    
+    
+    }
+    catch(error){
+        console.log(error)
+    }
+            
+        
+});
+//add to favourites
+app.post('/addTofavourites',async function(req,res){
+    
+    try{
+     let details=req.body
+     details= new Favourites(details)
+     
+    details.save((err,data)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error in adding to favourites")
+        }
+        else{
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("done")
+        }
+    })
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+//get favourites of the customer
+app.post('/getfavourites',async function(req,res){
+    
+    try{
+     
+        
+        Favourites.find({email:req.body.email},async (err,result)=>{
+           
+            if (err){
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+            }
+            else if(result){
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(JSON.stringify(result))
+            }
+            else{
+                res.writeHead(400,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("No Restaurants found")
+                
+            }
+            })
+    
+    
+    }
+    catch(error){
+        console.log(error)
+    }  
+    
+
+    
+
+    
+});
+//get address of customer
+app.post('/getaddress',async function(req,res){
+    
+    try{
+        let details=req.body.email
+        Customer.find({email:req.body.email},async (err,result)=>{
+           
+            if (err){
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+            }
+            else if(result){
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(result[0].address)
+            }
+            else{
+                res.writeHead(400,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("No Restaurants found")
+                
+            }
+            })
+    
+
+}
+catch(error){
+    console.log(error)
+}
+        
+    
+
+    
+
+    
+});
+
+//place order
+app.post('/placeOrder',async function(req,res){
+        console.log("received",req.body)
+        let details = req.body
+        
+        details =  new Orders(details)
+        details.save((err,data)=>{
+            if (err){
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error in placing order")
+            }
+            else{
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("done")
+            }
+        })
+    
+    
+
+
+});
+
+
+
+//get customer orders
+app.post('/getCustOrders',async function(req,res){
+    console.log("received request for customer orders",req.body.email)
+    try{
+        let status_list=[]
+        if(req.body.order_type=="current"){
+            status_list=["placed","preparing"]
+        }
+        else{
+            status_list=["delivered","cancelled"]
+        }
+        console.log(req.body)
+        console.log(status_list)
+        Orders.find({customer_email:req.body.email,order_status:{"$in":status_list}},async (err,result)=>{
+           console.log(result)
+            if (err){
+                console.log(err)
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+                
+            }
+            else if(result){
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(JSON.stringify(result))
+            }
+            else{
+                res.writeHead(400,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("No Restaurants found")
+                
+            }
+            })
+    
+    
+    }
+    catch(error){
+        console.log(error)
+    }      
+    
+
+    
+
+    
+});
+//update orders already placed
+app.post('/updateOrder',async function(req,res){
+    
+    try{
+     
+        Orders.updateOne({id:req.body.id},{order_status:req.body.status},async (err,result)=>{
+            console.log(result)
+             if (err){
+                 console.log(err)
+                 res.writeHead(500,{
+                     'Content-Type' : 'text/plain'
+                 })
+                 res.end("encountered an error")
+                 
+             }
+                 res.writeHead(200,{
+                     'Content-Type' : 'text/plain'
+                 })
+                 res.end("updated successfully")
+             
+             })
+     
+     
+     }
+     catch(error){
+         console.log(error)
+     }      
+     
+ 
+     
+    
+
+    
+
+    
+});
+
+//get orders for a specific restaurant
+app.post('/getRestoOrders',async function(req,res){
+     //req.body.restaurant_name,req.body.zipcode,req.body.type
+    console.log(req.body)
+     let status_list=[]
+        if(req.body.type=="new"){
+            status_list=["placed","preparing"]
+        }
+        else{
+            status_list=["delivered","cancelled"]
+        }
+    try{
+        console.log(status_list)
+        Orders.find({restaurant_name:req.body.restaurant_name,restaurant_zipcode:req.body.zipcode,order_status:{"$in":status_list}},async (err,result)=>{
+            console.log(result)
+             if (err){
+                 console.log(err)
+                 res.writeHead(500,{
+                     'Content-Type' : 'text/plain'
+                 })
+                 res.end("error")
+                 
+             }
+             else if(result){
+                 res.writeHead(200,{
+                     'Content-Type' : 'text/plain'
+                 })
+                 res.end(JSON.stringify(result))
+             }
+             else{
+                 res.writeHead(400,{
+                     'Content-Type' : 'text/plain'
+                 })
+                 res.end("No Restaurants found")
+                 
+             }
+             })
+     
+
+    }
+catch(error){
+    console.log(error)
+}
+        
+    
 
     
 

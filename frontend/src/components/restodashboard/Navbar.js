@@ -1,7 +1,8 @@
-import React from 'react'
+import React,{useState} from 'react'
 import {FaBars} from 'react-icons/fa'
 import { useCookies } from "react-cookie";
 const Navbar = (props) => {
+    const [radioval2,setradioval2]=useState("all")
     function sidehandle(e){
         e.preventDefault();
     }
@@ -18,16 +19,19 @@ const Navbar = (props) => {
         
         <form id="search-form" class="form-inline" role="form" onSubmit={sidehandle}>
             <div className="col-sm brand" >
-            <a className="navbar-brand"><img style={{border:0}} src="/ue2.png" /></a>
+            <a className="navbar-brand"><img style={{border:0}} size="100px" src="/ue2.png" /></a>
             
             </div>
             <div className="col-sm">    
             </div>
             
                 
+            <div className="col-sm-6">
+                 
+            </div>
             
-            <h2> Helllo, {cookies.resteraunt_name}</h2>
-            <a className="navbar-brand"><img style={{border:0}} src={cookies.restdp} /></a>
+            <h2> Hello, {cookies.resteraunt_name}</h2>
+            <a className="navbar-brand"><img style={{border:0}} size="100px" width="60px" height="60px" src={cookies.restdp} /></a>
            
             
             <div className="col-sm">

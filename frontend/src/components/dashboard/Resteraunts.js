@@ -32,11 +32,11 @@ const Resteraunts = (props) => {
                     
                     console.log(response.data,typeof response.data)
                     setoriginal_restos(response.data[0])
-                    setrestos(response.data[0])
+                    setrestos(response.data)
                     console.log("got the restaurants",restos_received)
                     
                 }
-                else if(response.status === 202)
+                else if(response.status === 400)
                 {
                     console.log("no data found")
                 }

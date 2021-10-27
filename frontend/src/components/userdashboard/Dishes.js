@@ -27,7 +27,7 @@ const Dishes = (props) => {
                 {
                     
                     console.log(response.data,typeof response.data)
-                    setdishes(response.data[0])
+                    setdishes(response.data)
                     console.log("gsdfsdfds",dishes_received)
                     
                     
