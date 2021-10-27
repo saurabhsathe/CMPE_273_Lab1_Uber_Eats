@@ -1131,6 +1131,9 @@ app.post('/getCustOrders',async function(req,res){
         if(req.body.order_type=="current"){
             status_list=["placed","preparing"]
         }
+        else if(req.body.order_type=="all"){
+            status_list=["placed","preparing","delivered","cancelled"]
+        }
         else{
             status_list=["delivered","cancelled"]
         }

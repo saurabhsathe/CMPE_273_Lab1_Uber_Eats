@@ -48,7 +48,7 @@ const CurrentOrderCard = (props) => {
             <p><b style={{color:"black"}}>Delivery Address:{props.order.delivery_address}</b></p>
             </div>
             <div className="card-footer py-4">
-            
+            <button type="button" class="btn btn-dark" onClick={()=>{alert("cancelling order")}} disabled={props.order.order_status=="placed"? false : true}>Cancel</button>
            
                 </div>
         </div>

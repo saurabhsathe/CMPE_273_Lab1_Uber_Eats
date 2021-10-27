@@ -12,7 +12,7 @@ import {useLocation} from 'react-router-dom'
 import Checkout from './Checkout'
 import Favourites from './Favourites'
 import Successful from './Successful'
-import Current_Orders from './Current_Orders'
+import MyOrders from './MyOrders'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 
@@ -45,7 +45,7 @@ const Contentbar = (props) => {
             <Route path="/userdash/checkout" component={Checkout} />
             <Route path="/userdash/favourites" component={Favourites} />
             <Route path="/userdash/success" component={Successful} />
-            <Route path="/userdash/current" component={Current_Orders} />
+            <Route path="/userdash/myorders" component={MyOrders} />
             <Route path="/userdash/past" component={PastOrders} />
             </Switch></BrowserRouter>
       

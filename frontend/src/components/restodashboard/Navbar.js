@@ -1,8 +1,11 @@
 import React,{useState} from 'react'
 import {FaBars} from 'react-icons/fa'
 import { useCookies } from "react-cookie";
+import { useHistory } from "react-router";
+
 const Navbar = (props) => {
-    const [radioval2,setradioval2]=useState("all")
+    const history = useHistory();
+    
     function sidehandle(e){
         e.preventDefault();
     }
@@ -27,7 +30,7 @@ const Navbar = (props) => {
             
                 
             <div className="col-sm-6">
-                 
+                   
             </div>
             
             <h2> Hello, {cookies.resteraunt_name}</h2>

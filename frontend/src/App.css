@@ -44,6 +44,17 @@ body {
   
   cursor: pointer;
 }
+.radio_anchor{
+  
+  border-radius:15px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background: white;
+  color: black;
+  margin: 0px;
+  
+  cursor: pointer;
+}
 .mainradio{
   display: inline-flex;
   overflow: hidden;
@@ -55,6 +66,9 @@ body {
   
 }
 .radio_button:checked+.radio_label{
+  background: black;
+  color: white;
+}.radio_button:checked+.radio_anchor{
   background: black;
   color: white;
 }
