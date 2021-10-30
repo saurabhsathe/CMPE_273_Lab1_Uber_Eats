@@ -31,6 +31,7 @@ var get_resto_orders=require('./db_operations/get_resto_orders')
 var updatedish=require('./db_operations/update_dish')
 var connect_mongo = require('./example2')
 var host="http://localhost"
+var kafka = require('./kafka/client');
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -83,8 +84,8 @@ const { resolve } = require('path');
 
 
 
-var mongodb=mongo.connect(mongo_connection_string,options)
-  
+//var mongodb=mongo.connect(mongo_connection_string,options)
+  var mongodb
 
 //Route to handle Post Request Call
 
@@ -602,8 +603,47 @@ catch(error){
     
 });
 
-//Route to handle customer login request
+//login through kafka
 app.post('/customerlogin',async function(req,res){
+    
+    
+    console.log("login request received")
+    let user=req.body
+    await kafka.make_request('customer_login',user, function(err,results){
+
+        console.log('in result');
+        console.log(results);
+        if (err){
+            console.log(err)
+            console.log("Inside err");
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
+            })
+        }else{
+            if (results.length==0){
+                res.writeHead(202,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("account does not exist")
+            }
+            else{
+                res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("account exists")
+            }
+            
+            }
+        
+    });
+    
+    
+});
+
+//Route to handle customer login request
+app.post('/customerlogin2',async function(req,res){
     
     
     console.log("login request received")
