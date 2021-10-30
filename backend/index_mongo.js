@@ -1,14 +1,35 @@
 
+var insert_user =require('./db_operations/insert_user')
+var s3=require("./aws_handler/aws_credential_store")
+var email_exists =require('./db_operations/email_exists')
+var resto_exists =require('./db_operations/resto_exists')
 var express = require('express');
 var app = express();
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
 var cors = require('cors');
 const multer = require('multer')
 const path = require("path")
 const fs = require("fs")
 const {promisify} = require("util")
+const pipeline = promisify(require("stream").pipeline)
 const s3upload = require("./upload_file")
+var insert_resto =require('./db_operations/insert_resto')
+var verify_user = require('./db_operations/verify_user_credentials')
+var getresto  = require('./db_operations/getresto_info')
+var insert_dish = require('./db_operations/insert_dish')
+var get_dishes =  require('./db_operations/get_dishes')
+var getall_dishes =  require('./db_operations/getalldishes')
+var getall_restos = require('./db_operations/getall_restaurants')
+var insert_favourite = require('./db_operations/add_favourites')
+var get_favourite = require('./db_operations/get_favourites')
+var getcust_addr = require('./db_operations/getcust_addr')
+var place_order = require('./db_operations/insert_order')
+var getcust_orders =require('./db_operations/get_cust_orders')
+var update_order = require('./db_operations/update_order')
+var get_resto_orders=require('./db_operations/get_resto_orders')
 var updatedish=require('./db_operations/update_dish')
+var connect_mongo = require('./example2')
 var host="http://localhost"
 var kafka = require('./kafka/client');
 app.set('view engine', 'ejs');
@@ -64,7 +85,7 @@ const { resolve } = require('path');
 
 
 //var mongodb=mongo.connect(mongo_connection_string,options)
-var mongodb=mongo.connect(mongo_connection_string,options)
+  var mongodb
 
 //Route to handle Post Request Call
 
@@ -501,158 +522,6 @@ catch(error){
     
 });
 
-//Route to handle customer login request
-app.post('/customerlogin2',async function(req,res){
-    
-    
-    console.log("login request received")
-    let user=req.body
-    
-    Customer.findOne({email:user.email,pwd:user.password},async (err,dummy)=>{
-        if (err){
-            res.writeHead(500,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("error")
-        }
-      
-        if(dummy){
-            res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-            res.writeHead(200,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("account exists")
-        }
-        else{
-            res.writeHead(202,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("account does not exist")
-        }
-    })
-
-    
-
-    
-});
-
-//Route to handle restaurant signup request
-app.post('/restosignup',upload.single("restdp"),async function(req,res){
-    console.log("int the resto signup")
-    let resto=JSON.parse(req.body.data)    
-    let stored_file_name=res.req.file.originalname
-    resto=new Restaurant(resto)
-    let fileloc="./public/"+res.req.file.filename
-
-    Restaurant.findOne({fullname:resto.fulname,zipcode:resto.zipcode},async (err,result)=>{
-       
-        if (err){
-            res.writeHead(500,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("error")
-        }
-        else if(result){
-            fs.unlinkSync(fileloc)
-            res.writeHead(400,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("Restaurant already exists")
-        }
-        else{
-            
-         fname=resto.fullname+resto.zipcode+path.extname(fileloc)
-            resto.restdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantimages",fname)
-            fs.unlinkSync(fileloc)
-            
-            resto.save((err,data)=>{
-                if (err){
-                    res.writeHead(500,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end("error in inserting")
-                }
-                else{
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end("done")
-                }
-            })
-            
-        }
-            })
-        
-
-    
-
-    
-    
-    
-
-    
-});
-
-
-app.post('/restosignup',upload.single("restdp"),async function(req,res){
-    console.log("int the resto signup")
-    let resto=JSON.parse(req.body.data)    
-    let stored_file_name=res.req.file.originalname
-    resto=new Restaurant(resto)
-    let fileloc="./public/"+res.req.file.filename
-
-    Restaurant.findOne({fullname:resto.fulname,zipcode:resto.zipcode},async (err,result)=>{
-       
-        if (err){
-            res.writeHead(500,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("error")
-        }
-        else if(result){
-            fs.unlinkSync(fileloc)
-            res.writeHead(400,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("Restaurant already exists")
-        }
-        else{
-            
-         fname=resto.fullname+resto.zipcode+path.extname(fileloc)
-            resto.restdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantimages",fname)
-            fs.unlinkSync(fileloc)
-            
-            resto.save((err,data)=>{
-                if (err){
-                    res.writeHead(500,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end("error in inserting")
-                }
-                else{
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end("done")
-                }
-            })
-            
-        }
-            })
-        
-
-    
-
-    
-    
-    
-
-    
-});
-
-
-
-
 
 */
 
@@ -734,7 +603,7 @@ catch(error){
     
 });
 
-//customer login through kafka
+//login through kafka
 app.post('/customerlogin',async function(req,res){
     
     
@@ -747,10 +616,10 @@ app.post('/customerlogin',async function(req,res){
         if (err){
             console.log(err)
             console.log("Inside err");
-            res.writeHead(400,{
-                'Content-Type' : 'text/plain'
+            res.json({
+                status:"error",
+                msg:"System Error, Try Again."
             })
-            res.end("error reaching database")
         }else{
             if (results.length==0){
                 res.writeHead(202,{
@@ -773,6 +642,40 @@ app.post('/customerlogin',async function(req,res){
     
 });
 
+//Route to handle customer login request
+app.post('/customerlogin2',async function(req,res){
+    
+    
+    console.log("login request received")
+    let user=req.body
+    
+    Customer.findOne({email:user.email,pwd:user.password},async (err,dummy)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+      
+        if(dummy){
+            res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("account exists")
+        }
+        else{
+            res.writeHead(202,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("account does not exist")
+        }
+    })
+
+    
+
+    
+});
 
 //Route to handle customer signup request
 app.post('/add_customer',upload.single("dp"),async function(req,res){
@@ -781,52 +684,36 @@ app.post('/add_customer',upload.single("dp"),async function(req,res){
     user = new Customer(user)
     Customer.findOne({email:user.email},async (err,dummy)=>{
         if (err){
-            console.log(err)
             res.writeHead(500,{
                 'Content-Type' : 'text/plain'
             })
             res.end("error")
-
         }
         if(dummy){
-            console.log(dummy)
-            res.writeHead(202,{
+            res.writeHead(400,{
                 'Content-Type' : 'text/plain'
             })
             res.end("dummy exists")
         }
         else{
-            console.log("account does not exists",dummy)
             let fileloc="./public/"+res.req.file.filename
             let fname=user.email.split("@")[0]+path.extname(res.req.file.originalname)
        
             user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatscustomerimagesbucket",fname)
-
-
-            await kafka.make_request('customer_registration',user, function(err,results){
-
-                console.log('in result');
-                console.log(results);
+            user.save((err,data)=>{
                 if (err){
-                    console.log(err)
-                    console.log("Inside err");
-                    res.writeHead(400,{
+                    res.writeHead(500,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end("error reaching database")
-                }else{
-                    
-                        //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                        res.writeHead(200,{
-                            'Content-Type' : 'text/plain'
-                        })
-                        res.end("customer registered successfully")
-                    
-                    
-                    }
-                
-            });
-            
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
         }
     })
     
@@ -842,56 +729,41 @@ app.post('/add_customer',upload.single("dp"),async function(req,res){
 app.post('/owner_signup',upload.single("dp"),async function(req,res){
     console.log("request received")
     let user=JSON.parse(req.body.data)
-    
+    user = new RestoOwner(user)
     RestoOwner.findOne({email:user.email},async (err,dummy)=>{
         if (err){
-            console.log(err)
             res.writeHead(500,{
                 'Content-Type' : 'text/plain'
             })
             res.end("error")
-
         }
         if(dummy){
-            console.log(dummy)
-            res.writeHead(202,{
+            console.log("found existing user")
+            res.writeHead(200,{
                 'Content-Type' : 'text/plain'
+            
             })
-            res.end("dummy exists")
+            res.end("owner exists")
         }
         else{
-            
-            console.log("account does not exists",dummy)
             let fileloc="./public/"+res.req.file.filename
-            let fname=user.email.split("@")[0]+path.extname(res.req.file.originalname)
+            fname=resto.name+resto.zipcode+path.extname(res.req.file.originalname)
        
-            user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatscustomerimagesbucket",fname)
-
-
-            await kafka.make_request('owner_registration',user, function(err,results){
-
-                console.log('in result');
-                console.log(results);
+            user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantownerimagedetails",fname)
+            user.save((err,data)=>{
                 if (err){
-                    console.log(err)
-                    console.log("Inside err");
-                    res.writeHead(400,{
+                    res.writeHead(500,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end("error reaching database")
-                }else{
-                    
-                        //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                        res.writeHead(200,{
-                            'Content-Type' : 'text/plain'
-                        })
-                        res.end("customer registered successfully")
-                    
-                    
-                    }
-                
-            });
-            
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
         }
     })
     
@@ -930,30 +802,21 @@ app.post('/restosignup',upload.single("restdp"),async function(req,res){
          fname=resto.fullname+resto.zipcode+path.extname(fileloc)
             resto.restdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantimages",fname)
             fs.unlinkSync(fileloc)
-            console.log("in the restaurant registration")
-            await kafka.make_request('resto_registration',resto, function(err,results){
-
-                console.log('in result');
-                console.log(results);
+            
+            resto.save((err,data)=>{
                 if (err){
-                    console.log(err)
-                    console.log("Inside err");
-                    res.writeHead(400,{
+                    res.writeHead(500,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end("error reaching database")
-                }else{
-                    
-                        //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                        res.writeHead(200,{
-                            'Content-Type' : 'text/plain'
-                        })
-                        res.end("Restaurant registered successfully")
-                    
-                    
-                    }
-                
-            });
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
             
         }
             })

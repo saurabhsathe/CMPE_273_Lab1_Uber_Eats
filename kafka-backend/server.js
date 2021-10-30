@@ -10,16 +10,27 @@ var Dishes = require("./mongo_operations/models/DishesModel")
 var Favourites = require("./mongo_operations/models/FavouritesModel");
 var Orders = require("./mongo_operations/models/OrdersModel");
 var {mongo_connection_string} = require('./mongo_operations/mongo_connection')
-var options ={
+
+var mongodb=mongo.connect(mongo_connection_string,{
     useNewUrlParser: true, 
     useUnifiedTopology: true,
     maxpoolSize:500,
     
-}
+},(err,client)=>{
+    if (err){
+        console.log("error connecting to the database")
+        console.log(err)
+    }
+    else{
+        console.log("mongo db connection successful")
+    }
+})
 
 
 var CustomerLogin = require('./services/customer_login.js')
-
+var CustomerRegistration = require('./services/customer_registration')
+var OwnerRegistration = require('./services/owner_registration')
+var RestoRegistration =  require('./services/resto_registration')
 
 var Books = require('./services/books.js');
 
@@ -58,3 +69,6 @@ async function handleTopicRequest(topic_name,fname){
 //second argument is a function that will handle this topic request
 
 handleTopicRequest("customer_login",CustomerLogin)
+handleTopicRequest("customer_registration",CustomerRegistration)
+handleTopicRequest("owner_registration",OwnerRegistration)
+handleTopicRequest("resto_registration",RestoRegistration)

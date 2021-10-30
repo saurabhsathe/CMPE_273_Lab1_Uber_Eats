@@ -42,12 +42,15 @@ const LoginForm = () => {
                     setCookie("email", uemail, {path: "/"});
                     
                     
-                    }else{
+                    }else if(response.status === 202){
                     
                     seterrors("User does not exists or Invalid credentials")
 
 
                     
+                }
+                else{
+                    seterrors("Error reaching database")
                 }
             });
     

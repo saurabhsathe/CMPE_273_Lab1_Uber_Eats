@@ -52,9 +52,9 @@ const SignupForm = () => {
                         
                     }))
 
-                    }else if(response.status === 400){
+                    }else if(response.status === 202){
                     
-                    seterrors("user already exists")
+                    seterrors("email id already registered")
 
 
                     

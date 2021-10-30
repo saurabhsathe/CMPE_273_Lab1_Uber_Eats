@@ -81,10 +81,12 @@ const RestoSignup = () => {
             const [firstResponse] = await Promise.all([
                 axios.post(process.env.REACT_APP_BACKEND+'owner_signup',formData),
               ]);
-              if(firstResponse.status==200 || firstResponse.status==400){
+              console.log("completed owner signup")
+              if(firstResponse.status==200 || firstResponse.status==202){
               const [secondResponse] = await Promise.all([
                 axios.post(process.env.REACT_APP_BACKEND+'restosignup',formData2)
             ]);
+
             if(secondResponse.status==200 ){
               
                console.log("data insertion sucessful")
