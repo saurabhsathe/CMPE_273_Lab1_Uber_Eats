@@ -6,7 +6,7 @@ let CountedId = {type: Number, default: () => counter++}
 
 
 const DishesModel = new Schema ({
-    id:CountedId,
+    id:{type:String},
     dish_name:{type:String,required:true},
     resteraunt_name:{type:String,required:true},
     zipcode:{type:String,required:true},

@@ -35,7 +35,7 @@ const RestoCard = (props) => {
              }
              else if(response.status === 202)
              {
-                alert("could not add the restaurant")
+                alert("already added as favourite")
              }
 
      })

@@ -23,7 +23,7 @@ const CreateDish = () => {
             resteraunt_name:cookies.resteraunt_name,
             zipcode:cookies.zipcode,
             dish_desc:dish_desc,
-            dish_price:dish_price
+            price:dish_price
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;

@@ -55,7 +55,7 @@ if(dishes_received.length>0)
 {details_received = dishes_received.map((dish,index) => {
     return(
         
-    <DishCard id = {dish.id} 
+    <DishCard id = {dish._id} 
     key ={dish.dish_id} 
     dishdp={dish.dishdp} 
     dish_name ={dish.dish_name}
