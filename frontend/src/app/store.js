@@ -1,9 +1,9 @@
-import {configureStore} from '@reduxjs/toolkit'
-import userReducer from '../features/user_slice'
+import {createStore,applyMiddleware} from 'redux'
+import {persistStore} from 'redux-persist'
 
-export default configureStore({
-    reducer:{
-        user:userReducer
-    },
-    devTools:true//to enable redux devtools
-})
+import rootreducer from './reducer_combiner'
+import logger from 'redux-logger'
+const middleware = [logger]
+export const store = createStore(rootreducer,applyMiddleware(...middleware))
+export const persist_store = persistStore(store)
+export default {store,persist_store}

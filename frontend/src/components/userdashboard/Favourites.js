@@ -13,32 +13,32 @@ const Favourites = (props) => {
     let redirectVar = null
     let [restos_received,setrestos]=useState([])
     const [cookies, setCookie] = useCookies(["customer"]);
-    console.log(user)
+    
     useEffect(()=>{
         
              var headers = new Headers(); 
            const data = {
                email:cookies.email
            }
-        console.log(data)
+           console.log("redux user------->",user)
+        /*
         axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data).then(response=>{
                 
-                if(response.status === 200)
-                {
-                    
-                    console.log(response.data,typeof response.data)
-                    setrestos(response.data)
-                    console.log("got the restaurants",restos_received)
-                    
-                }
-                else if(response.status === 202)
-                {
-                    console.log("no data found")
-                }
+            if(response.status === 200)
+            {
+                
+                console.log(response.data,typeof response.data)
+                setrestos(response.data)
+                console.log("got the restaurants",restos_received)
+                
+            }
+            else if(response.status === 202)
+            {
+                console.log("no data found")
+            }
 
-        })
-       
-   
+    })
+   */
   
     
 
