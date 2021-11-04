@@ -3,11 +3,20 @@ import cookie from "react-cookies";
 import axios from "axios";
 export const getfavourites = createAsyncThunk(
     'user/getfavourites',
-    async (data)=>{axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data).then(response=>{
-                
+      async (data)=>{
+        console.log("ddddddddddddddddddddddddddd",data)     
+          
+        const api_response = await axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data.user,function(err,resu){
+            if(err){
+                console.log("error in axios",err)
+            }
+        })
+     
+        .then((response)=>{
+        
         if(response.status === 200)
         {
-            
+            console.log("got your data----------------->")
             console.log(response.data,typeof response.data)
             return response.data
             
@@ -15,16 +24,19 @@ export const getfavourites = createAsyncThunk(
         else if(response.status === 202)
         {
             console.log("no data found")
+            return null
         }
     
 })
-    
+console.log("here is your api response---------------->",api_response)
+ return api_response
 });
 export const userSlice=createSlice({
     name:"user",
     initialState:{
         user:null,
         userType:null,
+        status:null,
         isloggedin:false,
         favourites:[]
     },
@@ -47,8 +59,20 @@ export const userSlice=createSlice({
             state.user=null
             cookie.remove('loggedin', { path: '/' })
         }
-    }
+    },
+    extraReducers: (builder) => {
+        builder
+          .addCase(getfavourites.pending, (state) => {
+            state.status = 'loading';
+          })
+          .addCase(getfavourites.fulfilled, (state, action) => {
+            state.status = 'idle';
+            
+            state.favourites = action.payload;
+        
+          });
+      }
 })
 export const {login,logout,signup} = userSlice.actions
-export const selectuser = (state) =>state.user.user
+export const selectuser = (state) =>state.user
 export default userSlice.reducer

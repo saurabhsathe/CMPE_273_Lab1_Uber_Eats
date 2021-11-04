@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import RestoCard from './RestoCard'
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies'
-import {selectuser} from '../../features/user_slice'
+import {selectuser,getfavourites} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
 
 const Favourites = (props) => {
@@ -13,6 +13,9 @@ const Favourites = (props) => {
     let redirectVar = null
     let [restos_received,setrestos]=useState([])
     const [cookies, setCookie] = useCookies(["customer"]);
+    const dispatch = useDispatch()
+    
+    
     
     useEffect(()=>{
         
@@ -21,6 +24,16 @@ const Favourites = (props) => {
                email:cookies.email
            }
            console.log("redux user------->",user)
+           
+           async function getfavs(user) {
+            let favs=await dispatch(getfavourites(user))
+            
+            console.log("here are your favourites",user.favourites)
+            setrestos(user.favourites)
+ 
+          }
+          getfavs(user)
+
         /*
         axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data).then(response=>{
                 
