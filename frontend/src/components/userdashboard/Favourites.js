@@ -28,7 +28,7 @@ const Favourites = (props) => {
            async function getfavs(user) {
             let favs=await dispatch(getfavourites(user))
             
-            console.log("here are your favourites",user.favourites)
+            console.log("here are your favourites",favs.payload)
             setrestos(user.favourites)
  
           }

@@ -2,29 +2,28 @@ import React from 'react'
 import {Redirect} from 'react-router-dom'
 import axios from 'axios'
 import {useState} from 'react'
+import {useDispatch} from 'react-redux'
+import {updateOrder} from '../../features/user_slice'
 const CurrentOrderCard = (props) => {
     let redirectvar=null
     const [updated,setupdated]=useState(false)
 
-    
+    const dispatch=useDispatch()    
     function CancelOrder(){
         let data={
             id:props.order._id,
             status:"cancelled"
         }
-        axios.post(process.env.REACT_APP_BACKEND+'updateOrder',data)
-            .then(response => {
-                if(response.status === 200){
-                    console.log("updated")
-                    props.setupdated(true)
-                    }else if(response.status === 202){
-                    
-                    
+        
 
-
-                    
-                }
-            });
+        async function update(data) {
+            await dispatch(updateOrder(data))
+            
+            console.log("order updated ")
+           setupdated(true)
+ 
+          }
+          update(data)
             
     };
 

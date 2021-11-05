@@ -1,36 +1,73 @@
 import { createAsyncThunk, createSlice} from "@reduxjs/toolkit"
+import {getfavs} from './user_api/getfavourites_api'
+import {checkout} from './user_api/checkout'
+import {get_all_resto} from './user_api/get_all_resto'
+import {get_cust_orders} from './user_api/get_cust_orders'
+import {get_dishes} from './user_api/get_dishes'
+import {update_order} from './user_api/update_order'
+import {update_user} from './user_api/update_user'
+
 import cookie from "react-cookies";
-import axios from "axios";
+
+
+
 export const getfavourites = createAsyncThunk(
     'user/getfavourites',
       async (data)=>{
-        console.log("ddddddddddddddddddddddddddd",data)     
           
-        const api_response = await axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data.user,function(err,resu){
-            if(err){
-                console.log("error in axios",err)
-            }
-        })
-     
-        .then((response)=>{
-        
-        if(response.status === 200)
-        {
-            console.log("got your data----------------->")
-            console.log(response.data,typeof response.data)
-            return response.data
-            
-        }
-        else if(response.status === 202)
-        {
-            console.log("no data found")
-            return null
-        }
-    
-})
-console.log("here is your api response---------------->",api_response)
- return api_response
+        const api_response = await getfavs(data)
+       
+        return api_response
 });
+
+export const placeOrder = createAsyncThunk(
+  'user/checkout ',
+    async (data)=>{
+      console.log(data)
+        
+      const api_response = await checkout(data)
+      return api_response
+});
+
+export const getrestos = createAsyncThunk(
+  'user/get_all_resto ',
+    async (data)=>{
+        
+      const api_response = await get_all_resto(data)
+      return api_response
+});
+export const getCustOrders = createAsyncThunk(
+  'user/get_cust_orders ',
+    async (data)=>{
+        
+      const api_response = await get_cust_orders(data)
+      return api_response
+});
+export const getDishes = createAsyncThunk(
+  'user/get_dishes ',
+    async (data)=>{
+        
+      const api_response = await get_dishes(data)
+      return api_response
+});
+export const updateOrder = createAsyncThunk(
+  'user/update_order ',
+    async (data)=>{
+      console.log("here is your data---------------------->")
+      const api_response = await update_order(data)
+      console.log("here is the response------------------->")
+      return api_response
+});
+export const updateUser = createAsyncThunk(
+  'user/update_user ',
+    async (data)=>{
+        
+      const api_response = await updateUser(data)
+      return api_response
+});
+
+
+
 export const userSlice=createSlice({
     name:"user",
     initialState:{
@@ -62,15 +99,63 @@ export const userSlice=createSlice({
     },
     extraReducers: (builder) => {
         builder
-          .addCase(getfavourites.pending, (state) => {
+          
+        
+        
+        .addCase(getfavourites.pending, (state) => {
             state.status = 'loading';
           })
           .addCase(getfavourites.fulfilled, (state, action) => {
             state.status = 'idle';
+            state.favourites = action.payload;
+          })
+          
+          
+          
+          
+          .addCase(placeOrder.pending, (state) => {
+            state.status = 'loading';
+          })
+          .addCase(placeOrder.fulfilled, (state, action) => {
+            state.status = 'idle';
             
             state.favourites = action.payload;
         
-          });
+          })
+          
+          
+          
+          .addCase(getrestos.pending, (state) => {
+            state.status = 'loading';
+          })
+          .addCase(getrestos.fulfilled, (state, action) => {
+            state.status = 'idle';
+            
+          })
+          
+          
+          
+          .addCase(getCustOrders.pending, (state) => {
+            state.status = 'loading';
+          })
+          .addCase(getCustOrders.fulfilled, (state, action) => {
+            state.status = 'idle';
+           })
+
+
+
+
+           .addCase(getDishes.pending, (state) => {
+            state.status = 'loading';
+          })
+          .addCase(getDishes.fulfilled, (state, action) => {
+            state.status = 'idle';
+           
+          })
+          
+         
+          
+          ;
       }
 })
 export const {login,logout,signup} = userSlice.actions

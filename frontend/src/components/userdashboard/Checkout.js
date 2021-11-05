@@ -5,6 +5,11 @@ import axios from 'axios'
 import { useCookies } from "react-cookie";
 
 import {Redirect} from 'react-router-dom'
+import {selectuser,getfavourites} from '../../features/user_slice'
+import {useSelector,useDispatch} from 'react-redux'
+import {placeOrder} from '../../features/user_slice'
+
+
 const Checkout = () => {
     
     const [addr_update,setaddr_update]=useState(true)
@@ -12,6 +17,7 @@ const Checkout = () => {
     const [addr,setaddr]=useState()
     let redirectVar = null;
     const [inserted,setinserted]=useState(false)
+   
     useEffect(()=>{
         
         var headers = new Headers(); 
@@ -52,10 +58,8 @@ const {
     emptyCart
 
 } = useCart();
-
-    
-    
-    function placeOrder(){
+const dispatch=useDispatch() 
+    function placeNewOrder(){
         let data={
             customer_email:cookies.email,
             restaurant_name:items[0].resteraunt_name,
@@ -66,21 +70,14 @@ const {
             
         }
         
-        axios.post(process.env.REACT_APP_BACKEND+"placeOrder",data).then(response=>{
-             
-             if(response.status === 200)
-             {
-                 console.log()
-                
-                setinserted(true)
-                 
-             }
-             else if(response.status === 202)
-             {
-                
-             }
-             
-     })
+        async function place(data) {
+            await dispatch(placeOrder(data))
+            
+            console.log("order placed ")
+            setinserted(true)
+ 
+          }
+          place(data)
     
 
 
@@ -152,7 +149,7 @@ const {
                 <textarea name="address" value={addr} onChange={e => setaddr(e.target.value)} rows="10" cols="30" disabled={addr_update}>{addr}</textarea>    
                 <button className="btn btn-dark" onClick={()=>{setaddr_update(!addr_update)} } style={{width:"30%"}}>Update Address</button>
                
-                <button className = "btn btn-dark" onClick={()=>placeOrder()} style={{width:"30%"}} >Confirm and Place order</button>
+                <button className = "btn btn-dark" onClick={()=>placeNewOrder()} style={{width:"30%"}} >Confirm and Place order</button>
                 
                                         <button  className = "btn btn-dark"  onClick={()=>emptyCart()} style={{width:"30%"}}>EmptyCart</button>
          
