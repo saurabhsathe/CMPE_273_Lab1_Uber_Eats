@@ -67,16 +67,16 @@ export const updateUser = createAsyncThunk(
 });
 
 
-
+var initial={
+  user:null,
+  userType:null,
+  status:null,
+  isloggedin:false,
+  favourites:[]
+}
 export const userSlice=createSlice({
     name:"user",
-    initialState:{
-        user:null,
-        userType:null,
-        status:null,
-        isloggedin:false,
-        favourites:[]
-    },
+    initialState:initial,
     reducers:{
         login:(state,action)=>{
             console.log("in redux---------------------------")
@@ -93,7 +93,7 @@ export const userSlice=createSlice({
            
         },
         logout:(state,action)=>{
-            state.user=null
+            state.user=initial
             cookie.remove('loggedin', { path: '/' })
         }
     },

@@ -80,22 +80,26 @@ var storage = multer.diskStorage({
   
   var upload = multer({ storage:storage })
 app.post('/updateDish',async function(req,res){
-    console.log("Request received",req.body)
+    console.log("Request received to update dish",req.body)
     try{
      
-     result = await updatedish.update_dish(req.body)
-     if(result!=false){
-        res.writeHead(200,{
-            'Content-Type' : 'text/plain'
-        })
-        res.end("done")
-    }
-    else{
-        res.writeHead(202,{
-            'Content-Type' : 'text/plain'
-        })
-        res.end("had some issues")
-    }
+        await kafka.make_request('update_dish',req.body, function(err,result){
+           
+            if (err){
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+            }
+            else{
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("dish updated successully")
+            }
+            })
+    
+    
 
 
 }
@@ -430,6 +434,7 @@ app.post('/restologin',async function(req,res){
 
 //adding dish
 app.post('/addDish',upload.single("dp"),async function(req,res){
+    console.log(req.body.data)
     let dish=JSON.parse(req.body.data)    
     
         let fileloc="./public/"+res.req.file.filename
@@ -836,7 +841,7 @@ app.post('/getRestoOrders',async function(req,res){
         }
     try{
         console.log(status_list)
-        await kafka.make_request('get_resto_orders',req.body, function(err,results){
+        await kafka.make_request('get_resto_orders',req.body, function(err,result){
             console.log(result)
              if (err){
                  console.log(err)

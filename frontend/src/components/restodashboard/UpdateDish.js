@@ -5,6 +5,8 @@ import cookie from 'react-cookies'
 import Cookies from 'universal-cookie'
 import { useCookies } from "react-cookie";
 import {Redirect} from 'react-router-dom';
+import {updateDish} from '../../features/resto_slice'
+import {useSelector,useDispatch} from 'react-redux'
 const UpdateDish = (props) => {
    
     const [inserted, setinserted] = useState(false);
@@ -14,14 +16,16 @@ const UpdateDish = (props) => {
     const [dish_price,setdish_price] = useState(props.location.state.resto.price);
     const [dp,setudishdp] = useState();
     const [errors,seterrors]=useState();
+    const dispatch= useDispatch()
     console.log("here are the props",props)
     function handleUpdate(e){
         var headers = new Headers();
         
         e.preventDefault();
         const data = {
-            dish_name:dish_name,
             id:props.location.state.resto.id,
+            dish_name:dish_name,
+            
             dish_desc:props.location.state.resto.dish_desc,
             price:dish_price
         }
@@ -29,21 +33,13 @@ const UpdateDish = (props) => {
         axios.defaults.withCredentials = true;
         //make a post request with the user data
         
-        axios.post(process.env.REACT_APP_BACKEND+'updateDish',data)
-            .then(response => {
-                
-                if(response.status === 200){
-                    console.log("updated dish")
-                    
-                    setinserted(true)
-                    }else if(response.status === 202){
-                    
-                    
-                    console.log("could not update")
-
-                    
-                }
-            });
+        async function update_dish(data) {
+            await dispatch(updateDish(data))
+            
+            setinserted(true)
+ 
+          }
+          update_dish(data)
             
     };
     let redirectvar=null;

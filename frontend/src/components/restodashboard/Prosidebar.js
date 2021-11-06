@@ -37,18 +37,9 @@ const Prosidebar = () => {
     <a href="/restodash/createdish" >Add Dish</a>
     </MenuItem>
     <hr />
-    <MenuItem >
-    <a href="/restodash/neworders" >New Orders</a>
-    </MenuItem>
+    <MenuItem ><a href="/restodash/myorders" >My Orders</a></MenuItem>
     <hr />
-    
-    <MenuItem >
-    <a href="/restodash/current" >Current Orders</a>
-    </MenuItem>
-    <hr />
-    <MenuItem ><a href="/restodash/pastorders" >Past Orders</a></MenuItem>
-    <hr />
-    
+     
     <MenuItem >Customers</MenuItem>
     <hr />
     <MenuItem ><form onSubmit={handleLogout} action="/"><button style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></form></MenuItem>

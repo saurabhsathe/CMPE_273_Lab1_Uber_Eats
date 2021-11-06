@@ -4,11 +4,13 @@ import axios from 'axios'
 import { useCookies } from "react-cookie";
 import cookie from 'react-cookies'
 import {Link} from 'react-router-dom'
+import {getDishes} from '../../features/resto_slice'
+import {useSelector,useDispatch} from 'react-redux'
 const Resteraunts = () => {
     
     let [dishes_received,setdishes]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
-    
+    const dispatch=useDispatch() 
     
             
            
@@ -20,7 +22,26 @@ const Resteraunts = () => {
                  zipcode:cookies.zipcode,
          
             }
-  
+
+            
+   
+        
+        async function getdishes(data) {
+            let mydishes = await dispatch(getDishes(data))
+            
+            setdishes(mydishes.payload)
+ 
+          }
+          getdishes(data)
+    
+
+
+
+
+    
+
+
+  /*
         axios.post(process.env.REACT_APP_BACKEND+"getDishes",data).then(response=>{
                 console.log("repsonse is--------->",response.data)
                 if(response.status === 200)
@@ -36,10 +57,10 @@ const Resteraunts = () => {
                 {
                 }
 
-        })
+        })*/
        
     },[]);
-  
+
 
 let details_received= dishes_received.map(dish => {
     return(

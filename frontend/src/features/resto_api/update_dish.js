@@ -5,14 +5,11 @@ export function update_dish(data){
     .then(response => {
         
         if(response.status === 200){
-            console.log("updated dish")
-            
-            setinserted(true)
+            return true
             }else if(response.status === 202){
             
             
-            console.log("could not update")
-
+            return false
             
         }
     });

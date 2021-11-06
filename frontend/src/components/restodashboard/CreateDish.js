@@ -5,6 +5,8 @@ import cookie from 'react-cookies'
 import Cookies from 'universal-cookie'
 import { useCookies } from "react-cookie";
 import {Redirect} from 'react-router-dom';
+import {addDish, getDishes} from '../../features/resto_slice'
+import {useSelector,useDispatch} from 'react-redux'
 const CreateDish = () => {
    
     const [inserted, setinserted] = useState(false);
@@ -14,6 +16,8 @@ const CreateDish = () => {
     const [dish_price,setdish_price] = useState();
     const [dp,setudishdp] = useState();
     const [errors,seterrors]=useState();
+    const dispatch=useDispatch() 
+
     function handleAddDish(e){
         var headers = new Headers();
     
@@ -33,21 +37,13 @@ const CreateDish = () => {
         formData.append("dp", dp);
         
         
-        axios.post(process.env.REACT_APP_BACKEND+'addDish',formData)
-            .then(response => {
-                
-                if(response.status === 200){
-                    console.log("added dish")
-                    
-                    setinserted(true)
-                    }else if(response.status === 202){
-                    
-                    
-
-
-                    
-                }
-            });
+         async function add_dish(data) {
+            await dispatch(addDish(data))
+            
+            setinserted(true)
+ 
+          }
+          add_dish(formData)
             
     };
     let redirectvar=null;

@@ -16,7 +16,7 @@ const Restologin = () => {
     const [usertype,setusertype]=useState()
     let [errors,seterrors]=useState()
     const dispatch = useDispatch()
-
+    let redirectVar = null;
 
 
     function handleLogin(e){
@@ -45,6 +45,7 @@ const Restologin = () => {
                     setCookie("resteraunt_name", restodata.resteraunt_name, {path: "/"});
                     setCookie("zipcode", restodata.zipcode, {path: "/"});
                     setCookie("restdp",restodata.restdp, {path: "/"});
+                    console.log("here in successful login")
                     }else{
                     
                     seterrors("User does not exists or Invalid credentials")
@@ -64,12 +65,11 @@ const Restologin = () => {
     }
     const user = useSelector(selectuser)
 
-    let redirectVar = null;
-        
-    if(user){
+    
+    console.log("here is the loggedin user",user)
+    if(cookie.load('cookie')){
         redirectVar = <Redirect to="/restodash"/>
         }
-    
     
     return (
         <div>
