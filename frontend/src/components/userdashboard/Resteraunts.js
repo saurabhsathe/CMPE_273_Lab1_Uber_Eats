@@ -97,7 +97,10 @@ let redirectVar=null
     const data = {
             resteraunt_name:"dasdsadsa"
         }
-    axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
+        var tok=localStorage.getItem('token')
+
+        console.log("here is my token----------------",typeof(tok))
+        axios.defaults.headers.common['authorization'] = tok;
      axios.post(process.env.REACT_APP_BACKEND+"getallResto",data).then(response=>{
              
              if(response.status === 200)

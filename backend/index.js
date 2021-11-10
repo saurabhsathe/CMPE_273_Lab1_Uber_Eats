@@ -12,9 +12,10 @@ var updatedish=require('./db_operations/update_dish')
 var host="http://localhost"
 var kafka = require('./kafka/client');
 const {checkAuth} = require("./Utils/passport")
+const { auth } = require("./Utils/passport");
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
-
+auth();
 app.use(bodyParser.json());
 const jwt = require("jsonwebtoken")
 
@@ -179,7 +180,7 @@ app.post('/customerlogin',async function(req,res){
             const token = jwt.sign(payload, "cmpe273_secret_key", {
                 expiresIn: 1008000
             });
-            res.end(token);
+            res.end("JWT "+token);
                 //res.end(JSON.stringify(results))
             }
             

@@ -8,14 +8,16 @@ const Customer = require('../mongo_operations/models/CustomerModel');
 
 // Setup work and export for the JWT passport strategy
 function auth() {
-    
+    console.log("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     var opts = {
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken("token"),
+        jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
         secretOrKey: secret
     };
-    console.log("reached here")
+    console.log("reached here------------------------->")
     passport.use(
+        
         new JwtStrategy(opts, (jwt_payload, callback) => {
+            console.log("in the jwt payload---------------------->",jwt_payload)
             const user_id = jwt_payload._id;
             console.log(jwt_payload)
             Customer.findById(user_id, (err, results) => {
@@ -34,6 +36,6 @@ function auth() {
 }
 
 exports.auth = auth;
-exports.checkAuth = passport.authenticate(passport.JwtStrategy, { session: false });
+exports.checkAuth = passport.authenticate("jwt", { session: false });
 
 

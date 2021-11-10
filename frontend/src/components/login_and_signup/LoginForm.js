@@ -45,9 +45,9 @@ const LoginForm = () => {
                     console.log("here is the response---------->",response.data)
                     //settoken(response.data)
                     const current=String(response.data)
-                    var decoded=jwt_decode(current)
+                    var decoded=jwt_decode(response.data.split(' ')[1])
                     console.log(" Here is the decoded version",decoded)
-                    localStorage.setItem("token", decoded);
+                    localStorage.setItem("token", response.data);
 
                     /*
                     var decoded = jwt_decode(authtoken.split(' ')[1]);
