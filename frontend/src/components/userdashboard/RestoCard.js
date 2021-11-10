@@ -25,7 +25,11 @@ const RestoCard = (props) => {
             zipcode:props.zipcode
         }
         console.log(data)
-     axios.post(process.env.REACT_APP_BACKEND+"addTofavourites",data).then(response=>{
+        //axios.defaults.headers.//headers.common['authorization'] = localStorage.getItem('token');
+        const header_config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        };
+     axios.post(process.env.REACT_APP_BACKEND+"addTofavourites",data,header_config).then(response=>{
              
              if(response.status === 200)
              {

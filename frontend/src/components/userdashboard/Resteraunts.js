@@ -15,6 +15,7 @@ const Resteraunts = (props) => {
     const [restname,setrestname]=useState("")
     const [restzip,setrestzip]=useState("")
     const [filters,setfilter]=useState({})
+    window.scrollTo(0, 0)
     function filterRestos(e){
         e.preventDefault();
         let radio_filtered=[]
@@ -96,13 +97,13 @@ let redirectVar=null
     const data = {
             resteraunt_name:"dasdsadsa"
         }
-        
+    axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
      axios.post(process.env.REACT_APP_BACKEND+"getallResto",data).then(response=>{
              
              if(response.status === 200)
              {
-                 
-                 setoriginal_restos(response.data[0])
+                 console.log("your response------------>",response.data)
+                 setoriginal_restos(response.data)
                 setrestos_rcvd(response.data)
                 console.log("here it is",response.data[0])
                 

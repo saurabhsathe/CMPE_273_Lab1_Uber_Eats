@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import axios from 'axios';
 import {Link} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
@@ -7,19 +7,27 @@ import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies'
 import {useCookies} from 'react-cookie'
+import jwt_decode from 'jwt-decode'
+//import * as jwt_decode from 'jwt-decode';
+
 const LoginForm = () => {
     
     const [uemail,setuemail]=useState()
     const [upwd,setpassword]=useState()
+    const [authtoken,settoken]=useState()
     const [usertype,setusertype]="customer"
     let [errors,seterrors]=useState()
     const dispatch = useDispatch()
     const [cookies, setCookie] = useCookies(["customer"]);
+    useEffect(()=>{
+        localStorage.removeItem("user_id");
 
+    },[]);
 
     function handleLogin(e){
         var headers = new Headers();
         //prevent page from refresh
+        
         e.preventDefault();
         const data = {
             email : uemail,
@@ -31,14 +39,28 @@ const LoginForm = () => {
         //make a post request with the user data
         axios.post(process.env.REACT_APP_BACKEND+'customerlogin',data)
             .then(response => {
-                
                 if(response.status === 200){
                     alert("successfull login")
+                    //token.
+                    console.log("here is the response---------->",response.data)
+                    //settoken(response.data)
+                    const current=String(response.data)
+                    var decoded=jwt_decode(current)
+                    console.log(" Here is the decoded version",decoded)
+                    localStorage.setItem("token", decoded);
+
+                    /*
+                    var decoded = jwt_decode(authtoken.split(' ')[1]);
+                    console.log("here is the decoded---------->",decoded)
+                    */
+                    
                     dispatch(login({
                         email:uemail,
-                        userType:"customer"
+                        userType:"customer",
+                        //token:response.data
                         
                     }))
+                    settoken(response.data._id)
                     setCookie("email", uemail, {path: "/"});
                     
                     
@@ -53,7 +75,7 @@ const LoginForm = () => {
                     seterrors("Error reaching database")
                 }
             });
-    
+                    
    
 
 
@@ -65,10 +87,17 @@ const LoginForm = () => {
 const user = useSelector(selectuser)
 
 let redirectVar = null;
-        if(cookie.load('cookie')){
+       
+if(localStorage.getItem("token")!=null){
             console.log("loaded successfully")
             redirectVar = <Redirect to= "/userdash"/>
-        }    
+}/*
+if(authtoken){
+    localStorage.setItem("token", authtoken)
+
+
+}*/
+        
 return (<div>
         {redirectVar}
         <div className="login-form" >

@@ -16,6 +16,7 @@ function handleLogout(){
  
   dispatch(logout())
   cookie.remove('cookie', { path: '/' })
+  localStorage.removeItem("token");
   redirectVar = <Redirect to= "/"/>
 }
 

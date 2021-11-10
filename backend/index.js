@@ -11,9 +11,12 @@ const s3upload = require("./upload_file")
 var updatedish=require('./db_operations/update_dish')
 var host="http://localhost"
 var kafka = require('./kafka/client');
+const {checkAuth} = require("./Utils/passport")
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
+
 app.use(bodyParser.json());
+const jwt = require("jsonwebtoken")
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -57,8 +60,6 @@ var Restaurant=require("./mongo_operations/models/RestaurantsModel")
 var RestoOwner = require("./mongo_operations/models/RestaurantOwnerModel")
 var Dishes = require("./mongo_operations/models/DishesModel")
 var Favourites = require("./mongo_operations/models/FavouritesModel");
-var Orders = require("./mongo_operations/models/OrdersModel");
-const { resolve } = require('path');
 
 
 
@@ -174,7 +175,12 @@ app.post('/customerlogin',async function(req,res){
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end("account exists")
+                const payload = { _id: results._id, email: results.email};
+            const token = jwt.sign(payload, "cmpe273_secret_key", {
+                expiresIn: 1008000
+            });
+            res.end(token);
+                //res.end(JSON.stringify(results))
             }
             
             }
@@ -583,8 +589,51 @@ app.post('/getallResto',async function(req,res){
             
         
 });
+
+
+/*
+//get resto for customer dashboard
+app.post('/getallRestoCust',async function(req,res){
+    
+    try{
+     
+        
+        await kafka.make_request('get_restos',{}, function(err,results){
+
+            console.log('in result');
+            console.log(results);
+            if (err){
+                console.log(err)
+                console.log("Inside err");
+                res.writeHead(400,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error reaching database")
+            }else{
+                
+                    //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end(JSON.stringify(results))
+                
+                
+                }
+            
+        });
+
+    
+    }
+    catch(error){
+        console.log(error)
+    }
+            
+        
+});
+*/
+
 //add to favourites
-app.post('/addTofavourites',async function(req,res){
+app.post('/addTofavourites',checkAuth,async function(req,res){
     
     try{
 
