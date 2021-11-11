@@ -8,6 +8,7 @@ import cookie from 'react-cookies'
 import {selectuser} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
 import CurrentOrderCard from './CurrentOrderCard'
+import Pagination from './Pagination'
 const Current_Orders = (props) => {
     const user = useSelector(selectuser)
     let redirectVar = null
@@ -16,6 +17,10 @@ const Current_Orders = (props) => {
     console.log(user)
     const [updated,setupdated]=useState()
     const [radioval2,setradioval2]=useState("all")
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(4);
+    
     useEffect(()=>{
         
              var headers = new Headers(); 
@@ -77,7 +82,10 @@ if(!cookie.load('cookie')){
 }
 
 console.log(orders_received.length)
-let details_received= orders_received.map((order,index) => {
+const indexOfLastPost = currentPage * postsPerPage;
+const indexOfFirstPost = indexOfLastPost - postsPerPage;
+const paginate = pageNumber => setCurrentPage(pageNumber);
+let details_received= orders_received.slice(indexOfFirstPost, indexOfLastPost).map((order,index) => {
     
     return(
      
@@ -90,6 +98,8 @@ let details_received= orders_received.map((order,index) => {
 
     )
 })
+
+
 
 
     return (
@@ -116,8 +126,14 @@ let details_received= orders_received.map((order,index) => {
       </div> 
       <hr />
    <div className="row text-center">
+      
       {details_received}
      
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={orders_received.length}
+        paginate={paginate}
+      />
 
 
 
