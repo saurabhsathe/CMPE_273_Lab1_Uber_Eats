@@ -11,10 +11,10 @@ import {useState} from 'react'
 const RestoDash = () => {
     const [coll,setcollapse]=useState(false)
     let redirectVar=null
-    if(!cookie.load('cookie')){
+    if(localStorage.getItem("token")==null){
         redirectVar = <Redirect to= "/restologin"/>
     }
-    console.log(coll)
+    console.log("tokennnnnnn----------->",localStorage.getItem("token"))
     return (
         <div >
             {redirectVar}

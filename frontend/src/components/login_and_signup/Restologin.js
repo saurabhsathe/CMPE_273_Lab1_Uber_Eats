@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {login} from '../../features/user_slice'
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -8,16 +8,18 @@ import Cookies from 'universal-cookie'
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
 import { useCookies } from "react-cookie";
-
+import jwt_decode from 'jwt-decode'
 const Restologin = () => {
     const [cookies, setCookie] = useCookies(["restaurant"]);
     const [uemail,setuemail]=useState()
     const [upwd,setpassword]=useState()
-    const [usertype,setusertype]=useState()
+    const [update,setupdate]=useState(false)
     let [errors,seterrors]=useState()
     const dispatch = useDispatch()
     let redirectVar = null;
-
+    useEffect(() => {
+        
+    }, [update])
 
     function handleLogin(e){
         var headers = new Headers();
@@ -40,12 +42,16 @@ const Restologin = () => {
                         email:uemail,
                         userType:"restaurant_owner"
                     }))
-                    let restodata = response.data
+                    console.log("here is the data ------------------------->",response.data)
+                    let restodata = jwt_decode(response.data.split(' ')[1])
+                    localStorage.setItem("token", response.data);
+
                     console.log("here is restodata", restodata)
                     setCookie("resteraunt_name", restodata.resteraunt_name, {path: "/"});
                     setCookie("zipcode", restodata.zipcode, {path: "/"});
                     setCookie("restdp",restodata.restdp, {path: "/"});
                     console.log("here in successful login")
+                    setupdate(!update)
                     }else{
                     
                     seterrors("User does not exists or Invalid credentials")
@@ -66,10 +72,9 @@ const Restologin = () => {
     const user = useSelector(selectuser)
 
     
-    console.log("here is the loggedin user",user)
-    if(cookie.load('cookie')){
-        redirectVar = <Redirect to="/restodash"/>
-        }
+    if(localStorage.getItem("token")!=null){
+        redirectVar = <Redirect to= "/restodash"/>
+    }
     
     return (
         <div>

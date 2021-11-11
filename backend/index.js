@@ -13,9 +13,11 @@ var host="http://localhost"
 var kafka = require('./kafka/client');
 const {checkAuth} = require("./Utils/passport")
 const { auth } = require("./Utils/passport");
+
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
 auth();
+
 app.use(bodyParser.json());
 const jwt = require("jsonwebtoken")
 
@@ -81,7 +83,7 @@ var storage = multer.diskStorage({
   })
   
   var upload = multer({ storage:storage })
-app.post('/updateDish',async function(req,res){
+app.post('/updateDish',checkAuth,async function(req,res){
     console.log("Request received to update dish",req.body)
     try{
      
@@ -176,7 +178,7 @@ app.post('/customerlogin',async function(req,res){
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'
                 })
-                const payload = { _id: results._id, email: results.email};
+                const payload = { _id: results._id, email: results.email,user_type:"customer"};
             const token = jwt.sign(payload, "cmpe273_secret_key", {
                 expiresIn: 1008000
             });
@@ -414,12 +416,20 @@ app.post('/restologin',async function(req,res){
         
 
                 }
+                else
+                {    
+
                     res.writeHead(200,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end(JSON.stringify(resto_details))
+                    const payload = { _id: dummy._id, resteraunt_name:resto_details.resteraunt_name,zipcode:resto_details.zipcode,restdp:resto_details.restdp,user_type:"owner"};
+                    const token = jwt.sign(payload, "cmpe273_secret_key", {
+                        expiresIn: 1008000
+                    });
+                    res.end("JWT "+token);
+                    //res.end(JSON.stringify(resto_details))
         
-                
+                }  
             })
 
 
@@ -440,7 +450,7 @@ app.post('/restologin',async function(req,res){
 
 
 //adding dish
-app.post('/addDish',upload.single("dp"),async function(req,res){
+app.post('/addDish',checkAuth,upload.single("dp"),async function(req,res){
     console.log(req.body.data)
     let dish=JSON.parse(req.body.data)    
     
@@ -688,7 +698,7 @@ catch(error){
     
 });
 //get favourites of the customer
-app.post('/getfavourites',async function(req,res){
+app.post('/getfavourites',checkAuth,async function(req,res){
     
     try{
      
@@ -729,7 +739,7 @@ app.post('/getfavourites',async function(req,res){
     
 });
 //get address of customer
-app.post('/getaddress',async function(req,res){
+app.post('/getaddress',checkAuth,async function(req,res){
     //{email:req.body}
     try{
         
@@ -771,7 +781,7 @@ catch(error){
 });
 
 //place order
-app.post('/placeOrder',async function(req,res){
+app.post('/placeOrder',checkAuth,async function(req,res){
         console.log("received",req.body)
         
         
@@ -800,7 +810,7 @@ app.post('/placeOrder',async function(req,res){
 
 
 //get customer orders
-app.post('/getCustOrders',async function(req,res){
+app.post('/getCustOrders',checkAuth,async function(req,res){
     console.log("received request for customer orders",req.body.email)
     try{
         
@@ -879,7 +889,7 @@ app.post('/updateOrder',async function(req,res){
 });
 
 //get orders for a specific restaurant
-app.post('/getRestoOrders',async function(req,res){
+app.post('/getRestoOrders',checkAuth,async function(req,res){
      //req.body.restaurant_name,req.body.zipcode,req.body.type
     console.log(req.body)
      let status_list=[]

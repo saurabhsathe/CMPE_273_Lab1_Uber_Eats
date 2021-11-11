@@ -26,8 +26,9 @@ const Checkout = () => {
       const data = {
           email:cookies.email
       }
-
-   axios.post(process.env.REACT_APP_BACKEND+"getaddress",data).then(response=>{
+      var tok=localStorage.getItem('token')
+      axios.defaults.headers.common['authorization'] = tok;
+        axios.post(process.env.REACT_APP_BACKEND+"getaddress",data).then(response=>{
            
            if(response.status === 200)
            {

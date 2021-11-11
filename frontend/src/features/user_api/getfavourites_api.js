@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export function getfavs(data){
+    var tok=localStorage.getItem('token')
+        axios.defaults.headers.common['authorization'] = tok;
     return axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data.user,function(err,resu){
         if(err){
             console.log("error in axios",err)

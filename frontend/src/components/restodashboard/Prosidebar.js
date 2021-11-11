@@ -19,6 +19,8 @@ const Prosidebar = () => {
         dispatch(logout())
         cookie.remove('cookie', { path: '/' })
         redirectVar = <Redirect to= "/"/>
+        localStorage.removeItem("token");
+        redirectVar = <Redirect to= "/"/>
       }
       
 
@@ -29,10 +31,8 @@ const Prosidebar = () => {
   <Menu iconShape="square">
     <MenuItem ><a href="/restodash" >Dashboard</a></MenuItem>
     <hr />
-    <MenuItem >
-    <a href="/restodash/updateowner">Update Profile</a>
-    </MenuItem>
-    <hr />
+    
+   
     <MenuItem >
     <a href="/restodash/createdish" >Add Dish</a>
     </MenuItem>

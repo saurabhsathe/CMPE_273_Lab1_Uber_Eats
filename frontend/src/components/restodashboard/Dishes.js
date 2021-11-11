@@ -28,7 +28,7 @@ const Resteraunts = () => {
         
         async function getdishes(data) {
             let mydishes = await dispatch(getDishes(data))
-            
+            console.log("here are your dishes-------------->")
             setdishes(mydishes.payload)
  
           }

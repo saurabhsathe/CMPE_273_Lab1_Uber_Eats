@@ -46,13 +46,17 @@ const CreateDish = () => {
           add_dish(formData)
             
     };
-    let redirectvar=null;
+    let redirectVar=null;
+   
+    if(localStorage.getItem("token")==null){
+      redirectVar = <Redirect to= "/restologin"/>
+  }
     if (inserted==true){
-        redirectvar = <Redirect to="/restodash" />
+        redirectVar = <Redirect to="/restodash" />
     }
     return (
         <div>
-            {redirectvar}
+            {redirectVar}
             <div className="register-form" style={{marginTop:"80px"}}>
            <h2><b>Add a dish</b></h2>
            <form onSubmit={handleAddDish} enctype="multipart/form-data">

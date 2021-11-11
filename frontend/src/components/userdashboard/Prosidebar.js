@@ -22,7 +22,7 @@ function handleLogout(){
 
 
     
-if(!cookie.load('cookie')){
+if(localStorage.getItem("token")==null || localStorage.getItem("token").length==0 ){
     redirectVar = <Redirect to= "/userlogin"/>
 }
 

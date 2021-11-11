@@ -91,12 +91,7 @@ let redirectVar = null;
 if(localStorage.getItem("token")!=null){
             console.log("loaded successfully")
             redirectVar = <Redirect to= "/userdash"/>
-}/*
-if(authtoken){
-    localStorage.setItem("token", authtoken)
-
-
-}*/
+}
         
 return (<div>
         {redirectVar}

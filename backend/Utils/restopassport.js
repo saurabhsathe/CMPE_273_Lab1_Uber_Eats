@@ -5,28 +5,21 @@ const passport = require("passport");
 var { secret } = require("./config");
 var jwt = require('jwt-simple');
 const Owner = require('../mongo_operations/models/RestaurantOwnerModel');
-const Customer = require('../mongo_operations/models/CustomerModel');
 
 // Setup work and export for the JWT passport strategy
-function auth() {
+function auth2() {
     var opts = {
         jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
         secretOrKey: secret
     };
-    console.log("loaded auth")
     passport.use(
         
         new JwtStrategy(opts, (jwt_payload, callback) => {
             
-            const user_type = jwt_payload.user_type;
-            const user_id = jwt_payload._id;
-
-
-
-            console.log("user_id------------------>",jwt_payload)
-            if (user_type=="customer"){
-                
-            Customer.findById(user_id, (err, results) => {
+            const owner_id = jwt_payload._id;
+            console.log("reached here------------------------->",jwt_payload)
+    
+            Owner.findById(owner_id, (err, results) => {
                 if (err) {
                     return callback(err, false);
                 }
@@ -37,25 +30,11 @@ function auth() {
                     callback(null, false);
                 }
             });
-        }
-        else{
-            Owner.findById(user_id, (err, results) => {
-                if (err) {
-                    return callback(err, false);
-                }
-                if (results) {
-                    callback(null, results);
-                }
-                else {
-                    callback(null, false);
-                }
-            });
-            }
         })
     )
 }
 
-exports.auth = auth;
-exports.checkAuth = passport.authenticate("jwt", { session: false });
+exports.auth2 = auth2;
+exports.checkAuth2 = passport.authenticate("jwt", { session: false });
 
 

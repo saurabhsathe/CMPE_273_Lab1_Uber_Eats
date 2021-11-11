@@ -24,7 +24,7 @@ const Current_Orders = (props) => {
                  order_type:"all"
                  
              }
-    
+             axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
           axios.post(process.env.REACT_APP_BACKEND+"getCustOrders",data).then(response=>{
                 
                 if(response.status === 200)
@@ -55,7 +55,7 @@ const Current_Orders = (props) => {
         order_type:ordertype
         
     }
-
+    axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
  axios.post(process.env.REACT_APP_BACKEND+"getCustOrders",data).then(response=>{
        
        if(response.status === 200)

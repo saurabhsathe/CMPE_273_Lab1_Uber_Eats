@@ -70,8 +70,7 @@ function getOrdersByType(ordertype){
 
 
 
-
-if(!cookie.load('cookie')){
+  if(localStorage.getItem("token")==null){
     redirectVar = <Redirect to= "/restologin"/>
 }
 

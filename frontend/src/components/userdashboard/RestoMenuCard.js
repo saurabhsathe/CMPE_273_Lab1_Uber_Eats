@@ -20,7 +20,8 @@ const RestoMeuCard = (props) => {
                 zipcode:props.zipcode
 
             }
-            console.log("restaurant_details",resteraunt_name,zipcode)
+            var tok=localStorage.getItem('token')
+            axios.defaults.headers.common['authorization'] = tok;
         axios.post(process.env.REACT_APP_BACKEND+"getDishes",data).then(response=>{
                 
                 if(response.status === 200)
