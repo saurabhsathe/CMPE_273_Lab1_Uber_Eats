@@ -28,13 +28,13 @@ const Checkout = () => {
       }
       var tok=localStorage.getItem('token')
       axios.defaults.headers.common['authorization'] = tok;
-        axios.post(process.env.REACT_APP_BACKEND+"getaddress",data).then(response=>{
+        axios.post(process.env.REACT_APP_BACKEND+"getcustdetails",data).then(response=>{
            
            if(response.status === 200)
            {
                
                console.log(response.data,typeof response.data)
-               setaddr(response.data)               
+               setaddr(response.data.address)               
                
            }
            else if(response.status === 202)

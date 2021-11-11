@@ -5,8 +5,7 @@ import {useState} from 'react'
 const CurrentOrderCard = (props) => {
     let redirectvar=null
     const [updated,setupdated]=useState(false)
-
-
+const [btnstat,setbtn]=useState("visible")
     function ConfirmOrder(type){
         let data={
             id:props.order.id,
@@ -32,12 +31,13 @@ const CurrentOrderCard = (props) => {
     if(updated==true){
         redirectvar=<Redirect to="/restodash" />
     }
+    
     return (
  
         <div className="col-md-4 mb-4" >
         {redirectvar}
         <div className="card h-100" >
-      
+
             <div className="card-body" id={props.order.id}>
             <p><b style={{color:"black"}}>{props.order.restaurant_name}</b></p>
             <p><b style={{color:"black"}}>Zipcode:{props.order.restaurant_zipcode}</b></p>
@@ -49,8 +49,8 @@ const CurrentOrderCard = (props) => {
             </div>
             <div className="card-footer py-4">
             
-            <button type="button" class="btn btn-dark" onClick={()=>{ConfirmOrder("preparing")}}>Accept</button>
-            &nbsp; &nbsp;<button type="button" class="btn btn-dark" onClick={()=>{ConfirmOrder("cancelled")}}>Cancel</button>
+            <button type="button" class="btn btn-dark" onClick={()=>{ConfirmOrder("preparing")}} style={{visibility:props.order.order_status!="placed"? "hidden" : "visible"}}>Accept</button>
+            &nbsp; &nbsp;<button type="button" class="btn btn-dark" onClick={()=>{ConfirmOrder("cancelled")}} style={{visibility:props.order.order_status!="placed"? "hidden" : "visible"}} disabled={props.order.order_status!="placed"? true : false}>Cancel</button>
             
                 </div>
         </div>

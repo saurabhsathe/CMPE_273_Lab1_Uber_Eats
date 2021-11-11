@@ -602,46 +602,6 @@ app.post('/getallResto',async function(req,res){
 });
 
 
-/*
-//get resto for customer dashboard
-app.post('/getallRestoCust',async function(req,res){
-    
-    try{
-     
-        
-        await kafka.make_request('get_restos',{}, function(err,results){
-
-            console.log('in result');
-            console.log(results);
-            if (err){
-                console.log(err)
-                console.log("Inside err");
-                res.writeHead(400,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("error reaching database")
-            }else{
-                
-                    //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end(JSON.stringify(results))
-                
-                
-                }
-            
-        });
-
-    
-    }
-    catch(error){
-        console.log(error)
-    }
-            
-        
-});
-*/
 
 //add to favourites
 app.post('/addTofavourites',checkAuth,async function(req,res){
@@ -739,7 +699,7 @@ app.post('/getfavourites',checkAuth,async function(req,res){
     
 });
 //get address of customer
-app.post('/getaddress',checkAuth,async function(req,res){
+app.post('/getcustdetails',checkAuth,async function(req,res){
     //{email:req.body}
     try{
         
@@ -756,7 +716,7 @@ app.post('/getaddress',checkAuth,async function(req,res){
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end(result.address)
+                res.end(JSON.stringify(result))
             }
             else{
                 res.writeHead(400,{
@@ -938,7 +898,43 @@ catch(error){
 
     
 });
+app.post('/updateCust',checkAuth,async function(req,res){
+    //req.body.restaurant_name,req.body.zipcode,req.body.type
+   console.log(req.body)
+   try{
+     
+    await kafka.make_request('update_profile',req.body, function(err,result){
+        console.log(result)
+         if (err){
+             console.log(err)
+             res.writeHead(500,{
+                 'Content-Type' : 'text/plain'
+             })
+             res.end("encountered an error")
+             
+         }else{
+             res.writeHead(200,{
+                 'Content-Type' : 'text/plain'
+             })
+             res.end("updated successfully")
+         
+            }
+        })
+ 
+ 
+ }
+ catch(error){
+     console.log(error)
+ }      
+ 
 
+     
+   
+
+   
+
+   
+});
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001");

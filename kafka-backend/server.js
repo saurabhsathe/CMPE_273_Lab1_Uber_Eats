@@ -46,7 +46,7 @@ var placeOrder= require('./services/placeOrder')
 var updateOrder= require('./services/updateOrder')
 var get_cust_orders= require('./services/getCustOrders')
 var get_resto_orders= require('./services/getRestoOrders')
-
+var updateProfile =  require('./services/updateProfile')
 
 
 
@@ -96,5 +96,5 @@ handleTopicRequest("update_order",updateOrder)
 handleTopicRequest("get_cust_orders",get_cust_orders)
 handleTopicRequest("get_resto_orders",get_resto_orders)
 handleTopicRequest("get_address",getAddress)
-
+handleTopicRequest("update_profile",updateProfile)
 

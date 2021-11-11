@@ -9,6 +9,7 @@ import {selectuser} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
 import CurrentOrderCard from './CurrentOrderCard'
 import Pagination from './Pagination'
+import {getCustOrders} from '../../features/user_slice'
 const Current_Orders = (props) => {
     const user = useSelector(selectuser)
     let redirectVar = null
@@ -19,8 +20,8 @@ const Current_Orders = (props) => {
     const [radioval2,setradioval2]=useState("all")
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(4);
-    
+    const [postsPerPage] = useState(3);
+    const dispatch=useDispatch()
     useEffect(()=>{
         
              var headers = new Headers(); 
@@ -29,23 +30,14 @@ const Current_Orders = (props) => {
                  order_type:"all"
                  
              }
-             axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
-          axios.post(process.env.REACT_APP_BACKEND+"getCustOrders",data).then(response=>{
+             async function get_orders(data) {
+                let mydishes = await dispatch(getCustOrders(data))
                 
-                if(response.status === 200)
-                {
-                    
-                    console.log("received response here",response.data)
-                    setorders(response.data)
-                    
-                }
-                else if(response.status === 202)
-                {
-                    console.log("no data found")
-                }
-
-        })
-       
+                setorders(mydishes.payload)
+     
+              }
+              get_orders(data)
+             
    
   
     

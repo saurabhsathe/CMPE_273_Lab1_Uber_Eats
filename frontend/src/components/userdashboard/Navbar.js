@@ -8,7 +8,7 @@ import Cart from './Cart'
 import {FaShoppingCart} from 'react-icons/fa'
 import UserCart from './UserCart'
 import { useCookies } from "react-cookie";
-
+import Modal from 'react-modal'
 const Navbar = (props) => {
     const [checkbtn,setcheckbtn] = useState(false)
     const [radioval,setradioval]=useState("all")
@@ -47,9 +47,10 @@ const Navbar = (props) => {
                             <FaShoppingCart />
                               
 		                 </button></span>
-                         < UserCart trigger={checkbtn} setTrigger={setcheckbtn}>
-
-                        <Cart />
+                        
+                        < UserCart trigger={checkbtn} setTrigger={setcheckbtn}>
+                        
+                        <Cart setcheck={setcheckbtn} />
 
                          </ UserCart>
 

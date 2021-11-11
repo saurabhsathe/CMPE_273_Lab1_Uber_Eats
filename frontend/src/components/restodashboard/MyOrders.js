@@ -11,6 +11,7 @@ import NewOrderCard from './NewOrderCard'
 
 import {getOrders} from '../../features/resto_slice'
 import {useSelector,useDispatch} from 'react-redux'
+import Pagination from './Pagination'
 
 const Current_Orders = (props) => {
     const user = useSelector(selectuser)
@@ -20,6 +21,9 @@ const Current_Orders = (props) => {
    
     const [updated,setupdated]=useState()
     const [radioval2,setradioval2]=useState("all")
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(3);
+    
     const dispatch=useDispatch()
     useEffect(()=>{
         
@@ -74,8 +78,11 @@ function getOrdersByType(ordertype){
     redirectVar = <Redirect to= "/restologin"/>
 }
 
-
-let details_received= orders_received.map((order,index) => {
+console.log(orders_received.length)
+const indexOfLastPost = currentPage * postsPerPage;
+const indexOfFirstPost = indexOfLastPost - postsPerPage;
+const paginate = pageNumber => setCurrentPage(pageNumber);
+let details_received= orders_received.slice(indexOfFirstPost, indexOfLastPost).map((order,index) => {
     return(
      
     <NewOrderCard
@@ -113,7 +120,12 @@ let details_received= orders_received.map((order,index) => {
       <hr />
    <div className="row text-center">
       {details_received}
-     
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={orders_received.length}
+        paginate={paginate}
+      />
+
 
 
 

@@ -2,7 +2,7 @@ import React from 'react'
 import {useCart} from 'react-use-cart'
 import {FaTrash} from 'react-icons/fa'
 import {Link} from 'react-router-dom'
-const Cart = () => {
+const Cart = (props) => {
     function placeOrder(){
         if(isEmpty){
             alert("Cart is empty!!Please add some thing in your card")
@@ -24,7 +24,7 @@ const Cart = () => {
     if (isEmpty) return <h1 className="text-center">Your cart is empty</h1>
 
     return (
-        <section className="py-4 container">
+        <section className="py-2 container">
             <div className="row justify-content-center">
                 <h4>Your Cart</h4>
                 <table className="table table-light table-hover m-0">
@@ -93,7 +93,7 @@ const Cart = () => {
                                         
                                     </td>
                                     <td>
-                                        <Link to="/userdash/checkout"><button className = "btn btn-dark" onClick={()=>placeOrder()}>Confirm and Place order</button></Link>
+                                    <a href="/userdash/cart" ><button className = "btn btn-dark" onClick={()=>props.setcheck(false)}>Confirm and Place order</button></a>
                                     </td>
                                     <td>
                                         
