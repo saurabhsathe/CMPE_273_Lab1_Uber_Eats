@@ -9,16 +9,18 @@ const CurrentOrderCard = (props) => {
 const [btnstat,setbtn]=useState("visible")
 const [dropbtn,setdrop]=useState('')
     function updateOrder(type){
+
+        console.log("here---------------------updating ",type)
         let data={
-            id:props.order.id,
+            id:props.order._id,
             status:dropbtn
         }
-
+        console.log("here---------------------updating ",props.order)
         axios.post(process.env.REACT_APP_BACKEND+'updateOrder',data)
             .then(response => {
                 if(response.status === 200){
                     console.log("updated")
-                    setupdated(true)
+                   
                     }else if(response.status === 202){
                     
                     
@@ -30,11 +32,12 @@ const [dropbtn,setdrop]=useState('')
             
     };
 
+    //{visibility:props.order.order_status!="completed" || props.order.order_status!="cancelled" || props.order.order_status!="delivered" || props.order.order_status!="delivered" ? "hidden" : "picked up"}
     
     if(updated==true){
         redirectvar=<Redirect to="/restodash" />
     }
-    console.log(dropbtn)
+    console.log("drop btn",dropbtn)
     
     return (
  
@@ -61,7 +64,7 @@ const [dropbtn,setdrop]=useState('')
         <i class="fa fa-caret-down icon"></i>
       </div>
       <select class="dropdown-list" onChange={(e)=>{setdrop(e.target.value)}}>
-        <option class="dropdown-list__item" key="received" value="received">Received</option>
+        <option class="dropdown-list__item" key="received" value="received" selected>Received</option>
         <option class="dropdown-list__item" key="preparing" value="preparing" >Preparing</option>
         <option class="dropdown-list__item" key="on the way"  value="on the way" >On the way</option>
         <option class="dropdown-list__item" key="ready"  value="ready">Pickup ready</option>
@@ -69,7 +72,8 @@ const [dropbtn,setdrop]=useState('')
         <option class="dropdown-list__item" key="cancelled"  value="cancelled">Cancelled</option>
       </select>
     </div>
-    <button type="button" class="btn btn-dark" onClick={()=>{updateOrder("preparing")}} style={{visibility:props.order.order_status!="completed" || props.order.order_status!="cancelled" || props.order.order_status!="delivered" || props.order.order_status!="delivered" ? "hidden" : "picked up"}}>Update</button>
+    <hr />
+    <button type="button" class="btn btn-dark" onClick={()=>{updateOrder(dropbtn)}} >Update</button>
                 </div>
         </div>
         </div>

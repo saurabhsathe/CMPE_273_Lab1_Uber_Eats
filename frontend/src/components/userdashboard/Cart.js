@@ -93,7 +93,7 @@ const Cart = (props) => {
                                         
                                     </td>
                                     <td>
-                                    <Link to="/userdash/checkout" ><button className = "btn btn-dark" onClick={()=>props.setcheck(false)}>Confirm and Place order</button></Link>
+                                    <Link to="/userdash/checkout" ><button className = "btn btn-dark" >Confirm and Place order</button></Link>
                                     </td>
                                     <td>
                                         

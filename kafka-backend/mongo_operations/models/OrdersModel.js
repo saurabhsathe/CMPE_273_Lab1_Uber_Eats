@@ -12,8 +12,8 @@ const OrdersModel = new Schema ({
     amount:{type:Number,required:true},
     order_date:{type: Date, default: Date.now},
     order_status:{type:String,required:true},
-    delivery_address:{type:String,required:true}
-
+    delivery_address:{type:String,required:true},
+    instructions:{type:String}
      
 })
 const ordersmodel = mongoose.model('order',OrdersModel)

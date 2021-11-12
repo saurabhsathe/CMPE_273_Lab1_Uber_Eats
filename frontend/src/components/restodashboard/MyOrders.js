@@ -42,7 +42,7 @@ axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
         {
           console.log("here is the response------------->",response)
           setorders(response.data)
-          setupdated(!updated)
+       
             
         }
         else if(response.status === 202)
@@ -87,7 +87,7 @@ axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
         {
           console.log("here is the response------------->",response)
           setorders(response.data)
-          setupdated(!updated)
+          
             
         }
         else if(response.status === 202)
@@ -116,7 +116,7 @@ let details_received= orders_received.slice(indexOfFirstPost, indexOfLastPost).m
     <NewOrderCard
     
    order={order}
-    
+ 
     />
 
     )

@@ -19,6 +19,7 @@ const Checkout = () => {
     const [addr,setaddr]=useState()
     let redirectVar = null;
     const [inserted,setinserted]=useState(false)
+    const [instr,setinstr]=useState("")
    
     useEffect(()=>{
         
@@ -70,6 +71,7 @@ const dispatch=useDispatch()
             amount:cartTotal,
             delivery_address:addr,
             order_status:"placed",
+            instructions:instr
             
         }
         
@@ -149,12 +151,18 @@ const dispatch=useDispatch()
                 <h4>Total Amount {cartTotal}$</h4>
                 <hr />
                 <h4>Delivery Address</h4>
-                <textarea name="address" value={addr} onChange={e => setaddr(e.target.value)} rows="10" cols="30" disabled={addr_update}>{addr}</textarea>    
-                <button className="btn btn-dark" onClick={()=>{setaddr_update(!addr_update)} } style={{width:"30%"}}>Update Address</button>
-               
-                <button className = "btn btn-dark" onClick={()=>placeNewOrder()} style={{width:"30%"}} >Confirm and Place order</button>
-                
-                                        <button  className = "btn btn-dark"  onClick={()=>emptyCart()} style={{width:"30%"}}>EmptyCart</button>
+                <textarea name="address" value={addr} onChange={e => setaddr(e.target.value)} rows="2" cols="10" disabled={addr_update}>{addr}</textarea>    
+                <h1></h1>
+                <hr />
+                <h4>Special instructions</h4>
+                <textarea name="instructions" value={instr} onChange={e => setinstr(e.target.value)} rows="2" cols="10" >{instr}</textarea>    
+                <h1></h1>
+                <hr />
+                <button className="btn btn-dark" onClick={()=>{setaddr_update(!addr_update)} } style={{width:"25%"}}>Update Address</button>
+                &nbsp;&nbsp;&nbsp; 
+                <button className = "btn btn-dark" onClick={()=>placeNewOrder()} style={{width:"25%"}} >Confirm and Place order</button>
+                &nbsp;&nbsp;&nbsp;
+                                        <button  className = "btn btn-dark"  onClick={()=>emptyCart()} style={{width:"25%"}}>EmptyCart</button>
          
             </div>
         </section>

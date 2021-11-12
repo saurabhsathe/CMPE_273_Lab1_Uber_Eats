@@ -39,12 +39,15 @@ const CurrentOrderCard = (props) => {
       
             <div className="card-body" id={props.order.id}>
             <p><b style={{color:"black"}}>{props.order.restaurant_name}</b></p>
-            <p><b style={{color:"black"}}>Zipcode:{props.order.restaurant_zipcode}</b></p>
+            <hr />
+            <table> 
+            <tr><td><b style={{color:"black"}}>Zipcode:</b></td><td>{props.order.restaurant_zipcode}<br /></td></tr>
  
-            <p><b style={{color:"black"}}>Amount:{props.order.amount}$</b></p>
-            <p><b style={{color:"black"}}>Date:{props.order.order_date}</b></p>
-            <p><b style={{color:"black"}}>Status:{props.order.order_status}</b></p>
-            <p><b style={{color:"black"}}>Delivery Address:{props.order.delivery_address}</b></p>
+            <tr><td><b style={{color:"black"}}>Amount:</b></td><td>{props.order.amount}$<br /></td></tr>
+            <tr><td><b style={{color:"black"}}>Date:</b></td><td>{props.order.order_date}<br /></td></tr>
+            <tr><td><b style={{color:"black"}}>Status:</b></td><td>{props.order.order_status}<br /></td></tr>
+            <tr><td><b style={{color:"black"}}>Delivery Address:</b></td><td>{props.order.delivery_address}<br /></td></tr>
+            </table>
             </div>
             <div className="card-footer py-4">
             <button type="button" class="btn btn-dark"  onClick={CancelOrder} disabled={props.order.order_status=="placed"? false : true}>Cancel</button>
