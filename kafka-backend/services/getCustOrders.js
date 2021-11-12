@@ -5,13 +5,16 @@ async function handle_request(resto, callback){
     console.log("request received")
     let status_list=[]
         if(resto.order_type=="current"){
-            status_list=["placed","preparing"]
+            status_list=["placed","received"]
         }
         else if(resto.order_type=="all"){
-            status_list=["placed","preparing","delivered","cancelled"]
+            status_list=["received","placed","preparing","on the way","ready","pickedup","cancelled"]
+        }
+        else if(resto.order_type=="ongoing"){
+            status_list=["received","placed","preparing","on the way","ready"]
         }
         else{
-            status_list=["delivered","cancelled"]
+            status_list=["delivered","pickedup","cancelled"]
         }
     Orders.find({customer_email:resto.email,order_status:{"$in":status_list}},async (err,result)=>{
        

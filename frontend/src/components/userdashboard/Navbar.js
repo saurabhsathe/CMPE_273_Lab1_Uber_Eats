@@ -4,7 +4,7 @@ import Vegnonvegoption from './Vegnonvegoption'
 import Location from './Location' 
 import './vegnonveg.css'
 import {useState,useEffect} from 'react'
-import Cart from './Cart'
+import Cart2 from './Cart2'
 import {FaShoppingCart} from 'react-icons/fa'
 import UserCart from './UserCart'
 import { useCookies } from "react-cookie";
@@ -50,7 +50,7 @@ const Navbar = (props) => {
                         
                         < UserCart trigger={checkbtn} setTrigger={setcheckbtn}>
                         
-                        <Cart setcheck={setcheckbtn} />
+                        <Cart2 setcheck={setcheckbtn} />
 
                          </ UserCart>
 

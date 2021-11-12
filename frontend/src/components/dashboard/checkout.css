@@ -3,7 +3,7 @@
     position: fixed;
     top:0;
     right:0;
-    width: 80veh;
+    width: 20veh;
     max-width: 140veh;
     
     background-color: rgba(0,0,0,0.5);
@@ -14,7 +14,7 @@
 .popup-inner{
 position: relative;
 padding: 32px;
-width: 100%;
+width: 80%;
 max-width: 640 ;
 background-color: white;
 }

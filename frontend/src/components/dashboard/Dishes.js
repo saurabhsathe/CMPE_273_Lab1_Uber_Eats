@@ -4,13 +4,15 @@ import axios from 'axios'
 import { useCookies } from "react-cookie";
 import { useLocation, Link } from 'react-router-dom';
 import DishCard from './DishCard'
+import {getDishes} from '../../features/user_slice'
+import {useSelector,useDispatch} from 'react-redux'
 const Dishes = (props) => {
     let [dishes_received,setdishes]=useState([])
     const location=useLocation()
 
     
             
-           
+    const dispatch=useDispatch()        
     useEffect(()=>{
         if(Object.keys(props).length != 0){
         console.log("herhehrehrhehrehrehh",location.state)
@@ -21,23 +23,14 @@ const Dishes = (props) => {
          
             }
   
-        axios.post(process.env.REACT_APP_BACKEND+"getDishes",data).then(response=>{
+            async function place(data) {
+                let dish_list = await dispatch(getDishes(data))
                 
-                if(response.status === 200)
-                {
-                    
-                    console.log(response.data,typeof response.data)
-                    setdishes(response.data[0])
-                    console.log("gsdfsdfds",dishes_received)
-                    
-                    
-                }
-                else if(response.status === 202)
-                {
-                    console.log("no data found")
-                }
-
-        })
+                console.log("dishes_Received")
+                setdishes(dish_list.payload)
+     
+              }
+              place(data)
        
     }
     else{
@@ -55,7 +48,7 @@ if(dishes_received.length>0)
 {details_received = dishes_received.map((dish,index) => {
     return(
         
-    <DishCard id = {dish.id} 
+    <DishCard id = {dish._id} 
     key ={dish.dish_id} 
     dishdp={dish.dishdp} 
     dish_name ={dish.dish_name}

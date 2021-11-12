@@ -30,16 +30,21 @@ const Current_Orders = (props) => {
                  order_type:"all"
                  
              }
-             async function get_orders(data) {
-                let mydishes = await dispatch(getCustOrders(data))
+             var tok=localStorage.getItem('token')
+        axios.defaults.headers.common['authorization'] = tok;
+    axios.post(process.env.REACT_APP_BACKEND+"getCustOrders",data).then(response=>{
                 
-                setorders(mydishes.payload)
-     
-              }
-              get_orders(data)
-             
-   
-  
+        if(response.status === 200)
+        {
+            
+           setorders(response.data)
+            
+        }
+        else if(response.status === 202)
+        {
+            console.log("no data found")
+        }
+})
     
 
 
@@ -111,6 +116,8 @@ let details_received= orders_received.slice(indexOfFirstPost, indexOfLastPost).m
 
    <input type="radio" className="radio_button" value="current" onChange={e=>{setradioval2(e.target.value);getOrdersByType(e.target.value)}} id="current" name="options2"  />
    <label for="current" className="radio_label"> New</label>
+   <input type="radio" className="radio_button" value="ongoing" onChange={e=>{setradioval2(e.target.value);getOrdersByType(e.target.value)}} id="ongoing" name="options2"  />
+   <label for="ongoing" className="radio_label"> ongoing</label>
 
     <input type="radio" className="radio_button" value="past" onChange={e=>{setradioval2(e.target.value);getOrdersByType(e.target.value)}} id="past" name="options2" /> 
     <label for="past" className="radio_label">Past</label>

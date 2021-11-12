@@ -11,6 +11,7 @@ const RestoProfile = (props) => {
         <RestoProfNavbar />
         <div class="container mt-5">
         {console.log(location.state)}
+        
         <div class="row d-flex justify-content-center">
             <div class="col-md-7">
                 <div class="card p-3 py-4">

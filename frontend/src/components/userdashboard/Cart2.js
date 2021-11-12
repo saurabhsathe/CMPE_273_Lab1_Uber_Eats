@@ -24,10 +24,9 @@ const Cart = (props) => {
     if (isEmpty) return <h1 className="text-center">Your cart is empty</h1>
 
     return (
-        <section className="py-2 container">
-            <div className="row justify-content-center">
+        <div >
                 <h4>Your Cart</h4>
-                <table className="table table-light table-hover m-0">
+                <table >
                     <tbody>
                     {console.log(items[0])}
                         {
@@ -93,7 +92,7 @@ const Cart = (props) => {
                                         
                                     </td>
                                     <td>
-                                    <Link to="/userdash/checkout" ><button className = "btn btn-dark" onClick={()=>props.setcheck(false)}>Confirm and Place order</button></Link>
+                                    <a href="/userdash/cart" ><button className = "btn btn-dark" onClick={()=>props.setcheck(false)}>Confirm and Place order</button></a>
                                     </td>
                                     <td>
                                         
@@ -111,7 +110,7 @@ const Cart = (props) => {
                     </tbody>
                 </table>
             </div>
-        </section>
+
     )
 }
 

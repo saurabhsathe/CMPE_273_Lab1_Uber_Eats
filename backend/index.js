@@ -852,15 +852,9 @@ app.post('/updateOrder',async function(req,res){
 app.post('/getRestoOrders',checkAuth,async function(req,res){
      //req.body.restaurant_name,req.body.zipcode,req.body.type
     console.log(req.body)
-     let status_list=[]
-        if(req.body.type=="new"){
-            status_list=["placed","preparing"]
-        }
-        else{
-            status_list=["delivered","cancelled"]
-        }
+     
     try{
-        console.log(status_list)
+     
         await kafka.make_request('get_resto_orders',req.body, function(err,result){
             console.log(result)
              if (err){

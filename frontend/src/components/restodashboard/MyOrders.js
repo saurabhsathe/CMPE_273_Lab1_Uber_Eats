@@ -19,7 +19,7 @@ const Current_Orders = (props) => {
     let [orders_received,setorders]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
    
-    const [updated,setupdated]=useState()
+    const [updated,setupdated]=useState(false)
     const [radioval2,setradioval2]=useState("all")
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(3);
@@ -35,21 +35,28 @@ const Current_Orders = (props) => {
     
            }
            
-           async function get_orders(data) {
-            let mydishes = await dispatch(getOrders(data))
+           axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
+axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
+                
+        if(response.status === 200)
+        {
+          console.log("here is the response------------->",response)
+          setorders(response.data)
+          setupdated(!updated)
             
-            setorders(mydishes.payload)
- 
-          }
-          get_orders(data)
-       
-   
+        }
+        else if(response.status === 202)
+        {
+            
+        }
+
+})
   
     
 
 
 
-},[updated]);
+},[]);
 
 function getOrdersByType(ordertype){
 
@@ -63,14 +70,35 @@ function getOrdersByType(ordertype){
  }
  console.log("the data--------------------------->",data,ordertype)
  console.log("Order type--------------------------->",ordertype)
-  async function get_orders(data) {
+ /* 
+ async function get_orders(data) {
     let myorders = await dispatch(getOrders(data))
-  
+    console.log("here are the orders",myorders)
     setorders(myorders.payload)
     setupdated(true)
   }
   get_orders(data)
-  }
+  
+*/
+axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
+axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
+                
+        if(response.status === 200)
+        {
+          console.log("here is the response------------->",response)
+          setorders(response.data)
+          setupdated(!updated)
+            
+        }
+        else if(response.status === 202)
+        {
+            
+        }
+
+})
+
+
+}
 
 
 
@@ -107,13 +135,17 @@ let details_received= orders_received.slice(indexOfFirstPost, indexOfLastPost).m
    <b>Filter by Order type</b>&nbsp;
    <div className="mainradio " data-toggle="buttons">
     
-    <input type="radio" value="all" onChange={e=>{setradioval2(e.target.value);getOrdersByType(e.target.value)}} className="radio_button" id="all" name="options2" defaultChecked/>
+    <input type="radio" value="all" onChange={e=>{setradioval2(e.target.value);getOrdersByType("all")}} className="radio_button" id="all" name="options2" defaultChecked/>
     <label for="all" className="radio_label">All</label>
 
-   <input type="radio" className="radio_button" value="current" onChange={e=>{setradioval2(e.target.value);getOrdersByType(e.target.value)}} id="current" name="options2"  />
-   <label for="current" className="radio_label"> New</label>
+   <input type="radio" className="radio_button" value="new" onChange={e=>{setradioval2(e.target.value);getOrdersByType("new")}} id="new" name="options2"  />
+   <label for="new" className="radio_label"> New</label>
 
-    <input type="radio" className="radio_button" value="past" onChange={e=>{setradioval2(e.target.value);getOrdersByType(e.target.value)}} id="past" name="options2" /> 
+
+   <input type="radio" className="radio_button" value="ongoing" onChange={e=>{setradioval2(e.target.value);getOrdersByType("ongoing")}} id="ongoing" name="options2"  />
+   <label for="ongoing" className="radio_label"> ongoing</label>
+
+    <input type="radio" className="radio_button" value="past" onChange={e=>{setradioval2(e.target.value);getOrdersByType("past")}} id="past" name="options2" /> 
     <label for="past" className="radio_label">Past</label>
 
       </div> 
