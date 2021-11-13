@@ -12,12 +12,8 @@ async function handle_request(user, callback){
             callback(err,"Error");
         }
         
-            callback(null,data);
-        
+            callback(null,data);  
     })
-    
-        
-   
 }
 
 exports.handle_request = handle_request;

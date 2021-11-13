@@ -56,8 +56,8 @@ axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
 
 
 
-},[]);
-
+},[updated]);
+console.log("here is the update-------->",updated)
 function getOrdersByType(ordertype){
 
     
@@ -116,7 +116,8 @@ let details_received= orders_received.slice(indexOfFirstPost, indexOfLastPost).m
     <NewOrderCard
     
    order={order}
- 
+   isupdated={setupdated}
+   updated={updated}   
     />
 
     )

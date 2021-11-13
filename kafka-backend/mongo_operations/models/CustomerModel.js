@@ -8,6 +8,7 @@ const CustomerModel = new Schema ({
     contact:{type:String,required:true},
     pwd:{type:String,required:true},
     userdp:{type:String,required:true},
+    city:{type:String,required:true}
 },
 {
     versionKey:false

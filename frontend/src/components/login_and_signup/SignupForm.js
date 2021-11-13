@@ -16,6 +16,7 @@ const SignupForm = () => {
     const [ucpwd,setucpwd] = useState();
     const [udp,setudp] = useState();
     const [usertype,setusertype] = "customer";
+    const [ucity,setucity] = useState();
     const [errors,seterrors]=useState();
     const dispatch = useDispatch()
 
@@ -62,13 +63,12 @@ const SignupForm = () => {
             });
             
     }
-    const user = useSelector(selectuser)
-
     let redirectVar = null;
-        
-    if(user){
-        redirectVar = <Redirect to="/userdash"/>
-        }
+    if(localStorage.getItem("token")!=null){
+      console.log("loaded successfully")
+      redirectVar = <Redirect to= "/userdash"/>
+}
+
     return (
         <div>
          {redirectVar}
@@ -89,7 +89,10 @@ const SignupForm = () => {
                      <label>Zipcode</label>
                      <input type="text" value={uzip} pattern="[0-9]{5}" id="uzip" className="form-control" placeholder="Address" onChange={e => setuzip(e.target.value)} required/>
                   </div>
-         
+                  <div className="form-group">
+                     <label>City</label>
+                     <input type="" value={ucity}  id="ucity" className="form-control" placeholder="City" onChange={e => setucity(e.target.value)} required/>
+                  </div>
 
 
                   <div className="form-group">
