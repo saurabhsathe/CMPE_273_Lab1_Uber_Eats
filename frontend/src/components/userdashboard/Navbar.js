@@ -9,6 +9,8 @@ import {FaShoppingCart} from 'react-icons/fa'
 import UserCart from './UserCart'
 import { useCookies } from "react-cookie";
 import Modal from 'react-modal'
+import {useSelector,useDispatch} from 'react-redux'
+import {selectuser,getfavourites} from '../../features/user_slice'
 const Navbar = (props) => {
     const [checkbtn,setcheckbtn] = useState(false)
     const [radioval,setradioval]=useState("all")
@@ -20,7 +22,7 @@ const Navbar = (props) => {
     
         
     }
-        
+    const user = useSelector(selectuser)   
     return (
         <div className="wrapper container">
             
@@ -33,7 +35,7 @@ const Navbar = (props) => {
             <div className="col-sm brand" >
             <a className="navbar-brand"><img style={{border:0}} src="/ue2.png" /></a>
             </div>     
-            <h4>Hello, {cookies.email}!!!!</h4>
+            <h4>Hello, {user.user.email}!!!!</h4>
           
             </form>
             

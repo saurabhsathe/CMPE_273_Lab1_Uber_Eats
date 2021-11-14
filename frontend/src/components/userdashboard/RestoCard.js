@@ -19,7 +19,7 @@ const RestoCard = (props) => {
 
         var headers = new Headers(); 
         const data = {
-            email:cookies.email,
+            email:user.user.email,
             resteraunt_name:props.resteraunt_name,
             restdp:props.restdp,
             zipcode:props.zipcode

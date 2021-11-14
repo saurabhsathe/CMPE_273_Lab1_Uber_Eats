@@ -20,7 +20,7 @@ const Dishes = (props) => {
            const data = {
                 resteraunt_name:location.state.resto.resteraunt_name,
                  zipcode:location.state.resto.zipcode,
-         
+                 user_type:"customer"
             }
   
             async function place(data) {

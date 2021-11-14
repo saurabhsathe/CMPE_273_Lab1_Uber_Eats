@@ -8,9 +8,11 @@ const RestoProfile = (props) => {
     let [redirectVar,setredirectvar]=useState()
     
     const location = useLocation();
-    if(!cookie.load('cookie')){
-        setredirectvar(<Redirect to= "/userlogin"/>)
-    }
+    
+if(localStorage.getItem("token")==null){
+    console.log("loaded successfully")
+    redirectVar = <Redirect to= "/userlogin"/>
+}
     return (
         <div>
             {redirectVar}

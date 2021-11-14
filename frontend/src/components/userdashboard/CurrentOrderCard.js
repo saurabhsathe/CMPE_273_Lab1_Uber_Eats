@@ -2,17 +2,21 @@ import React from 'react'
 import {Redirect} from 'react-router-dom'
 import axios from 'axios'
 import {useState} from 'react'
-import {useDispatch} from 'react-redux'
+
 import {updateOrder} from '../../features/user_slice'
+import {selectuser,getfavourites} from '../../features/user_slice'
+import {useSelector,useDispatch} from 'react-redux'
 const CurrentOrderCard = (props) => {
     let redirectvar=null
     const [updated,setupdated]=useState(false)
-
+    const user = useSelector(selectuser)
     const dispatch=useDispatch()    
     function CancelOrder(){
         let data={
             id:props.order._id,
             status:"cancelled"
+            ,
+            user_type:"customer"
         }
         
 
@@ -42,11 +46,12 @@ const CurrentOrderCard = (props) => {
             <hr />
             <table> 
             <tr><td><b style={{color:"black"}}>Zipcode:</b></td><td>{props.order.restaurant_zipcode}<br /></td></tr>
- 
+            
             <tr><td><b style={{color:"black"}}>Amount:</b></td><td>{props.order.amount}$<br /></td></tr>
             <tr><td><b style={{color:"black"}}>Date:</b></td><td>{props.order.order_date}<br /></td></tr>
             <tr><td><b style={{color:"black"}}>Status:</b></td><td>{props.order.order_status}<br /></td></tr>
             <tr><td><b style={{color:"black"}}>Delivery Address:</b></td><td>{props.order.delivery_address}<br /></td></tr>
+            <tr><td><b style={{color:"black"}}>Special Instructions:</b></td><td>{props.order.instructions}<br /></td></tr>
             </table>
             </div>
             <div className="card-footer py-4">

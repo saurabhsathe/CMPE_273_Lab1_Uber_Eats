@@ -3,6 +3,7 @@ let Orders=require("../mongo_operations/models/OrdersModel")
 
 async function handle_request(order, callback){
     console.log("request received to place an order")
+    console.log(order)
     order=new Orders(order)
     order.save((err,data)=>{
         if (err){

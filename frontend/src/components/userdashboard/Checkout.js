@@ -20,12 +20,12 @@ const Checkout = () => {
     let redirectVar = null;
     const [inserted,setinserted]=useState(false)
     const [instr,setinstr]=useState("")
-   
+    const user = useSelector(selectuser)   
     useEffect(()=>{
         
         var headers = new Headers(); 
       const data = {
-          email:cookies.email
+          email:user.user.email
       }
       var tok=localStorage.getItem('token')
       axios.defaults.headers.common['authorization'] = tok;
@@ -65,14 +65,14 @@ const {
 const dispatch=useDispatch() 
     function placeNewOrder(){
         let data={
-            customer_email:cookies.email,
+            customer_email:user.user.email,
             restaurant_name:items[0].resteraunt_name,
             restaurant_zipcode:items[0].zipcode,
             amount:cartTotal,
             delivery_address:addr,
             order_status:"placed",
-            instructions:instr
-            
+            instructions:instr,
+            user_type:"customer"
         }
         
         async function place(data) {

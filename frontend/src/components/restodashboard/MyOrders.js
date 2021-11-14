@@ -2,14 +2,9 @@ import React, {Component}  from 'react'
 import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
-
 import {Redirect} from 'react-router';
-import cookie from 'react-cookies'
 import {selectuser} from '../../features/user_slice'
-
 import NewOrderCard from './NewOrderCard'
-
-import {getOrders} from '../../features/resto_slice'
 import {useSelector,useDispatch} from 'react-redux'
 import Pagination from './Pagination'
 
@@ -22,7 +17,7 @@ const Current_Orders = (props) => {
     const [updated,setupdated]=useState(false)
     const [radioval2,setradioval2]=useState("all")
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage,setpostPerPage] = useState(3);
+    const [postsPerPage,setpostPerPage] = useState(2);
     
     const dispatch=useDispatch()
     useEffect(()=>{
@@ -68,18 +63,7 @@ function getOrdersByType(ordertype){
   order_type:ordertype
 
  }
- console.log("the data--------------------------->",data,ordertype)
- console.log("Order type--------------------------->",ordertype)
- /* 
- async function get_orders(data) {
-    let myorders = await dispatch(getOrders(data))
-    console.log("here are the orders",myorders)
-    setorders(myorders.payload)
-    setupdated(true)
-  }
-  get_orders(data)
-  
-*/
+ 
 axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
 axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
                 

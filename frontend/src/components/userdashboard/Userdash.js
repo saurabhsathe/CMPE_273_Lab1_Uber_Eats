@@ -34,9 +34,10 @@ const Userdash = () => {
 
 
 
-    if(!cookie.load('cookie')){
-        redirectVar = <Redirect to= "/userlogin"/>
-    }
+if(localStorage.getItem("token")==null){
+    console.log("loaded successfully")
+    redirectVar = <Redirect to= "/userlogin"/>
+}
     console.log("here is the redirectvar",redirectVar)
     
     

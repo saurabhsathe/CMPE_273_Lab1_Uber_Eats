@@ -21,7 +21,9 @@ const Favourites = (props) => {
         
              var headers = new Headers(); 
            const data = {
-               email:cookies.email
+               email:user.user.email
+               ,
+            user_type:"customer"
            }
            console.log("redux user------->",user)
            
@@ -29,10 +31,10 @@ const Favourites = (props) => {
             let favs=await dispatch(getfavourites(user))
             
             console.log("here are your favourites",favs.payload)
-            setrestos(user.favourites)
+            setrestos(favs.payload)
  
           }
-          getfavs(user)
+          getfavs(data)
 
         /*
         axios.post(process.env.REACT_APP_BACKEND+"getfavourites",data).then(response=>{
@@ -58,11 +60,18 @@ const Favourites = (props) => {
 
 
 },[]);
-  
+/*  
 if(!cookie.load('cookie')){
     redirectVar = <Redirect to= "/userlogin"/>
+}*/
+
+if(localStorage.getItem("token")==null){
+    console.log("loaded successfully")
+    redirectVar = <Redirect to= "/userlogin"/>
 }
-let details_received= restos_received.map((resto,index) => {
+let details_received
+if (restos_received!=null){
+details_received= restos_received.map((resto,index) => {
     return(
      
     <RestoCard
@@ -77,7 +86,10 @@ let details_received= restos_received.map((resto,index) => {
     )
 })
 
-
+}
+else{
+ details_received=()=>{return <div>No favourites found</div>}  
+}
     return (
 
 
@@ -100,6 +112,7 @@ let details_received= restos_received.map((resto,index) => {
     )
     
     
+
 }
 
 export default Favourites

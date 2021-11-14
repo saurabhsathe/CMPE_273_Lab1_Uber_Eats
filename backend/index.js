@@ -603,7 +603,7 @@ app.post('/getallResto',async function(req,res){
 
 //add to favourites
 app.post('/addTofavourites',checkAuth,async function(req,res){
-    
+    console.log(" in the favourites------------>")
     try{
 
 
@@ -657,7 +657,7 @@ catch(error){
 });
 //get favourites of the customer
 app.post('/getfavourites',checkAuth,async function(req,res){
-    
+    console.log("you are inside------------------------>")
     try{
      
         

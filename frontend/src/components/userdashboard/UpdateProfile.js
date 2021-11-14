@@ -14,7 +14,7 @@ const UpdateProfile = () => {
     const[userid,setuserid]=useState('')
     const [udp,setudp] = useState();
     const [ucity,setucity] = useState();
-    const [updated,setupdated] = useState();
+    const [updated,setupdated] = useState(false);
     const [errors,seterrors]=useState();
     const user = useSelector(selectuser)
     const dispatch=useDispatch()
@@ -75,9 +75,12 @@ const UpdateProfile = () => {
        }
 
        if(localStorage.getItem("token")==null){
-         redirectVar = <Redirect to= "/userdash"/>
+         redirectVar = <Redirect to= "/userlogin"/>
      }
      
+     if(updated){
+      redirectVar = <Redirect to= "/userdash"/>
+  }
     return (
         <div>
         {redirectVar}
