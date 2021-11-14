@@ -84,6 +84,7 @@ async function handleTopicRequest(topic_name,fname){
 
 handleTopicRequest("customer_login",CustomerLogin)
 handleTopicRequest("customer_registration",CustomerRegistration)
+handleTopicRequest("resto_registration",RestoRegistration)
 handleTopicRequest("owner_registration",OwnerRegistration)
 handleTopicRequest("add_dish",AddDish)
 handleTopicRequest("get_dishes",getDishes)

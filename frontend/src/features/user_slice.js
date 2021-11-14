@@ -58,11 +58,13 @@ export const updateOrder = createAsyncThunk(
       console.log("here is the response------------------->")
       return api_response
 });
+
+
 export const updateUser = createAsyncThunk(
   'user/update_user ',
     async (data)=>{
         
-      const api_response = await updateUser(data)
+      const api_response = await update_user(data)
       return api_response
 });
 
@@ -149,6 +151,13 @@ export const userSlice=createSlice({
             state.status = 'loading';
           })
           .addCase(getDishes.fulfilled, (state, action) => {
+            state.status = 'idle';
+           
+          })
+          .addCase(updateUser.pending, (state) => {
+            state.status = 'loading';
+          })
+          .addCase(updateUser.fulfilled, (state, action) => {
             state.status = 'idle';
            
           })

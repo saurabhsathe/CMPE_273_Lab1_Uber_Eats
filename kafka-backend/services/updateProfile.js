@@ -1,14 +1,14 @@
 
-let Dish=require("../mongo_operations/models/CustomerModel")
+let Customer=require("../mongo_operations/models/CustomerModel")
 
 async function handle_request(cust, callback){
-    console.log("request received to update dish")
-    Dish.updateOne({email:cust.email},{address:cust.address,zipcode:cust.zipcode,contact:cust.contact},async (err,result)=>{
-           console.log("successfully updated the dish")
+    console.log("request received to update customer---------->",cust)
+    Customer.updateOne({_id:cust._id},{address:cust.address,zipcode:cust.zipcode,contact:cust.contact,city:cust.city},async (err,result)=>{
+           console.log("successfully updated the customer details",result)
            if (err){
-               callback(err,"Error");
+            callback(err,"Error");
            }
-           return true
+           callback(true,null);
               
            
        })

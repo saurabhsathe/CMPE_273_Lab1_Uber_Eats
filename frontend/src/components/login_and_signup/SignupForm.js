@@ -18,6 +18,7 @@ const SignupForm = () => {
     const [usertype,setusertype] = "customer";
     const [ucity,setucity] = useState();
     const [errors,seterrors]=useState();
+    const [inserted,setinserted]=useState(false);
     const dispatch = useDispatch()
 
     
@@ -52,7 +53,7 @@ const SignupForm = () => {
                         userType:"customer"
                         
                     }))
-
+                        setinserted(true)
                     }else if(response.status === 202){
                     
                     seterrors("email id already registered")
@@ -67,6 +68,9 @@ const SignupForm = () => {
     if(localStorage.getItem("token")!=null){
       console.log("loaded successfully")
       redirectVar = <Redirect to= "/userdash"/>
+}
+else if (inserted){
+   redirectVar = <Redirect to= "/userlogin"/>
 }
 
     return (

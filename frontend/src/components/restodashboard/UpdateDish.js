@@ -24,15 +24,17 @@ const UpdateDish = (props) => {
         e.preventDefault();
         const data = {
             id:props.location.state.resto.id,
+            _id:cookies.resteraunt_id,
             dish_name:dish_name,
             
             dish_desc:props.location.state.resto.dish_desc,
-            price:dish_price
+            price:dish_price,
+            user_type:"owner"
         }
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        
+        console.log("here is your data",data)
         async function update_dish(data) {
             await dispatch(updateDish(data))
             

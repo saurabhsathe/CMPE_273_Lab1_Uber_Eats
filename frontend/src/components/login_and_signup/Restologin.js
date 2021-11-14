@@ -38,15 +38,16 @@ const Restologin = () => {
             .then(response => {
                 
                 if(response.status === 200){
-                    dispatch(login({
-                        email:uemail,
-                        userType:"restaurant_owner"
-                    }))
                     console.log("here is the data ------------------------->",response.data)
                     let restodata = jwt_decode(response.data.split(' ')[1])
                     localStorage.setItem("token", response.data);
 
                     console.log("here is restodata", restodata)
+                    dispatch(login({
+                        email:uemail,
+                        userType:"restaurant_owner"
+                    }))
+                    setCookie("resteraunt_id", restodata._id, {path: "/"});
                     setCookie("resteraunt_name", restodata.resteraunt_name, {path: "/"});
                     setCookie("zipcode", restodata.zipcode, {path: "/"});
                     setCookie("restdp",restodata.restdp, {path: "/"});

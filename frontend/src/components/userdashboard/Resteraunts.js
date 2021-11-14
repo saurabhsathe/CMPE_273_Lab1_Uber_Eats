@@ -16,13 +16,78 @@ const Resteraunts = (props) => {
     const [restzip,setrestzip]=useState("")
     const [filters,setfilter]=useState({})
     window.scrollTo(0, 0)
+    var final=[]
     function filterRestos(e){
         e.preventDefault();
         let radio_filtered=[]
         let name_filtered=[]
         let zip_filtered=[]
-        let final=[]
+        
+        
         console.log("here inside filter",original_restos)
+        console.log(radioval)
+            
+        if(radioval!='all'){
+            if(radioval=="pickup"){
+            console.log(radioval)
+            radio_filtered = original_restos.filter(resto => resto.pickup_drop != "drop")
+            final=radio_filtered 
+            }
+            else{
+                console.log(radioval)
+                radio_filtered = original_restos.filter(resto => resto.pickup_drop != "pickup")
+                final=radio_filtered 
+                    
+            }
+        }
+        else{
+            radio_filtered=original_restos
+            final=radio_filtered 
+        }
+        //veg nonveg
+        console.log(final)
+        console.log("radio val 2222222222222->-------------",radioval2)
+        if(radioval2!='all'){
+            
+            if(radioval2=="veg"){
+                console.log(radioval2)
+                radio_filtered = final.filter(resto => resto.diet !="nonveg")
+                final=radio_filtered
+            }
+            else if(radioval2=="nonveg"){
+                console.log(radioval2)
+                radio_filtered = final.filter(resto => resto.diet !="veg")
+                final=radio_filtered
+            } 
+        }
+        else{
+            radio_filtered=final
+            final=radio_filtered 
+        }
+
+
+
+        if(restzip.length!=0){
+            console.log("in the restzip",restzip)
+            zip_filtered = final.filter(resto => resto.city === restzip)
+            final=zip_filtered 
+        }
+        
+        console.log("restname is ",restname.length)
+        if(restname.length!=0){
+            name_filtered = final.filter(resto => resto.resteraunt_name === restname)
+            final=name_filtered 
+        }
+          
+         
+        console.log("filtered_list by veg/nonveg",radio_filtered)
+        console.log("filtered_list by zipcode",zip_filtered)
+        console.log("filtered_list by restoname",name_filtered)
+        console.log(final)
+        console.log("props received2",props)
+        setrestos_rcvd(final)
+
+        /*
         if(radioval!='all'){
             
             if(radioval=="pickup"){
@@ -81,7 +146,7 @@ const Resteraunts = (props) => {
         console.log(final)
         console.log("props received2",props)
         setrestos_rcvd(final)
-        
+        */
     }
 
 let redirectVar=null

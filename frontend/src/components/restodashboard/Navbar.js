@@ -25,13 +25,10 @@ const Navbar = (props) => {
             <a className="navbar-brand"><img style={{border:0}} size="100px" src="/ue2.png" /></a>
             
             </div>
-            <div className="col-sm">    
-            </div>
+           
             
                 
-            <div className="col-sm-6">
-                   
-            </div>
+            
             
             <h2> Hello, {cookies.resteraunt_name}</h2>
             <a className="navbar-brand"><img style={{border:0}} size="100px" width="60px" height="60px" src={cookies.restdp} /></a>

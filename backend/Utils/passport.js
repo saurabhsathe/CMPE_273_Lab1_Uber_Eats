@@ -20,7 +20,7 @@ function auth() {
             
             const user_type = jwt_payload.user_type;
             const user_id = jwt_payload._id;
-
+            console.log("here...................")
 
 
             console.log("user_id------------------>",jwt_payload)
@@ -44,9 +44,11 @@ function auth() {
                     return callback(err, false);
                 }
                 if (results) {
+                    console.log("found the resteraunt_owner",results)
                     callback(null, results);
                 }
                 else {
+                    console.log("not found the resteraunt_owner",results)
                     callback(null, false);
                 }
             });

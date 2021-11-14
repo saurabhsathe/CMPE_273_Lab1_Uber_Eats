@@ -14,8 +14,10 @@ const CreateDish = () => {
     const [dish_name,setdish_name] = useState();
     const [dish_desc,setdish_desc] = useState();
     const [dish_price,setdish_price] = useState();
+    
     const [dp,setudishdp] = useState();
     const [errors,seterrors]=useState();
+    const [radioval2,setradioval2]=useState("veg");
     const dispatch=useDispatch() 
 
     function handleAddDish(e){
@@ -23,12 +25,16 @@ const CreateDish = () => {
     
         e.preventDefault();
         const data = {
+           _id:cookies.resteraunt_id,
             dish_name:dish_name,
             resteraunt_name:cookies.resteraunt_name,
             zipcode:cookies.zipcode,
             dish_desc:dish_desc,
-            price:dish_price
+            price:dish_price,
+            category:radioval2,
+            user_type:"owner"
         }
+        console.log(data)
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
@@ -36,7 +42,7 @@ const CreateDish = () => {
         formData.append("data", JSON.stringify(data));
         formData.append("dp", dp);
         
-        
+        alert("into add dish")
          async function add_dish(data) {
             await dispatch(addDish(data))
             
@@ -82,6 +88,23 @@ const CreateDish = () => {
                     <label>Upload Dish Picture</label><br />
                     <input type="file" id="dp" name="dp" onChange={e => setudishdp(e.target.files[0])} accept=".png,.gif,.jpeg,.jpg" />
                  </div>
+
+                 <div className="col-sm">
+                <div className="mainradio" data-toggle="buttons">
+        
+        <input type="radio" className="radio_button" value="pickup2" onChange={e=>setradioval2(e.target.value)} id="veg" name="options2" defaultChecked />
+       <label for="veg" className="radio_label">veg</label>
+
+        <input type="radio" className="radio_button" value="drop2" onChange={e=>setradioval2(e.target.value)} id="nonveg" name="options2" /> 
+        <label for="nonveg" className="radio_label">non-veg</label>
+
+          </div>      
+
+
+                </div>
+
+
+
                  <h4 style={{color:"red"}}>{errors}</h4>
 
                  <button type="submit" className="btn btn-dark">Add Dish</button>

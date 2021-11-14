@@ -174,14 +174,12 @@ app.post('/customerlogin',async function(req,res){
                 res.end("account does not exist")
             }
             else{
-                res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+                //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'
                 })
                 const payload = { _id: results._id, email: results.email,user_type:"customer"};
-            const token = jwt.sign(payload, "cmpe273_secret_key", {
-                expiresIn: 1008000
-            });
+            const token = jwt.sign(payload, "cmpe273_secret_key" );
             res.end("JWT "+token);
                 //res.end(JSON.stringify(results))
             }
@@ -329,8 +327,8 @@ app.post('/restosignup',upload.single("restdp"),async function(req,res){
     let stored_file_name=res.req.file.originalname
     resto=new Restaurant(resto)
     let fileloc="./public/"+res.req.file.filename
-
-    Restaurant.findOne({fullname:resto.fulname,zipcode:resto.zipcode},async (err,result)=>{
+    console.log(resto)
+    Restaurant.findOne({resteraunt_name:resto.resteraunt_name,zipcode:resto.zipcode},async (err,result)=>{
        
         if (err){
             res.writeHead(500,{
@@ -340,7 +338,7 @@ app.post('/restosignup',upload.single("restdp"),async function(req,res){
         }
         else if(result){
             fs.unlinkSync(fileloc)
-            res.writeHead(400,{
+            res.writeHead(202,{
                 'Content-Type' : 'text/plain'
             })
             res.end("Restaurant already exists")
@@ -405,7 +403,7 @@ app.post('/restologin',async function(req,res){
         }
       
         if(dummy){
-            res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+            //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
            
             Restaurant.findOne({owner_email:user.email},async (err,resto_details)=>{
                 if (err){
@@ -450,8 +448,8 @@ app.post('/restologin',async function(req,res){
 
 
 //adding dish
-app.post('/addDish',checkAuth,upload.single("dp"),async function(req,res){
-    console.log(req.body.data)
+app.post('/addDish',upload.single("dp"),async function(req,res){
+    console.log("received a request to add dish-------->",req.body.data)
     let dish=JSON.parse(req.body.data)    
     
         let fileloc="./public/"+res.req.file.filename
@@ -894,13 +892,12 @@ catch(error){
 });
 app.post('/updateCust',checkAuth,async function(req,res){
     //req.body.restaurant_name,req.body.zipcode,req.body.type
-   console.log(req.body)
+    console.log("update profile")
    try{
      
     await kafka.make_request('update_profile',req.body, function(err,result){
-        console.log(result)
+        console.log("updateeeeeeeeeeeeeeeeeeeeeeeeeeee----profile",result)
          if (err){
-             console.log(err)
              res.writeHead(500,{
                  'Content-Type' : 'text/plain'
              })

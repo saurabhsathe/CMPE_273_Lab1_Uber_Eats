@@ -52,6 +52,7 @@ const [dropbtn,setdrop]=useState('')
             <tr><td><b style={{color:"black"}}>Date:</b></td><td>{props.order.order_date}<br /></td></tr>
             <tr><td><b style={{color:"black"}}>Status:</b></td><td>{props.order.order_status}<br /></td></tr>
             <tr><td><b style={{color:"black"}}>Delivery Address:</b></td><td>{props.order.delivery_address}<br /></td></tr>
+            <tr><td><b style={{color:"black"}}>Special Instructions:</b></td><td>{props.order.instructions}<br /></td></tr>
             </table>
             </div>
             

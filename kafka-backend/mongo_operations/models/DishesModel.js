@@ -12,6 +12,7 @@ const DishesModel = new Schema ({
     zipcode:{type:String,required:true},
     dish_desc:{type:String,required:true},
     dishdp:{type:String,required:true},
+    category:{type:String,required:true},
     price:{type:Number,required:true}
 })
 const dishesmodel = mongoose.model('dish',DishesModel)

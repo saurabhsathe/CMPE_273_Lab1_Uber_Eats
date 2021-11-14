@@ -18,6 +18,7 @@ const Resteraunts = () => {
         console.log("herhehrehrhehrehrehh")
              var headers = new Headers(); 
            const data = {
+               _id:cookies.resteraunt_id,
                 resteraunt_name:cookies.resteraunt_name,
                  zipcode:cookies.zipcode,
          
@@ -72,6 +73,7 @@ let details_received= dishes_received.map(dish => {
     <div className="card-body">
     <h4 className="card-title">{dish.dish_name}</h4>
     <p className="card-text">{dish.dish_desc}</p>
+    <p className="card-text">{dish.category}</p>
     <p className="card-text"><b style={{color:"black"}}>{dish.price}$</b></p>
     </div>
     <div className="card-footer py-4">
