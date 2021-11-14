@@ -3,13 +3,14 @@ import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { useCookies } from "react-cookie";
 import {Redirect} from 'react-router';
-import {selectuser} from '../../features/user_slice'
+import {getOrders} from '../../features/resto_slice'
+
 import NewOrderCard from './NewOrderCard'
 import {useSelector,useDispatch} from 'react-redux'
 import Pagination from './Pagination'
 
 const Current_Orders = (props) => {
-    const user = useSelector(selectuser)
+
     let redirectVar = null
     let [orders_received,setorders]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
@@ -29,7 +30,7 @@ const Current_Orders = (props) => {
             order_type:"all"
     
            }
-           
+           /*
            axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
 axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
                 
@@ -46,7 +47,15 @@ axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
         }
 
 })
+  */
+async function getorders(data) {
+  let myorders = await dispatch(getOrders(data))
+  console.log("here are your dishes-------------->")
+  setorders(myorders.payload)
   
+}
+getorders(data)
+
     
 
 
@@ -63,7 +72,17 @@ function getOrdersByType(ordertype){
   order_type:ordertype
 
  }
- 
+
+ async function getorders(data) {
+  let myorders = await dispatch(getOrders(data))
+  console.log("here are your dishes-------------->")
+  setorders(myorders.payload)
+  
+}
+getorders(data)
+
+
+/* 
 axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
 axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
                 
@@ -81,7 +100,7 @@ axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
 
 })
 
-
+*/
 }
 
 

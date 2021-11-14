@@ -448,7 +448,7 @@ app.post('/restologin',async function(req,res){
 
 
 //adding dish
-app.post('/addDish',upload.single("dp"),async function(req,res){
+app.post('/addDish',checkAuth,upload.single("dp"),async function(req,res){
     console.log("received a request to add dish-------->",req.body.data)
     let dish=JSON.parse(req.body.data)    
     

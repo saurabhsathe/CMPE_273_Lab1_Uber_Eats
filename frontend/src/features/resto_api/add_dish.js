@@ -1,6 +1,10 @@
 import axios from "axios";
 
 export function add_dish(data){
+    var tok=localStorage.getItem('token')
+        axios.defaults.headers.common['authorization'] = tok;
+    
+
     return   axios.post(process.env.REACT_APP_BACKEND+'addDish',data).then(response => {
         
         if(response.status === 200){

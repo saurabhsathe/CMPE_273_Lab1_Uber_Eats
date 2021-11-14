@@ -11,6 +11,7 @@ const Resteraunts = () => {
     let [dishes_received,setdishes]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
     const dispatch=useDispatch() 
+    const [updated,setupdated]=useState(false)
     
             
            
@@ -31,10 +32,10 @@ const Resteraunts = () => {
             let mydishes = await dispatch(getDishes(data))
             console.log("here are your dishes-------------->")
             setdishes(mydishes.payload)
- 
+            
           }
           getdishes(data)
-    
+          
 
 
 

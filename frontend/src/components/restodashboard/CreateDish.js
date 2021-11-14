@@ -25,7 +25,7 @@ const CreateDish = () => {
     
         e.preventDefault();
         const data = {
-           _id:cookies.resteraunt_id,
+           user_id:cookies.resteraunt_id,
             dish_name:dish_name,
             resteraunt_name:cookies.resteraunt_name,
             zipcode:cookies.zipcode,
@@ -42,7 +42,7 @@ const CreateDish = () => {
         formData.append("data", JSON.stringify(data));
         formData.append("dp", dp);
         
-        alert("into add dish")
+        //alert("into add dish")
          async function add_dish(data) {
             await dispatch(addDish(data))
             
