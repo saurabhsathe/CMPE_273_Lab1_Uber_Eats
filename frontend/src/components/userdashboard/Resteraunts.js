@@ -164,7 +164,7 @@ let redirectVar=null
         }
         var tok=localStorage.getItem('token')
         axios.defaults.headers.common['authorization'] = tok;
-     axios.post(process.env.REACT_APP_BACKEND+"getallResto",data).then(response=>{
+     axios.get(process.env.REACT_APP_BACKEND+"getallResto").then(response=>{
              
              if(response.status === 200)
              {

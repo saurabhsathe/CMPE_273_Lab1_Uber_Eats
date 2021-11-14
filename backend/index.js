@@ -561,7 +561,7 @@ catch(error){
 });
 
 //to get all restaurants
-app.post('/getallResto',async function(req,res){
+app.get('/getallResto',async function(req,res){
     
     try{
      

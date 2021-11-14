@@ -22,10 +22,10 @@ const Resteraunts = (props) => {
         console.log("herhehrehrhehrehrehh")
              var headers = new Headers(); 
            const data = {
-               resteraunt_name:"dasdsadsa"
+               
            }
 
-        axios.post(process.env.REACT_APP_BACKEND+"getallResto",data).then(response=>{
+        axios.get(process.env.REACT_APP_BACKEND+"getallResto").then(response=>{
                 
                 if(response.status === 200)
                 {

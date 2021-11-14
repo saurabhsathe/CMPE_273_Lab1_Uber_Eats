@@ -2,20 +2,35 @@ import React from 'react'
 import {Redirect} from 'react-router-dom'
 import axios from 'axios'
 import {useState} from 'react'
+import {updateOrder} from '../../features/resto_slice'
+import {useSelector,useDispatch} from 'react-redux'
 
 const CurrentOrderCard = (props) => {
     let redirectvar=null
     const [updated,setupdated]=useState(false)
 const [btnstat,setbtn]=useState("visible")
 const [dropbtn,setdrop]=useState('')
-    function updateOrder(type){
+const dispatch= useDispatch()
+    function updateCustOrder(type){
 
         console.log("here---------------------updating ",type)
         let data={
             id:props.order._id,
             status:dropbtn
         }
-        console.log("here---------------------updating ",props.order)
+        //props.isupdated(!props.updated)
+        axios.defaults.withCredentials = true;
+        //make a post request with the user data
+        async function update_order(data) {
+            let response=await dispatch(updateOrder(data))
+            console.log("here is the response---------------->",response)
+            props.isupdated(!props.updated)
+ 
+          }
+          update_order(data)
+        
+        
+        /*
         axios.post(process.env.REACT_APP_BACKEND+'updateOrder',data)
             .then(response => {
                 if(response.status === 200){
@@ -28,7 +43,7 @@ const [dropbtn,setdrop]=useState('')
                     
                 }
             });
-            
+          */  
     };
 
     //{visibility:props.order.order_status!="completed" || props.order.order_status!="cancelled" || props.order.order_status!="delivered" || props.order.order_status!="delivered" ? "hidden" : "picked up"}
@@ -75,7 +90,7 @@ const [dropbtn,setdrop]=useState('')
       </select>
     </div>
     <hr />
-    <button type="button" class="btn btn-dark" onClick={()=>{updateOrder(dropbtn)}} >Update</button>
+    <button type="button" class="btn btn-dark" onClick={()=>{updateCustOrder(dropbtn)}} >Update</button>
                 </div>
         </div>
         </div>
