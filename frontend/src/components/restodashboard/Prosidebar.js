@@ -45,7 +45,8 @@ const Prosidebar = () => {
     <hr />
     <MenuItem ><a href="/restodash/myorders" >My Orders</a></MenuItem>
     <hr />
-     
+    <MenuItem ><a href="/restodash/customers" >My Customers</a></MenuItem>
+    <hr />
     
     <MenuItem ><form onSubmit={handleLogout} action="/"><button style={{background:"transparent",border:"none",color:"#adb5bd"}}>Logout </button></form></MenuItem>
     

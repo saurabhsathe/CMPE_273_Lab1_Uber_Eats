@@ -19,7 +19,7 @@ const Current_Orders = (props) => {
     const [radioval2,setradioval2]=useState("all")
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage,setpostPerPage] = useState(2);
+    const [postsPerPage,setpostPerPage] = useState(5);
     const dispatch=useDispatch()
     useEffect(()=>{
         
@@ -132,10 +132,10 @@ let details_received= orders_received.slice(indexOfFirstPost, indexOfLastPost).m
       <b>Orders per page</b>&nbsp;
                 <div className="mainradio" data-toggle="buttons">
         
-                    <input type="radio" onChange={e=>setpostPerPage(2)} className="radio_button" id="two" name="pageorders" defaultChecked/>
+                    <input type="radio" onChange={e=>setpostPerPage(2)} className="radio_button" id="two" name="pageorders" />
                     <label for="two" className="radio_label">2</label>
 
-                    <input type="radio" className="radio_button" onChange={e=>setpostPerPage(5)} id="five" name="pageorders"  />
+                    <input type="radio" className="radio_button" onChange={e=>setpostPerPage(5)} id="five" name="pageorders"  defaultChecked/>
                     <label for="five" className="radio_label">5</label>
 
                     <input type="radio" className="radio_button"  onChange={e=>setpostPerPage(10)} id="ten" name="pageorders" /> 

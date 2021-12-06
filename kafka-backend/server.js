@@ -17,7 +17,7 @@ var {mongo_connection_string} = require('./mongo_operations/mongo_connection')
 var mongodb=mongo.connect(mongo_connection_string,{
     useNewUrlParser: true, 
     useUnifiedTopology: true,
-    maxpoolSize:500,
+    maxpoolSize:1,
     
 },(err,client)=>{
     if (err){

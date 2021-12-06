@@ -1,25 +1,40 @@
 
+var insert_user =require('./db_operations/insert_user')
+var s3=require("./aws_handler/aws_credential_store")
+var email_exists =require('./db_operations/email_exists')
+var resto_exists =require('./db_operations/resto_exists')
 var express = require('express');
 var app = express();
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
 var cors = require('cors');
 const multer = require('multer')
 const path = require("path")
 const fs = require("fs")
 const {promisify} = require("util")
+const pipeline = promisify(require("stream").pipeline)
 const s3upload = require("./upload_file")
+var insert_resto =require('./db_operations/insert_resto')
+var verify_user = require('./db_operations/verify_user_credentials')
+var getresto  = require('./db_operations/getresto_info')
+var insert_dish = require('./db_operations/insert_dish')
+var get_dishes =  require('./db_operations/get_dishes')
+var getall_dishes =  require('./db_operations/getalldishes')
+var getall_restos = require('./db_operations/getall_restaurants')
+var insert_favourite = require('./db_operations/add_favourites')
+var get_favourite = require('./db_operations/get_favourites')
+var getcust_addr = require('./db_operations/getcust_addr')
+var place_order = require('./db_operations/insert_order')
+var getcust_orders =require('./db_operations/get_cust_orders')
+var update_order = require('./db_operations/update_order')
+var get_resto_orders=require('./db_operations/get_resto_orders')
 var updatedish=require('./db_operations/update_dish')
+var connect_mongo = require('./example2')
 var host="http://localhost"
-var kafka = require('./kafka/client');
-const {checkAuth} = require("./Utils/passport")
-const { auth } = require("./Utils/passport");
 
 app.set('view engine', 'ejs');
 var bodyParser = require('body-parser');
-auth();
-
 app.use(bodyParser.json());
-const jwt = require("jsonwebtoken")
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -63,12 +78,14 @@ var Restaurant=require("./mongo_operations/models/RestaurantsModel")
 var RestoOwner = require("./mongo_operations/models/RestaurantOwnerModel")
 var Dishes = require("./mongo_operations/models/DishesModel")
 var Favourites = require("./mongo_operations/models/FavouritesModel");
+var Orders = require("./mongo_operations/models/OrdersModel");
+const { resolve } = require('path');
 
 
 
 
-//var mongodb=mongo.connect(mongo_connection_string,options)
 var mongodb=mongo.connect(mongo_connection_string,options)
+
 
 //Route to handle Post Request Call
 
@@ -83,27 +100,23 @@ var storage = multer.diskStorage({
   })
   
   var upload = multer({ storage:storage })
-app.post('/updateDish',checkAuth,async function(req,res){
-    console.log("Request received to update dish",req.body)
+app.post('/updateDish',async function(req,res){
+    console.log("Request received",req.body)
     try{
      
-        await kafka.make_request('update_dish',req.body, function(err,result){
-           
-            if (err){
-                res.writeHead(500,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("error")
-            }
-            else{
-                res.writeHead(200,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("dish updated successully")
-            }
-            })
-    
-    
+     result = await updatedish.update_dish(req.body)
+     if(result!=false){
+        res.writeHead(200,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("done")
+    }
+    else{
+        res.writeHead(202,{
+            'Content-Type' : 'text/plain'
+        })
+        res.end("had some issues")
+    }
 
 
 }
@@ -149,48 +162,51 @@ catch(error){
     
 });
 
-//customer login through kafka
+//login through kafka
 app.post('/customerlogin',async function(req,res){
     
     
     console.log("login request received")
     let user=req.body
-    await kafka.make_request('customer_login',user, function(err,results){
-
-        console.log('in result');
-        console.log(results);
-        if (err){
-            console.log(err)
-            console.log("Inside err");
-            res.writeHead(400,{
-                'Content-Type' : 'text/plain'
-            })
-            res.end("error reaching database")
-        }else{
-            if (results.length==0){
-                res.writeHead(202,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("account does not exist")
-            }
-            else{
-                //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                res.writeHead(200,{
-                    'Content-Type' : 'text/plain'
-                })
-                const payload = { _id: results._id, email: results.email,user_type:"customer"};
-            const token = jwt.sign(payload, "cmpe273_secret_key" );
-            res.end("JWT "+token);
-                //res.end(JSON.stringify(results))
-            }
-            
-            }
-        
-    });
+    
     
     
 });
 
+//Route to handle customer login request
+app.post('/customerlogin2',async function(req,res){
+    
+    
+    console.log("login request received")
+    let user=req.body
+    
+    Customer.findOne({email:user.email,pwd:user.password},async (err,dummy)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+      
+        if(dummy){
+            res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("account exists")
+        }
+        else{
+            res.writeHead(202,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("account does not exist")
+        }
+    })
+
+    
+
+    
+});
 
 //Route to handle customer signup request
 app.post('/add_customer',upload.single("dp"),async function(req,res){
@@ -199,52 +215,36 @@ app.post('/add_customer',upload.single("dp"),async function(req,res){
     user = new Customer(user)
     Customer.findOne({email:user.email},async (err,dummy)=>{
         if (err){
-            console.log(err)
             res.writeHead(500,{
                 'Content-Type' : 'text/plain'
             })
             res.end("error")
-
         }
         if(dummy){
-            console.log(dummy)
-            res.writeHead(202,{
+            res.writeHead(400,{
                 'Content-Type' : 'text/plain'
             })
             res.end("dummy exists")
         }
         else{
-            console.log("account does not exists",dummy)
             let fileloc="./public/"+res.req.file.filename
             let fname=user.email.split("@")[0]+path.extname(res.req.file.originalname)
        
             user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatscustomerimagesbucket",fname)
-
-
-            await kafka.make_request('customer_registration',user, function(err,results){
-
-                console.log('in result');
-                console.log(results);
+            user.save((err,data)=>{
                 if (err){
-                    console.log(err)
-                    console.log("Inside err");
-                    res.writeHead(400,{
+                    res.writeHead(500,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end("error reaching database")
-                }else{
-                    
-                        //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                        res.writeHead(200,{
-                            'Content-Type' : 'text/plain'
-                        })
-                        res.end("customer registered successfully")
-                    
-                    
-                    }
-                
-            });
-            
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
         }
     })
     
@@ -260,56 +260,41 @@ app.post('/add_customer',upload.single("dp"),async function(req,res){
 app.post('/owner_signup',upload.single("dp"),async function(req,res){
     console.log("request received")
     let user=JSON.parse(req.body.data)
-    
+    user = new RestoOwner(user)
     RestoOwner.findOne({email:user.email},async (err,dummy)=>{
         if (err){
-            console.log(err)
             res.writeHead(500,{
                 'Content-Type' : 'text/plain'
             })
             res.end("error")
-
         }
         if(dummy){
-            console.log(dummy)
-            res.writeHead(202,{
+            console.log("found existing user")
+            res.writeHead(200,{
                 'Content-Type' : 'text/plain'
+            
             })
-            res.end("dummy exists")
+            res.end("owner exists")
         }
         else{
-            
-            console.log("account does not exists",dummy)
             let fileloc="./public/"+res.req.file.filename
-            let fname=user.email.split("@")[0]+path.extname(res.req.file.originalname)
+            fname=resto.name+resto.zipcode+path.extname(res.req.file.originalname)
        
-            user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatscustomerimagesbucket",fname)
-
-
-            await kafka.make_request('owner_registration',user, function(err,results){
-
-                console.log('in result');
-                console.log(results);
+            user.userdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantownerimagedetails",fname)
+            user.save((err,data)=>{
                 if (err){
-                    console.log(err)
-                    console.log("Inside err");
-                    res.writeHead(400,{
+                    res.writeHead(500,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end("error reaching database")
-                }else{
-                    
-                        //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                        res.writeHead(200,{
-                            'Content-Type' : 'text/plain'
-                        })
-                        res.end("customer registered successfully")
-                    
-                    
-                    }
-                
-            });
-            
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
         }
     })
     
@@ -327,8 +312,8 @@ app.post('/restosignup',upload.single("restdp"),async function(req,res){
     let stored_file_name=res.req.file.originalname
     resto=new Restaurant(resto)
     let fileloc="./public/"+res.req.file.filename
-    console.log(resto)
-    Restaurant.findOne({resteraunt_name:resto.resteraunt_name,zipcode:resto.zipcode},async (err,result)=>{
+
+    Restaurant.findOne({fullname:resto.fulname,zipcode:resto.zipcode},async (err,result)=>{
        
         if (err){
             res.writeHead(500,{
@@ -338,40 +323,31 @@ app.post('/restosignup',upload.single("restdp"),async function(req,res){
         }
         else if(result){
             fs.unlinkSync(fileloc)
-            res.writeHead(202,{
+            res.writeHead(400,{
                 'Content-Type' : 'text/plain'
             })
             res.end("Restaurant already exists")
         }
         else{
             
-         fname=resto.resteraunt_name+resto.zipcode+path.extname(fileloc)
+         fname=resto.fullname+resto.zipcode+path.extname(fileloc)
             resto.restdp = await s3upload.upload_to_s3(fileloc,"ubereatsrestaurantimages",fname)
             fs.unlinkSync(fileloc)
-            console.log("in the restaurant registration")
-            await kafka.make_request('resto_registration',resto, function(err,results){
-
-                console.log('in result');
-                console.log(results);
+            
+            resto.save((err,data)=>{
                 if (err){
-                    console.log(err)
-                    console.log("Inside err");
-                    res.writeHead(400,{
+                    res.writeHead(500,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end("error reaching database")
-                }else{
-                    
-                        //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                        res.writeHead(200,{
-                            'Content-Type' : 'text/plain'
-                        })
-                        res.end("Restaurant registered successfully")
-                    
-                    
-                    }
-                
-            });
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
             
         }
             })
@@ -403,7 +379,7 @@ app.post('/restologin',async function(req,res){
         }
       
         if(dummy){
-            //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
+            res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
            
             Restaurant.findOne({owner_email:user.email},async (err,resto_details)=>{
                 if (err){
@@ -414,20 +390,12 @@ app.post('/restologin',async function(req,res){
         
 
                 }
-                else
-                {    
-
                     res.writeHead(200,{
                         'Content-Type' : 'text/plain'
                     })
-                    const payload = { _id: dummy._id, resteraunt_name:resto_details.resteraunt_name,zipcode:resto_details.zipcode,restdp:resto_details.restdp,user_type:"owner"};
-                    const token = jwt.sign(payload, "cmpe273_secret_key", {
-                        expiresIn: 1008000
-                    });
-                    res.end("JWT "+token);
-                    //res.end(JSON.stringify(resto_details))
+                    res.end(JSON.stringify(resto_details))
         
-                }  
+                
             })
 
 
@@ -448,8 +416,7 @@ app.post('/restologin',async function(req,res){
 
 
 //adding dish
-app.post('/addDish',checkAuth,upload.single("dp"),async function(req,res){
-    console.log("received a request to add dish-------->",req.body.data)
+app.post('/addDish',upload.single("dp"),async function(req,res){
     let dish=JSON.parse(req.body.data)    
     
         let fileloc="./public/"+res.req.file.filename
@@ -459,7 +426,7 @@ app.post('/addDish',checkAuth,upload.single("dp"),async function(req,res){
 
         
         Dishes.findOne({resteraunt_name:dish.restaurant_name,zipcode:dish.zipcode,dish_name:dish.dish_name},async (err,result)=>{
-          
+        dish=new Dishes(dish)   
         if (err){
             res.writeHead(500,{
                 'Content-Type' : 'text/plain'
@@ -481,31 +448,20 @@ app.post('/addDish',checkAuth,upload.single("dp"),async function(req,res){
             dish.dishdp = await s3upload.upload_to_s3(fileloc,"ubereatsdishimages",fname)
             fs.unlinkSync(fileloc)
             
-            
-            console.log("in the dish addition")
-            await kafka.make_request('add_dish',dish, function(err,results){
-
-                console.log('in result');
-                console.log(results);
+            dish.save((err,data)=>{
                 if (err){
-                    console.log(err)
-                    console.log("Inside err");
-                    res.writeHead(400,{
+                    res.writeHead(500,{
                         'Content-Type' : 'text/plain'
                     })
-                    res.end("error reaching database")
-                }else{
-                    
-                        //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                        res.writeHead(200,{
-                            'Content-Type' : 'text/plain'
-                        })
-                        res.end("dish added successfully")
-                    
-                    
-                    }
-                
-            });
+                    res.end("error in inserting")
+                }
+                else{
+                    res.writeHead(200,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end("done")
+                }
+            })
             
         }
         })
@@ -518,34 +474,34 @@ app.post('/addDish',checkAuth,upload.single("dp"),async function(req,res){
     
 });
 //getdishes for a restaurant
-app.post('/getDishes',async function(req,res){
+app.get('/getDishes',async function(req,res){
+    console.log(req.query)
     
-    try{
+    /*try{
      
         
-        await kafka.make_request('get_dishes',req.body, function(err,results){
-
-            console.log('in result');
-            console.log(results);
-            if (err){
-                console.log(err)
-                console.log("Inside err");
-                res.writeHead(400,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("error reaching database")
-            }else{
-                
-                    //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end(JSON.stringify(results))
-                
-                
-                }
+    Dishes.find({resteraunt_name:req.body.resteraunt_name,zipcode:req.body.zipcode},async (err,result)=>{
+       
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error")
+        }
+        else if(result){
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result))
+        }
+        else{
+            res.writeHead(400,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("No dishes added")
             
-        });
+        }
+        })
 
 
 }
@@ -553,7 +509,7 @@ catch(error){
     console.log(error)
 }
         
-    
+ */   
 
     
 
@@ -566,30 +522,29 @@ app.get('/getallResto',async function(req,res){
     try{
      
         
-        await kafka.make_request('get_restos',{}, function(err,results){
-
-            console.log('in result');
-            console.log(results);
+        Restaurant.find({},async (err,result)=>{
+           
             if (err){
-                console.log(err)
-                console.log("Inside err");
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+            }
+            else if(result){
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(JSON.stringify(result))
+            }
+            else{
                 res.writeHead(400,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end("error reaching database")
-            }else{
+                res.end("No Restaurants found")
                 
-                    //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end(JSON.stringify(results))
-                
-                
-                }
-            
-        });
-
+            }
+            })
+    
     
     }
     catch(error){
@@ -598,51 +553,27 @@ app.get('/getallResto',async function(req,res){
             
         
 });
-
-
-
 //add to favourites
-app.post('/addTofavourites',checkAuth,async function(req,res){
-    console.log(" in the favourites------------>")
+app.post('/addTofavourites',async function(req,res){
+    
     try{
-
-
-        Favourites.findOne(req.body,async (err,result)=>{
-          
-            if (err){
-                res.writeHead(500,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("error")
-            }
-            if(result){
-               
-                res.writeHead(202,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("Restaurant already added as favourite")
-            }
-            else{
-        await kafka.make_request('add_favourite',req.body, function(err,results){
-
-            if (err){
-             
-                res.writeHead(400,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("error reaching database")
-            }else{
-                
-                    //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end("added as favourite")
-                
-                
-                }
-            
-        });}})
+     let details=req.body
+     details= new Favourites(details)
+     
+    details.save((err,data)=>{
+        if (err){
+            res.writeHead(500,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("error in adding to favourites")
+        }
+        else{
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("done")
+        }
+    })
 
 }
 catch(error){
@@ -656,34 +587,33 @@ catch(error){
     
 });
 //get favourites of the customer
-app.post('/getfavourites',checkAuth,async function(req,res){
-    console.log("you are inside------------------------>")
+app.post('/getfavourites',async function(req,res){
+    
     try{
      
         
-        await kafka.make_request('get_favourites',req.body, function(err,results){
-
-            console.log('in result');
-            console.log(results);
+        Favourites.find({email:req.body.email},async (err,result)=>{
+           
             if (err){
-                console.log(err)
-                console.log("Inside err");
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+            }
+            else if(result){
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(JSON.stringify(result))
+            }
+            else{
                 res.writeHead(400,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end("error reaching database")
-            }else{
+                res.end("No Restaurants found")
                 
-                    //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end(JSON.stringify(results))
-                
-                
-                }
-            
-        });
+            }
+            })
     
     
     }
@@ -697,12 +627,12 @@ app.post('/getfavourites',checkAuth,async function(req,res){
     
 });
 //get address of customer
-app.post('/getcustdetails',checkAuth,async function(req,res){
-    //{email:req.body}
+app.post('/getaddress',async function(req,res){
+    
     try{
-        
-        await kafka.make_request('get_address',req.body, function(err,result){
-           console.log("kafka----------------------result",result)
+        let details=req.body.email
+        Customer.find({email:req.body.email},async (err,result)=>{
+           
             if (err){
                 res.writeHead(500,{
                     'Content-Type' : 'text/plain'
@@ -710,11 +640,10 @@ app.post('/getcustdetails',checkAuth,async function(req,res){
                 res.end("error")
             }
             else if(result){
-                console.log(result)
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end(JSON.stringify(result))
+                res.end(result[0].address)
             }
             else{
                 res.writeHead(400,{
@@ -739,26 +668,25 @@ catch(error){
 });
 
 //place order
-app.post('/placeOrder',checkAuth,async function(req,res){
+app.post('/placeOrder',async function(req,res){
         console.log("received",req.body)
+        let details = req.body
         
-        
-        await kafka.make_request('place_order',req.body, function(err,result){
-           
+        details =  new Orders(details)
+        details.save((err,data)=>{
             if (err){
                 res.writeHead(500,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end("error")
+                res.end("error in placing order")
             }
             else{
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end("order placed successully")
+                res.end("done")
             }
-            })
-    
+        })
     
     
 
@@ -768,34 +696,45 @@ app.post('/placeOrder',checkAuth,async function(req,res){
 
 
 //get customer orders
-app.post('/getCustOrders',checkAuth,async function(req,res){
+app.post('/getCustOrders',async function(req,res){
     console.log("received request for customer orders",req.body.email)
     try{
-        
-        
-        await kafka.make_request('get_cust_orders',req.body, function(err,results){
-
-            console.log('in result');
-            console.log(results);
+        let status_list=[]
+        if(req.body.order_type=="current"){
+            status_list=["placed","preparing"]
+        }
+        else if(req.body.order_type=="all"){
+            status_list=["placed","preparing","delivered","cancelled"]
+        }
+        else{
+            status_list=["delivered","cancelled"]
+        }
+        console.log(req.body)
+        console.log(status_list)
+        Orders.find({customer_email:req.body.email,order_status:{"$in":status_list}},async (err,result)=>{
+           console.log(result)
             if (err){
                 console.log(err)
-                console.log("Inside err");
+                res.writeHead(500,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("error")
+                
+            }
+            else if(result){
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(JSON.stringify(result))
+            }
+            else{
                 res.writeHead(400,{
                     'Content-Type' : 'text/plain'
                 })
-                res.end("error reaching database")
-            }else{
+                res.end("No Restaurants found")
                 
-                    //res.cookie('cookie',"admin",{maxAge: 1000000, httpOnly: false, path : '/'});
-                    res.writeHead(200,{
-                        'Content-Type' : 'text/plain'
-                    })
-                    res.end(JSON.stringify(results))
-                
-                
-                }
-            
-            });
+            }
+            })
     
     
     }
@@ -813,7 +752,7 @@ app.post('/updateOrder',async function(req,res){
     
     try{
      
-        await kafka.make_request('update_order',req.body, function(err,result){
+        Orders.updateOne({_id:req.body.id},{order_status:req.body.status},async (err,result)=>{
             console.log(result)
              if (err){
                  console.log(err)
@@ -822,14 +761,13 @@ app.post('/updateOrder',async function(req,res){
                  })
                  res.end("encountered an error")
                  
-             }else{
+             }
                  res.writeHead(200,{
                      'Content-Type' : 'text/plain'
                  })
                  res.end("updated successfully")
              
-                }
-            })
+             })
      
      
      }
@@ -847,13 +785,19 @@ app.post('/updateOrder',async function(req,res){
 });
 
 //get orders for a specific restaurant
-app.post('/getRestoOrders',checkAuth,async function(req,res){
+app.post('/getRestoOrders',async function(req,res){
      //req.body.restaurant_name,req.body.zipcode,req.body.type
     console.log(req.body)
-     
+     let status_list=[]
+        if(req.body.type=="new"){
+            status_list=["placed","preparing"]
+        }
+        else{
+            status_list=["delivered","cancelled"]
+        }
     try{
-     
-        await kafka.make_request('get_resto_orders',req.body, function(err,result){
+        console.log(status_list)
+        Orders.find({restaurant_name:req.body.restaurant_name,restaurant_zipcode:req.body.zipcode,order_status:{"$in":status_list}},async (err,result)=>{
             console.log(result)
              if (err){
                  console.log(err)
@@ -890,42 +834,7 @@ catch(error){
 
     
 });
-app.post('/updateCust',checkAuth,async function(req,res){
-    //req.body.restaurant_name,req.body.zipcode,req.body.type
-    console.log("update profile")
-   try{
-     
-    await kafka.make_request('update_profile',req.body, function(err,result){
-        console.log("updateeeeeeeeeeeeeeeeeeeeeeeeeeee----profile",result)
-         if (err){
-             res.writeHead(500,{
-                 'Content-Type' : 'text/plain'
-             })
-             res.end("encountered an error")
-             
-         }else{
-             res.writeHead(200,{
-                 'Content-Type' : 'text/plain'
-             })
-             res.end("updated successfully")
-         
-            }
-        })
- 
- 
- }
- catch(error){
-     console.log(error)
- }      
- 
 
-     
-   
-
-   
-
-   
-});
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001");

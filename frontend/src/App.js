@@ -7,17 +7,23 @@ import {BrowserRouter} from 'react-router-dom'
 import { CookiesProvider } from "react-cookie";
 import { CartProvider } from "react-use-cart";
 
-function App() {
+
+
+function App(props) {
+  
   return (
+    
     <CookiesProvider>
         <BrowserRouter>
         <CartProvider>
-            <Main />
-
+        
+            <Main client={props.client}/>
+          
         
         </CartProvider>
         </BrowserRouter>
     </CookiesProvider>
+   
   );
 }
 

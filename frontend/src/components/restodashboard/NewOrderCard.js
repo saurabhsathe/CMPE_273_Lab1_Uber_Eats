@@ -90,7 +90,7 @@ const dispatch= useDispatch()
       </select>
     </div>
     <hr />
-    <button type="button" class="btn btn-dark" onClick={()=>{updateCustOrder(dropbtn)}} >Update</button>
+    <button type="button" class="btn btn-dark" onClick={()=>{updateCustOrder(dropbtn)}} disabled={props.order.order_status=="cancelled"?true : false}>Update</button>
                 </div>
         </div>
         </div>

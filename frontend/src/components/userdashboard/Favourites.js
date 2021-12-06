@@ -96,7 +96,7 @@ else{
         
             <div id="services" className="container">
             {redirectVar}
-   <h2 className="display-4 text-center mt-5 mb-3">Restaurants</h2>
+   <h2 className="display-4 text-center mt-5 mb-3">Favourites</h2>
         
    <div className="row text-center">
       {details_received}
