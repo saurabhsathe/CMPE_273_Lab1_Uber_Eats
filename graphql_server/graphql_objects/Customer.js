@@ -11,9 +11,10 @@ const CustomerType = new GraphQLObjectType({
         address:{type:GraphQLString},
         zipcode:{type:GraphQLString},
         contact:{type:GraphQLString},
-        pwd:{type:GraphQLString},
+        upassword:{type:GraphQLString},
         userdp:{type:GraphQLString},
-        city:{type:GraphQLString}
+        city:{type:GraphQLString},
+        country:{type:GraphQLString}
     }
 });
 

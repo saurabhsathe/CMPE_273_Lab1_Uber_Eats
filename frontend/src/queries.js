@@ -30,7 +30,6 @@ query getDishes($resteraunt_name:String!,$zipcode:String!){
 export const get_resto_orders=`
 query getRestoOrders($resteraunt_name:String!,$resteraunt_zipcode:String!,$order_type:String!){
     get_resto_oders(resteraunt_name:$resteraunt_name,zipcode:$resteraunt_zipcode,order_type:$order_type) {
-      id
       customer_email
       restaurant_name
       restaurant_zipcode
@@ -116,50 +115,5 @@ query custLogin($email:String!,$upassword:String!){
 {
   "email": "michael@gmail.com",
 	"upassword": "Michael@123"
-}
-*/
-export const getRestoLogin=`query restoLogin($email:String!,$upassword:String!){
-  resto_login(email:$email,upassword:$upassword) {
-    email
-    fullname
-    address
-    zipcode
-    contact
-    upassword
-    userdp
-  } 
-}`
-
-/*
-variables
-{
- "email": "jackinthebox@gmail.com",
-  "upassword": "jack@123"
-}
-
-*/
-export const getRestoDetails=`
-query getRestoDetails($owner_email:String!){
-  get_resto_details(owner_email:$owner_email) {
-    resteraunt_name
-    address
-    zipcode
-    restdp
-    contact
-    owner_email
-    pickup_drop
-    diet
-    city
-    restdesc
-  }
-}
-
-
-`
-/*
-
-{
-  "owner_email": "jackinthebox@gmail.com"
-  
 }
 */

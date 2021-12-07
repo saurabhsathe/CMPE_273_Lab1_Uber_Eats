@@ -162,6 +162,45 @@ let redirectVar=null
     const data = {
             resteraunt_name:"dasdsadsa"
         }
+
+        var RestosQuery = `{
+            restaurants{
+                resteraunt_name
+                address
+                zipcode
+                restdp
+                contact
+                owner_email
+                pickup_drop
+                diet
+                city
+                restdesc
+              }
+        }`
+        
+        axios.post("http://localhost:4000/graphql/",{
+            query:RestosQuery,
+            variables:{}
+        }).then(response=>{
+                console.log("heres my error",response)
+                if(response.status === 200)
+                {
+                    console.log("here is the response-------------->",response)
+                    console.log(response.data,typeof response.data)
+                    setoriginal_restos(response.data.data.restaurants)
+                    setrestos_rcvd(response.data.data.restaurants)
+                    props.setToggler(!props.toggler)
+
+                    console.log("got the restaurants",restos_received)
+                    
+                }
+                else if(response.status === 400)
+                {
+                    console.log("no data found")
+                }
+
+        }).catch((err)=>{console.log(err)})        
+        /*
         var tok=localStorage.getItem('token')
         axios.defaults.headers.common['authorization'] = tok;
      axios.get(process.env.REACT_APP_BACKEND+"getallResto").then(response=>{
@@ -182,7 +221,7 @@ let redirectVar=null
              }
 
      })
-    
+    */
        
     }
     

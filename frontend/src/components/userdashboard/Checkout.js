@@ -10,8 +10,8 @@ import {useSelector,useDispatch} from 'react-redux'
 
 
 import {placeOrder} from '../../features/user_slice'
-
-
+import {place_order} from '../mutation_queries'
+import {getCustDetails} from '../queries'
 const Checkout = () => {
     
     const [addr_update,setaddr_update]=useState(true)
@@ -25,23 +25,19 @@ const Checkout = () => {
         
         var headers = new Headers(); 
       const data = {
-          email:user.user.email
+          email:localStorage.getItem("token")
       }
-      var tok=localStorage.getItem('token')
-      axios.defaults.headers.common['authorization'] = tok;
-        axios.post(process.env.REACT_APP_BACKEND+"getcustdetails",data).then(response=>{
-           
-           if(response.status === 200)
-           {
+      axios.post("http://localhost:4000/graphql/",{
+        query:getCustDetails,
+        variables:data
+
+
+    }).then(response=>{
                
                console.log(response.data,typeof response.data)
-               setaddr(response.data.address)               
+               setaddr(response.data.data.get_cust_details.address)               
                
-           }
-           else if(response.status === 202)
-           {
                console.log("no data found")
-           }
 
    })
   
@@ -65,16 +61,33 @@ const {
 const dispatch=useDispatch() 
     function placeNewOrder(){
         let data={
-            customer_email:user.user.email,
+            customer_email:localStorage.getItem("token"),
             restaurant_name:items[0].resteraunt_name,
-            restaurant_zipcode:items[0].zipcode,
+            restaurant_zipcode:"95126",
             amount:cartTotal,
             delivery_address:addr,
             order_status:"placed",
             instructions:instr,
-            user_type:"customer"
+           
         }
+        console.log("order details",data)
+        axios.post("http://localhost:4000/graphql/",{
+            query:place_order,
+            variables:data
+            
+    
+        }).then(reponse=>{
+            console.log("order placed ")
+            setinserted(true)
+
+            
+       })
+      
+    
+    
+
         
+        /*
         async function place(data) {
             await dispatch(placeOrder(data))
             
@@ -83,7 +96,7 @@ const dispatch=useDispatch()
  
           }
           place(data)
-    
+    */
 
 
 

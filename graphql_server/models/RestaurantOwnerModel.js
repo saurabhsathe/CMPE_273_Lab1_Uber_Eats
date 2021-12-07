@@ -7,7 +7,7 @@ const RestaurantOwnerModel = new Schema ({
     address:{type:String,required:true},
     zipcode:{type:String,required:true},
     contact:{type:String,required:true},
-    pwd:{type:String,required:true},
+    upassword:{type:String,required:true},
     userdp:{type:String,required:true},
 })
 

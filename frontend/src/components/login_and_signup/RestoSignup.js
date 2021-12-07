@@ -5,7 +5,7 @@ import {useSelector,useDispatch} from 'react-redux'
 import {signup} from '../../features/user_slice'
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
-
+import {insert_owner,insert_resto} from '../mutation_queries'
 const RestoSignup = () => {
     const [radioval,setradioval]=useState("all")
     const [radioval2,setradioval2]=useState("all")
@@ -34,16 +34,23 @@ const RestoSignup = () => {
     
     
     async function handleRegister(e){
+
+     
+
         e.preventDefault()
         let data = {
             fullname : oname,
             address:oaddr,
             zipcode:ozip,
             contact:ocontact,
-            pwd : opwd,
+            upassword : opwd,
             email:oemail,
+            userdp:""
            
         }
+
+
+        /*
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
@@ -51,27 +58,62 @@ const RestoSignup = () => {
         formData.append("data", JSON.stringify(data));
         formData.append("dp", dp);
         console.log(formData)
+        */
         
-        
-            
+      
+      axios.post("http://localhost:4000/graphql/",{
+                query:insert_owner,
+                variables:{
+                  email:oemail,
+                  fullname : oname,
+                  zipcode:ozip,
+                  contact:ocontact,
+                  address:oaddr,
+                  upassword:opwd,
+                  userdp:"https://ubereatscustomerimagesbucket.s3.amazonaws.com/sathesaurabh97.png",
+                 
+                            
+                }
+            }).then(response=>{
+                //let dish_list = await dispatch(getDishes(data))
+                if (response){
+                  console.log("inserted owner successfully  now inserting restaurant")
+                  let data2 = {
+                     resteraunt_name : restname,
+                     address:restaddr,
+                     zipcode:restzip,
+                     contact:restcontact,
+                     owner_email:oemail,
+                     diet:radioval,
+                     pickup_drop:radioval2,
+                     city:restcity,
+                     restdesc:restdesc,
+                     restdp:"https://upload.wikimedia.org/wikipedia/en/thumb/6/6e/Jack_in_the_Box_2009_logo.svg/1200px-Jack_in_the_Box_2009_logo.svg.png"
+                     
+                 }
+                 axios.post("http://localhost:4000/graphql/",{
+                  query:insert_resto,
+                  variables:data2
+              }).then(response=>{                  setinserted(true)
+               console.log("inserted")}).catch(err=>{console.log(err)})
+
+
+
+
+               }
+               else{
+                  console.log("faced an error")
+               }
+              }).catch(err=>{
+                 console.log(err)
+              })    
 
             
 
             
             
-            let data2 = {
-                resteraunt_name : restname,
-                address:restaddr,
-                zipcode:restzip,
-                contact:restcontact,
-                owner_email:oemail,
-                diet:radioval,
-                pickup_drop:radioval2,
-                city:restcity,
-                restdesc:restdesc,
-                restdp:""
-                
-            }
+            
+            /*
             console.log("in the frontend side where we found out")
             let formData2=new FormData()
             formData2.append("data", JSON.stringify(data2));
@@ -100,7 +142,7 @@ const RestoSignup = () => {
        
          }
             
-
+*/
            
             
     }

@@ -35,7 +35,7 @@ const Navbar = (props) => {
             <div className="col-sm brand" >
             <a className="navbar-brand"><img style={{border:0}} src="/ue2.png" /></a>
             </div>     
-            <h4>Hello, {user.user.email}!!!!</h4>
+            <h4>Hello, {localStorage.getItem("token")}!!!!</h4>
           
             </form>
             

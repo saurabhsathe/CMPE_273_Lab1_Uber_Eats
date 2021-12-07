@@ -6,6 +6,7 @@ import { useLocation, Link } from 'react-router-dom';
 import DishCard from './DishCard'
 import {getDishes} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
+import {get_dishes} from '../queries'
 const Dishes = (props) => {
     let [dishes_received,setdishes]=useState([])
     const location=useLocation()
@@ -20,18 +21,20 @@ const Dishes = (props) => {
            const data = {
                 resteraunt_name:location.state.resto.resteraunt_name,
                  zipcode:location.state.resto.zipcode,
-                 user_type:"customer"
+          
             }
   
-            async function place(data) {
-                let dish_list = await dispatch(getDishes(data))
-                
-                console.log("dishes_Received")
-                setdishes(dish_list.payload)
-     
-              }
-              place(data)
-       
+            axios.post("http://localhost:4000/graphql/",{
+                query:get_dishes,
+                variables:data
+    
+    
+            }).then(response=>{
+    
+                console.log("here are your dishes",response)
+                setdishes(response.data.data.dishes)
+    
+            }) 
     }
     else{
         console.log("got NO props")

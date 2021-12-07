@@ -7,6 +7,7 @@ const {
 const OrderType = new GraphQLObjectType({
     name:'OrderType',
     fields:{
+        id:{type:GraphQLString},
         customer_email:{type:GraphQLString},
         restaurant_name:{type:GraphQLString},
         restaurant_zipcode:{type:GraphQLString},

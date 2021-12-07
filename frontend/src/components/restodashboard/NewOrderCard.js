@@ -4,6 +4,7 @@ import axios from 'axios'
 import {useState} from 'react'
 import {updateOrder} from '../../features/resto_slice'
 import {useSelector,useDispatch} from 'react-redux'
+import {update_order} from '../mutation_queries'
 
 const CurrentOrderCard = (props) => {
     let redirectvar=null
@@ -15,9 +16,24 @@ const dispatch= useDispatch()
 
         console.log("here---------------------updating ",type)
         let data={
-            id:props.order._id,
+            id:props.order.id,
             status:dropbtn
         }
+
+        console.log("here is the order",props.order)
+        axios.post("http://localhost:4000/graphql/",{
+            query:update_order,
+            variables:data
+
+
+        }).then(response=>{
+
+            console.log("updated",response)
+            props.isupdated(!props.updated)
+ 
+
+        })
+        /*
         //props.isupdated(!props.updated)
         axios.defaults.withCredentials = true;
         //make a post request with the user data
@@ -28,7 +44,7 @@ const dispatch= useDispatch()
  
           }
           update_order(data)
-        
+        */
         
         /*
         axios.post(process.env.REACT_APP_BACKEND+'updateOrder',data)
@@ -87,6 +103,7 @@ const dispatch= useDispatch()
         <option class="dropdown-list__item" key="ready"  value="ready">Pickup ready</option>
         <option class="dropdown-list__item" key="pickedup"  value="pickedup">Pickedup</option>
         <option class="dropdown-list__item" key="cancelled"  value="cancelled">Cancelled</option>
+        <option class="dropdown-list__item" key="delivered"  value="delivered">Delivered</option>
       </select>
     </div>
     <hr />

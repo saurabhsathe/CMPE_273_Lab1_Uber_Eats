@@ -8,6 +8,7 @@ import {getOrders} from '../../features/resto_slice'
 import NewOrderCard from './NewOrderCard'
 import {useSelector,useDispatch} from 'react-redux'
 import Pagination from './Pagination'
+import {get_resto_orders} from '../queries'
 
 const Current_Orders = (props) => {
 
@@ -25,11 +26,24 @@ const Current_Orders = (props) => {
         
              var headers = new Headers(); 
               const data = {
-            restaurant_name:cookies.resteraunt_name,
-            zipcode:cookies.zipcode,
+                resteraunt_name:cookies.resteraunt_name,
+            resteraunt_zipcode:cookies.zipcode,
             order_type:"all"
     
            }
+           axios.post("http://localhost:4000/graphql/",{
+            query:get_resto_orders,
+            variables:data
+
+
+        }).then(response=>{
+
+            console.log("here are your orders",response.data.data.get_resto_oders)
+            setorders(response.data.data.get_resto_oders)
+
+        })
+
+
            /*
            axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
 axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
@@ -47,7 +61,7 @@ axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
         }
 
 })
-  */
+  
 async function getorders(data) {
   let myorders = await dispatch(getOrders(data))
   console.log("here are your dishes-------------->")
@@ -55,7 +69,7 @@ async function getorders(data) {
   
 }
 getorders(data)
-
+*/
     
 
 
@@ -67,12 +81,24 @@ function getOrdersByType(ordertype){
     
     var headers = new Headers(); 
     const data = {
-  restaurant_name:cookies.resteraunt_name,
-  zipcode:cookies.zipcode,
+      resteraunt_name:cookies.resteraunt_name,
+  resteraunt_zipcode:cookies.zipcode,
   order_type:ordertype
 
  }
 
+ axios.post("http://localhost:4000/graphql/",{
+            query:get_resto_orders,
+            variables:data
+
+
+        }).then(response=>{
+
+            console.log("here are your orders",response)
+            setorders(response.data.data.get_resto_orders)
+
+        })
+/*
  async function getorders(data) {
   let myorders = await dispatch(getOrders(data))
   console.log("here are your dishes-------------->")
@@ -80,7 +106,7 @@ function getOrdersByType(ordertype){
   
 }
 getorders(data)
-
+*/
 
 /* 
 axios.defaults.headers.common['authorization'] = localStorage.getItem('token');
@@ -109,7 +135,7 @@ axios.post(process.env.REACT_APP_BACKEND+"getRestoOrders",data).then(response=>{
     redirectVar = <Redirect to= "/restologin"/>
 }
 
-console.log(orders_received.length)
+
 const indexOfLastPost = currentPage * postsPerPage;
 const indexOfFirstPost = indexOfLastPost - postsPerPage;
 const paginate = pageNumber => setCurrentPage(pageNumber);

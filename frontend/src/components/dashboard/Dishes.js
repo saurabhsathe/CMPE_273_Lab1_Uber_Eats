@@ -6,6 +6,7 @@ import { useLocation, Link } from 'react-router-dom';
 import DishCard from './DishCard'
 import {getDishes} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
+
 const Dishes = (props) => {
     let [dishes_received,setdishes]=useState([])
     const location=useLocation()

@@ -6,6 +6,7 @@ import cookie from 'react-cookies'
 import {Link} from 'react-router-dom'
 import {getDishes} from '../../features/resto_slice'
 import {useSelector,useDispatch} from 'react-redux'
+import {get_dishes} from '../queries'
 const Resteraunts = () => {
     
     let [dishes_received,setdishes]=useState([])
@@ -19,15 +20,25 @@ const Resteraunts = () => {
         console.log("herhehrehrhehrehrehh")
              var headers = new Headers(); 
            const data = {
-               _id:cookies.resteraunt_id,
+             //  _id:cookies.resteraunt_id,
                 resteraunt_name:cookies.resteraunt_name,
                  zipcode:cookies.zipcode,
          
             }
+            axios.post("http://localhost:4000/graphql/",{
+            query:get_dishes,
+            variables:data
 
+
+        }).then(response=>{
+
+            console.log("here are your dishes",response)
+            setdishes(response.data.data.dishes)
+
+        })
             
    
-        
+        /*
         async function getdishes(data) {
             let mydishes = await dispatch(getDishes(data))
             console.log("here are your dishes-------------->")
@@ -35,7 +46,7 @@ const Resteraunts = () => {
             
           }
           getdishes(data)
-          
+          */
 
 
 

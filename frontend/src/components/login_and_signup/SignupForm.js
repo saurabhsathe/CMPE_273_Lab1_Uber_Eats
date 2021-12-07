@@ -5,7 +5,9 @@ import {useSelector,useDispatch} from 'react-redux'
 import {signup} from '../../features/user_slice'
 import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
-
+import countrieslist from './countries';
+import {insert_customer} from '../mutation_queries'
+import {gql} from 'apollo-boost'
 const SignupForm = () => {
     const [uname,setuname] = useState();
     const [uaddr,setuaddr] = useState();
@@ -17,25 +19,77 @@ const SignupForm = () => {
     const [udp,setudp] = useState();
     const [usertype,setusertype] = "customer";
     const [ucity,setucity] = useState();
+    const [ucountry,setucountry] = useState();
     const [errors,seterrors]=useState();
     const [inserted,setinserted]=useState(false);
+    
     const dispatch = useDispatch()
 
-    
+    console.log(countrieslist)
     function handleRegister(e){
         var headers = new Headers();
         //prevent page from refresh
-       
-        e.preventDefault();
+         var CustomerSignupQuery=`mutation CreateCustomer($email:String!,$fullname:String!,$zipcode:String!,$contact:String!,$address:String!,$upassword:String!,$city:String!,$country:String!,$userdp:String!){
+            insert_cust(email:$email,fullname:$fullname,zipcode:$zipcode,contact:$contact,address:$address,upassword:$upassword,city:$city,country:$country,userdp:$userdp){
+               email
+            }
+               
+          }
+          
+         `    
+           e.preventDefault();
         const data = {
-            fullname : uname,
-            address:uaddr,
-            zipcode:uzip,
-            contact:ucontact,
-            pwd : upwd,
-            email:uemail,
+         email:uemail,
+         fullname : uname,
+         address:uaddr,
+         zipcode:uzip,
+         contact:ucontact,
+         pwd:upwd,
+         userdp:udp,
+         city:ucity,
+         country:ucountry
+            
+            
+            
+            
+            
+            
         
         }
+      console.log(CustomerSignupQuery)
+      axios.post("http://localhost:4000/graphql/",{
+                query:CustomerSignupQuery,
+                variables:{
+                  email:uemail,
+                  fullname : uname,
+                  zipcode:uzip,
+                  contact:ucontact,
+                  address:uaddr,
+                  
+                  upassword:upwd,
+                  userdp:"https://ubereatscustomerimagesbucket.s3.amazonaws.com/sathesaurabh97.png",
+                  city:ucity,
+                  country:ucountry
+                            
+                }
+            }).then(response=>{
+                //let dish_list = await dispatch(getDishes(data))
+                if (response.data.data.insert_cust.email){
+                dispatch(signup({
+                  email:uemail,
+                  userType:"customer"
+                  
+              }))
+                  setinserted(true) 
+                  console.log(response)
+               }
+               else{
+                  console.log("faced an error")
+               }
+              }).catch(err=>{
+                 console.log(err)
+              })
+        /*
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
@@ -62,7 +116,7 @@ const SignupForm = () => {
                     
                 }
             });
-            
+            */
     }
     let redirectVar = null;
     if(localStorage.getItem("token")!=null){
@@ -72,7 +126,7 @@ const SignupForm = () => {
 else if (inserted){
    redirectVar = <Redirect to= "/userlogin"/>
 }
-
+let options=countrieslist.map((country)=>{return <option value={country}>{country}</option>})
     return (
         <div>
          {redirectVar}
@@ -97,7 +151,12 @@ else if (inserted){
                      <label>City</label>
                      <input type="" value={ucity}  id="ucity" className="form-control" placeholder="City" onChange={e => setucity(e.target.value)} required/>
                   </div>
-
+                  <div className="form-group">
+                     <label>Country</label>
+                     <select value={ucountry}  id="ucountry" className="form-control" onChange={e => setucountry(e.target.value)} required style={{width:"50%"}}>
+                        {options}
+                     </select>
+                  </div>
 
                   <div className="form-group">
                      <label>Contact No.</label>

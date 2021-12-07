@@ -7,7 +7,7 @@ import {selectuser} from '../../features/user_slice'
 import {useSelector,useDispatch} from 'react-redux'
 import CurrentOrderCard from './CurrentOrderCard'
 import Pagination from './Pagination'
-
+import {get_cust_orders} from '../queries'
 
 const Current_Orders = (props) => {
     const user = useSelector(selectuser)
@@ -25,25 +25,37 @@ const Current_Orders = (props) => {
         
              var headers = new Headers(); 
              const data = {
-                 email:user.user.email,
+                 email:localStorage.getItem('token'),
                  order_type:"all",
-                 user_type:"customer"
              }
-             var tok=localStorage.getItem('token')
-        axios.defaults.headers.common['authorization'] = tok;
-    axios.post(process.env.REACT_APP_BACKEND+"getCustOrders",data).then(response=>{
+
+             axios.post("http://localhost:4000/graphql/",{
+            query:get_cust_orders,
+            variables:data
+
+
+        }).then(response=>{
+
+            console.log("here are your orders",response)
+            setorders(response.data.data.get_cust_orders)
+
+        })
+
+//              var tok=localStorage.getItem('token')
+//         axios.defaults.headers.common['authorization'] = tok;
+//     axios.post(process.env.REACT_APP_BACKEND+"getCustOrders",data).then(response=>{
        
-        if(response.status === 200)
-        {
+//         if(response.status === 200)
+//         {
             
-           setorders(response.data)
+//            setorders(response.data)
             
-        }
-        else if(response.status === 202)
-        {
-            console.log("no data found")
-        }
-})
+//         }
+//         else if(response.status === 202)
+//         {
+//             console.log("no data found")
+//         }
+// })
     
 
 

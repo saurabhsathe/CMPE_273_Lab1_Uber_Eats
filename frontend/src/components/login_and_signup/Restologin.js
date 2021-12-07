@@ -9,6 +9,7 @@ import {selectuser} from '../../features/user_slice'
 import {Redirect} from 'react-router';
 import { useCookies } from "react-cookie";
 import jwt_decode from 'jwt-decode'
+import {getRestoLogin,getRestoDetails} from '../queries'
 const Restologin = () => {
     const [cookies, setCookie] = useCookies(["restaurant"]);
     const [uemail,setuemail]=useState()
@@ -28,10 +29,37 @@ const Restologin = () => {
         e.preventDefault();
         const data = {
             email : uemail,
-            password : upwd,
-            usertype:"restaurant_owner"
+            upassword : upwd,
+            
         }
+        axios.post("http://localhost:4000/graphql/",{
+            query:getRestoLogin,
+            variables:data
+
+
+        }).then(response=>{
+            console.log(response)
+            axios.post("http://localhost:4000/graphql/",{
+            query:getRestoDetails,
+            variables:{
+                owner_email:uemail
+            }
+
+
+        }).then(res=>{
+            localStorage.setItem("token", uemail);
+            let restodata= res.data.data.get_resto_details
+            setCookie("resteraunt_id", restodata._id, {path: "/"});
+                    setCookie("resteraunt_name", restodata.resteraunt_name, {path: "/"});
+                    setCookie("zipcode", restodata.zipcode, {path: "/"});
+                    setCookie("restdp",restodata.restdp, {path: "/"});
+                    console.log("here in successful login")
+                    setupdate(!update)
+        })
+
+        })
         //set the with credentials to true
+        /*
         axios.defaults.withCredentials = true;
         //make a post request with the user data
         axios.post(process.env.REACT_APP_BACKEND+'restologin',data)
@@ -61,7 +89,7 @@ const Restologin = () => {
                     
                 }
             });
-            
+            */
 
 
 

@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 import {Redirect} from 'react-router-dom';
 import {addDish, getDishes} from '../../features/resto_slice'
 import {useSelector,useDispatch} from 'react-redux'
+import {insert_dish} from '../mutation_queries'
 const CreateDish = () => {
    
     const [inserted, setinserted] = useState(false);
@@ -25,16 +26,33 @@ const CreateDish = () => {
     
         e.preventDefault();
         const data = {
-           user_id:cookies.resteraunt_id,
+          
             dish_name:dish_name,
             resteraunt_name:cookies.resteraunt_name,
             zipcode:cookies.zipcode,
             dish_desc:dish_desc,
-            price:dish_price,
+            price:Number(dish_price),
             category:radioval2,
-            user_type:"owner"
+            dishdp: "https://ubereatsdishimages.s3.us-east-2.amazonaws.com/Smash%20Burger94103French%20Fries.JPG"
         }
-        console.log(data)
+        console.log("here is your data",data)
+        axios.post("http://localhost:4000/graphql/",{
+         query:insert_dish,
+         variables:data
+
+
+     }).then(response=>{
+
+         console.log("inserted your dish",response)
+         
+         setinserted(true)
+
+
+
+     })
+         
+        
+        /*
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
@@ -50,7 +68,7 @@ const CreateDish = () => {
  
           }
           add_dish(formData)
-            
+          */  
     };
     let redirectVar=null;
    

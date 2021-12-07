@@ -9,7 +9,7 @@ import cookie from 'react-cookies'
 import {useCookies} from 'react-cookie'
 import jwt_decode from 'jwt-decode'
 //import * as jwt_decode from 'jwt-decode';
-
+import {getCustLogin} from '../queries'
 const LoginForm = () => {
     
     const [uemail,setuemail]=useState()
@@ -31,10 +31,27 @@ const LoginForm = () => {
         e.preventDefault();
         const data = {
             email : uemail,
-            password : upwd,
-            usertype:"customer"
+            upassword : upwd,
+           
         }
+        axios.post("http://localhost:4000/graphql/",{
+            query:getCustLogin,
+            variables:data
+
+
+        }).then(response=>{
+            console.log(response)
+            if (!response.data.data.get_customer_login.email){
+                seterrors("User does not exists or Invalid credentials")
+
+            }
+            else{
+                localStorage.setItem("token", uemail);
+            }
+
+        })
         //set the with credentials to true
+        /*
         axios.defaults.withCredentials = true;
         //make a post request with the user data
         axios.post(process.env.REACT_APP_BACKEND+'customerlogin',data)
@@ -49,10 +66,9 @@ const LoginForm = () => {
                     //console.log(" Here is the decoded version",decoded)
                     localStorage.setItem("token", response.data);
 
-                    /*
                     var decoded = jwt_decode(authtoken.split(' ')[1]);
                     console.log("here is the decoded---------->",decoded)
-                    */
+                    
                     
                     dispatch(login({
                         email:uemail,
@@ -76,7 +92,7 @@ const LoginForm = () => {
                 }
             });
                     
-   
+   */
 
 
 
