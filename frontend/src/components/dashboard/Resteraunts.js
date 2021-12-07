@@ -7,9 +7,26 @@ import { gql } from 'apollo-boost';
 import { useCookies } from "react-cookie";
 import RestoCard from './RestoCard'
 import {useQuery} from 'graphql-hooks'
-var RestosQuery = gql`query RestosQuery{restaurants}`
+import { GraphQLClient, ClientContext } from 'graphql-hooks'
+var RestosQuery = `{
+    restaurants{
+        resteraunt_name
+        address
+        zipcode
+        restdp
+        contact
+        owner_email
+        pickup_drop
+        diet
+        city
+        restdesc
+      }
+}`
+
+
 
 const Resteraunts = (props) => {
+   
     const [original_restos,setoriginal_restos]=useState([])
     let [restos_received,setrestos]=useState([])
     const [cookies, setCookie] = useCookies(["restaurant"]);
@@ -20,21 +37,26 @@ const Resteraunts = (props) => {
     }
     console.log(process.env.REACT_APP_BACKEND+"getallResto")
     useEffect(()=>{
+       
         console.log(process.env.REACT_APP_BACKEND+"getallResto")
         if(Object.keys(props).length == 0){
       
              var headers = new Headers(); 
-         
-       
-        
-        axios.post("http://localhost:4000/graphql/",RestosQuery).then(response=>{
-                
+             
+             
+            
+    
+        axios.post("http://localhost:4000/graphql/",{
+            query:RestosQuery,
+            variables:{}
+        }).then(response=>{
+                console.log("heres my error",response)
                 if(response.status === 200)
                 {
                     console.log("here is the response-------------->",response)
                     console.log(response.data,typeof response.data)
                     setoriginal_restos(response.data[0])
-                    setrestos(response.data)
+                    setrestos(response.data.data.restaurants)
                     console.log("got the restaurants",restos_received)
                     
                 }
@@ -43,7 +65,7 @@ const Resteraunts = (props) => {
                     console.log("no data found")
                 }
 
-        })
+        }).catch((err)=>{console.log(err)})
        
     }
     else{

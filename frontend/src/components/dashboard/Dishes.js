@@ -9,7 +9,8 @@ import {useSelector,useDispatch} from 'react-redux'
 const Dishes = (props) => {
     let [dishes_received,setdishes]=useState([])
     const location=useLocation()
-
+   
+    
     
             
     const dispatch=useDispatch()        
@@ -22,15 +23,33 @@ const Dishes = (props) => {
                  zipcode:location.state.resto.zipcode,
          
             }
-  
-            async function place(data) {
-                let dish_list = await dispatch(getDishes(data))
-                
-                console.log("dishes_Received")
-                setdishes(dish_list.payload)
+            console.log("data asking for it----------->",data)
+            var DishesQuery = `{
+                dishes(resteraunt_name:"${location.state.resto.resteraunt_name}",zipcode:"${location.state.resto.zipcode}") {
+                    id
+                    dish_name
+                    dish_desc
+                    dishdp
+                    resteraunt_name
+                    price
+                  } 
+            }`
+            console.log(DishesQuery)
+            axios.post("http://localhost:4000/graphql/",{
+                query:DishesQuery,
+                variables:{
+                    resteraunt_name:location.state.resto.resteraunt_name,
+                 zipcode:location.state.resto.zipcode,
+                }
+            }).then(response=>{
+                //let dish_list = await dispatch(getDishes(data))
+                let dish_list=[]
+
+                console.log("dishes_received",response.data.data)
+                setdishes(response.data.data.dishes)
      
-              }
-              place(data)
+              })
+             // place(data)
        
     }
     else{

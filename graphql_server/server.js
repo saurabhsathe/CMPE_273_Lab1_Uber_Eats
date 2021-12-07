@@ -2,6 +2,7 @@ const express = require('express');
 const expressGraphQL = require('express-graphql').graphqlHTTP;
 const schema = require('./schema.js');
 const cors = require('cors');
+const multer = require('multer')
 var options={
     useNewUrlParser: true, 
     useUnifiedTopology: true,
@@ -19,8 +20,12 @@ app.use(cors());
 app.use('/graphql', expressGraphQL({
     schema:schema,
     graphiql:true
-}));
+})
 
+);
+app.use(multer({
+    storage: multer.memoryStorage(),
+}).any());
 app.listen(4000, () => {
     console.log('Server is running on port 4000..');
 });

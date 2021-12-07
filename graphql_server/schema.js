@@ -9,6 +9,11 @@ const {
 } = require('graphql');
 
 const RestaurantsModel = require('./models/RestaurantsModel')
+const DishesModel = require('./models/DishesModel')
+
+
+
+
 const CustomerType=require( './graphql_objects/Customer')
 const DishesType = require ('./graphql_objects/Dishes')
 const FavouritesType = require ( './graphql_objects/Favourites')
@@ -25,12 +30,14 @@ const RootQuery= new GraphQLObjectType({
             type:new GraphQLList(DishesType),
             args:{
                 resteraunt_name:{type:GraphQLString},
-                resteraunt_zipcode:{type:GraphQLString}
+                zipcode:{type:GraphQLString}
 
             },
-            resolve(parentValue, args){
-                return axios.get('')
-                    .then(res => res.data);
+             resolve(parentValue, args){
+                console.log("got a request to send dishes",args)
+                const results =DishesModel.find({resteraunt_name:args.resteraunt_name,zipcode:args.zipcode})
+               
+                return results
             }
         },
         restaurants:{
@@ -39,6 +46,7 @@ const RootQuery= new GraphQLObjectType({
 
             },
             resolve(parentValue, args){
+                console.log("request received to get the restaurants")
                 const users = RestaurantsModel.find({});
                 return users
             }
@@ -140,6 +148,12 @@ const mutation = new GraphQLObjectType({
             resolve(parentValue, args){
                 return axios.post('',args)
                 .then(res => res.data);
+            }
+        },
+        insert_cust:{
+            type:CustomerType,
+            resolve(parentValue, args){
+                return []
             }
         }
 
